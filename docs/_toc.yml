@@ -1,0 +1,21 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+options:
+  numbered: true
+
+chapters:
+- file: pages/1_Introduction.ipynb
+- file: pages/2_Node_Classification.ipynb
+- file: pages/3_Graph_Classification.ipynb
+- file: pages/4_Scaling_GNNs.ipynb
+- file: pages/5_Point_Cloud_Classification.ipynb
+- file: pages/6_GNN_Explanation.ipynb
+- file: pages/7_Aggregation_Package.ipynb
+- file: pages/8_Node_Classification_(with_W&B).ipynb
+- file: pages/9_Graph_Classification_with_PyG_and_W&B.ipynb
+- file: pages/10_Link_Prediction_on_MovieLens.ipynb
+- file: pages/11_Link_Regression_on_Movielens.ipynb
+- file: pages/references.md

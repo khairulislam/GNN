@@ -1,0 +1,8 @@
+jupyter-book
+matplotlib
+numpy
+torch_geometric
+pyg_lib
+torch_scatter 
+torch_sparse 
+torch_cluster 
