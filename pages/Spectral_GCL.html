@@ -1,0 +1,1130 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>7. Spectral methods &#8212; Graph Neural Network Tutorials</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=7f8ff830"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pages/Spectral_GCL';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="8. Scaling" href="4_Scaling_GNNs.html" />
+    <link rel="prev" title="6. Graph Attention Networks" href="GATs.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.jpeg" class="logo__image only-light" alt="Graph Neural Network Tutorials - Home"/>
+    <script>document.write(`<img src="../_static/logo.jpeg" class="logo__image only-dark" alt="Graph Neural Network Tutorials - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Graph Neural Network
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1_Introduction.html">1. Introduction</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="node/Node.html">2. Nodes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="node/Node_Classification.html">2.1. Node Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node/Node_Classification_%28with_W%26B%29.html">2.2. Node Classification with W&amp;B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node/Point_Cloud_Classification.html">2.3. Point Cloud Classification</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="Graph.html">3. Graph</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3_Graph_Classification.html">3.1. Graph Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9_Graph_Classification_with_PyG_and_W%26B.html">3.2. Graph Classification with W&amp;B</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="Aggregation.html">4. Aggregation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7_Aggregation_Package.html">4.1. Customizing Aggregations within Message Passing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Aggregation%20Functions.html">4.2. Aggregation Functions</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="Link.html">5. Links</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="10_Link_Prediction_on_MovieLens.html">5.1. Link Prediction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_Link_Regression_on_Movielens.html">5.2. Link Regression</a></li>
+</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="GATs.html">6. Graph Attention Networks</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">7. Spectral methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="4_Scaling_GNNs.html">8. Scaling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6_GNN_Explanation.html">9. Explain using Captum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">10. References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/khairulislam/Graph-Neural-Network/blob/master/docs/pages/Spectral_GCL.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch on Colab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/khairulislam/Graph-Neural-Network" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/khairulislam/Graph-Neural-Network/edit/master/docs/pages/Spectral_GCL.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/khairulislam/Graph-Neural-Network/issues/new?title=Issue%20on%20page%20%2Fpages/Spectral_GCL.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/pages/Spectral_GCL.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Spectral methods</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#outline">7.1. Outline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">7.2. Imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-convolution-in-ml">7.3. Why convolution in ML</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#some-theory-on-convolution">7.4. Some theory on convolution</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definition">7.4.1. Definition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fourier-transform">7.4.2. Fourier transform</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definition-of-the-fourier-transform">7.4.3. Definition of the Fourier transform</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connection-with-the-laplacian">7.4.4. Connection with the Laplacian</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">7.4.5. Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convolution-on-graphs">7.5. Convolution on graphs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graph-laplacian">7.5.1. Graph Laplacian</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graph-spectrum-fourier-transform-and-convolution">7.5.2. Graph spectrum, Fourier transform, and convolution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-convolutional-layers-in-pytorch-geometric">7.6. Spectral-convolutional layers in PyTorch Geometric</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chebconv">7.6.1. ChebConv</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#goal">7.6.1.1. Goal:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#chebyshev-approximation">7.6.1.2. Chebyshev approximation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#chebyshev-approximation-of-the-filter">7.6.1.3. Chebyshev approximation of the filter</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#property">7.6.1.4. Property</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fast-approximated-convolution">7.6.1.5. Fast approximated convolution</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#properties">7.6.1.6. Properties:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gcnconv">7.6.2. GCNConv</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#as-message-passing">7.6.2.1. As message passing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="spectral-methods">
+<h1><span class="section-number">7. </span>Spectral methods<a class="headerlink" href="#spectral-methods" title="Link to this heading">#</a></h1>
+<p>Acknowledgement: <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/get_started/colabs.html">PyTorch Geometric Tutorial Project</a></p>
+<div align="left">
+      <a href="https://www.youtube.com/watch?v=Ghw-fp_2HFM">
+         <img 
+            src="https://img.youtube.com/vi/Ghw-fp_2HFM/0.jpg" style="width:45%;" 
+            alt="Pytorch Geometric tutorial:Spectral Graph Convolutional Layers"
+            >
+      </a>
+</div><section id="outline">
+<h2><span class="section-number">7.1. </span>Outline<a class="headerlink" href="#outline" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Why convolution in ML</p></li>
+<li><p>Some theory on convolution</p></li>
+<li><p>Convolution on graphs</p></li>
+<li><p>Spectral-convolutional layers in PyTorch Geometric</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TORCH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">__version__</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># !pip install -q torch-scatter -f https://data.pyg.org/whl/torch-${TORCH}.html</span>
+<span class="c1"># !pip install -q torch-sparse -f https://data.pyg.org/whl/torch-${TORCH}.html</span>
+<span class="c1"># !pip install -q git+https://github.com/pyg-team/pytorch_geometric.git</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.11.0
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/antonio/anaconda3/envs/geometric_new/lib/python3.9/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="imports">
+<h2><span class="section-number">7.2. </span>Imports<a class="headerlink" href="#imports" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">16</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="why-convolution-in-ml">
+<h2><span class="section-number">7.3. </span>Why convolution in ML<a class="headerlink" href="#why-convolution-in-ml" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Weight sharing</p></li>
+<li><p>Detection of translational invariant and local features</p></li>
+</ul>
+<p><img alt="" src="https://github.com/AntonioLonga/PytorchGeometricTutorial/blob/main/Tutorial4/fig/fully_connected.png?raw=1" />
+<a class="reference external" href="https://missinglink.ai/guides/convolutional-neural-networks/fully-connected-layers-convolutional-neural-networks-complete-guide/">Source</a></p>
+<p><img alt="" src="https://github.com/AntonioLonga/PytorchGeometricTutorial/blob/main/Tutorial4/fig/cnn.gif?raw=1" />
+<a class="reference external" href="https://commons.wikimedia.org/wiki/File:Convolutional_Neural_Network.gif">Source</a></p>
+<p><img alt="" src="https://github.com/AntonioLonga/PytorchGeometricTutorial/blob/main/Tutorial4/fig/Convolution.png?raw=1" />
+<a class="reference external" href="https://commons.wikimedia.org/wiki/File:Convolution.PNG">Source</a></p>
+</section>
+<section id="some-theory-on-convolution">
+<h2><span class="section-number">7.4. </span>Some theory on convolution<a class="headerlink" href="#some-theory-on-convolution" title="Link to this heading">#</a></h2>
+<p><img alt="" src="https://github.com/AntonioLonga/PytorchGeometricTutorial/blob/main/Tutorial4/fig/Convolution_of_box_signal_with_itself2.gif?raw=1" />
+<a class="reference external" href="https://en.wikipedia.org/wiki/File:Convolution_of_box_signal_with_itself2.gif">Source</a></p>
+<section id="definition">
+<h3><span class="section-number">7.4.1. </span>Definition<a class="headerlink" href="#definition" title="Link to this heading">#</a></h3>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+c[n] = (v * w)[n] = \sum_{m=0}^{N-1} v[m] \cdot w[n-m]
+\end{align*}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">conv</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)):</span>
+        <span class="n">c</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)):</span>
+            <span class="n">c</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">+=</span> <span class="n">v</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">*</span> <span class="n">w</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="n">m</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">c</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">N</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">v</span><span class="p">[</span><span class="mi">8</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s1">&#39;.-&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="s1">&#39;.-&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s1">&#39;.-&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/85f55f3f2e2e4402de27d10ece3956c596b8263884aac4829245e32e679c366e.png" src="../_images/85f55f3f2e2e4402de27d10ece3956c596b8263884aac4829245e32e679c366e.png" />
+</div>
+</div>
+</section>
+<section id="fourier-transform">
+<h3><span class="section-number">7.4.2. </span>Fourier transform<a class="headerlink" href="#fourier-transform" title="Link to this heading">#</a></h3>
+<p>Transformation <span class="math notranslate nohighlight">\(\mathcal F: \mathbb{R}^N \to \mathbb{R}^N\)</span> with</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\mathcal F^{-1}(\mathcal F (v)) &amp;= v\\
+\mathcal F(v * w) &amp;= \mathcal F(v) \cdot \mathcal F(w).
+\end{align*}\]</div>
+<p>This implies</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+v * w &amp;= \mathcal F^{-1}(\mathcal F (v * w))\\
+&amp;= \mathcal F^{-1}(\mathcal F(v) \cdot \mathcal F(w))
+\end{align*}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">conv</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([4.75972857, 3.84267706, 4.75547361, 4.69473343, 4.41980675,
+       4.38291796, 3.98819354, 4.36896188, 4.0910097 , 4.60256767,
+       4.9724941 , 5.12207561, 5.60658149, 4.99165311, 4.75559415,
+       4.99484192, 4.8482739 , 4.82087932, 4.5831123 , 4.63790021])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.fft</span> <span class="kn">import</span> <span class="n">fft</span><span class="p">,</span> <span class="n">ifft</span> <span class="c1"># Fast Fourier Transform / Inverse FFT</span>
+<span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ifft</span><span class="p">(</span><span class="n">fft</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="n">fft</span><span class="p">(</span><span class="n">w</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([4.75972857, 3.84267706, 4.75547361, 4.69473343, 4.41980675,
+       4.38291796, 3.98819354, 4.36896188, 4.0910097 , 4.60256767,
+       4.9724941 , 5.12207561, 5.60658149, 4.99165311, 4.75559415,
+       4.99484192, 4.8482739 , 4.82087932, 4.5831123 , 4.63790021])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="definition-of-the-fourier-transform">
+<h3><span class="section-number">7.4.3. </span>Definition of the Fourier transform<a class="headerlink" href="#definition-of-the-fourier-transform" title="Link to this heading">#</a></h3>
+<p>The Fourier transform can be computed as</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\mathcal F(v) = U\cdot v, \;\;\mathcal F^{-1}(v) = \frac{1}{N}\ U^H \cdot v
+\end{align*}\]</div>
+<p>where the <span class="math notranslate nohighlight">\(N\times N\)</span> matrix <span class="math notranslate nohighlight">\(U\)</span> is defined as</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\\
+U =
+\begin{bmatrix}
+u_0(0) &amp; u_1(0) &amp; \dots &amp; u_{N-1}(0)\\
+u_0(1) &amp; u_1(1) &amp; \dots &amp; u_{N-1}(1)\\
+\vdots &amp; \vdots&amp; &amp; \vdots\\
+u_0(N-1) &amp; u_1(N-1) &amp; \dots &amp; u_{N-1}(N-1)\\
+\end{bmatrix}
+\end{align*}\]</div>
+<p>and <span class="math notranslate nohighlight">\(u_0, \dots, u_{N-1}\)</span> are functions defined as</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+u_n(x)&amp;:= \cos\left(2 \pi \frac{n}{N} x\right) - i \sin\left(2 \pi \frac{n}{N} x\right).
+\end{align*}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">matrix_U</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">,</span> <span class="n">N</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">N</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">N</span> <span class="o">*</span> <span class="n">n</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">U</span><span class="p">,</span> <span class="n">u</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">N</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">U</span>
+
+
+<span class="k">def</span> <span class="nf">fourier_transform</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">matrix_U</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">U</span> <span class="o">@</span> <span class="n">v</span>
+
+
+<span class="k">def</span> <span class="nf">inverse_fourier_transform</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">matrix_U</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">U</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span> <span class="o">@</span> <span class="n">v</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fft</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">-</span> <span class="n">fourier_transform</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 0.00000000e+00-0.00000000e+00j,  0.00000000e+00-2.22044605e-16j,
+        7.77156117e-16+0.00000000e+00j,  2.22044605e-16+1.05471187e-15j,
+        2.22044605e-16+6.10622664e-16j,  1.99840144e-15-6.66133815e-16j,
+       -1.11022302e-15-4.44089210e-16j, -2.83106871e-15-1.11022302e-16j,
+       -4.44089210e-16+1.60982339e-15j, -1.33226763e-15+4.44089210e-16j,
+        8.88178420e-16+3.88387152e-16j,  2.88657986e-15-3.55271368e-15j,
+        4.44089210e-16+4.99600361e-16j, -4.27435864e-15-1.66533454e-15j,
+       -2.66453526e-15+3.44169138e-15j,  6.21724894e-15-1.11022302e-15j,
+       -6.66133815e-16+1.60982339e-15j,  2.22044605e-16-1.44328993e-15j,
+        1.44328993e-15+4.32986980e-15j, -9.99200722e-16+2.22044605e-16j])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ifft</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">-</span> <span class="n">inverse_fourier_transform</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 5.55111512e-17-0.00000000e+00j,  0.00000000e+00-4.16333634e-17j,
+        4.51028104e-17-1.38777878e-17j,  1.38777878e-17-5.55111512e-17j,
+       -1.73472348e-18-1.73472348e-17j,  8.32667268e-17+1.38777878e-17j,
+       -5.55111512e-17+2.42861287e-17j, -1.38777878e-16+0.00000000e+00j,
+       -5.55111512e-17-8.67361738e-17j, -5.55111512e-17-2.77555756e-17j,
+        6.93889390e-18-1.94193576e-17j,  1.45716772e-16+1.87350135e-16j,
+        0.00000000e+00-3.12250226e-17j, -2.27248775e-16+9.71445147e-17j,
+       -1.24900090e-16-1.70002901e-16j,  2.91433544e-16+5.55111512e-17j,
+       -3.29597460e-17-8.32667268e-17j,  0.00000000e+00+6.93889390e-17j,
+        7.28583860e-17-2.22044605e-16j, -6.59194921e-17+5.55111512e-17j])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="connection-with-the-laplacian">
+<h3><span class="section-number">7.4.4. </span>Connection with the Laplacian<a class="headerlink" href="#connection-with-the-laplacian" title="Link to this heading">#</a></h3>
+<p>The functions <span class="math notranslate nohighlight">\(u_n\)</span> (the columns of the Fourier transform matrix) are eigenvectors of the Laplacian:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+u_n(x)&amp;:= \cos\left(2 \pi \frac{n}{N} x\right) - i \sin\left(2 \pi \frac{n}{N} x\right)\\
+\Delta u_n(x)&amp;:= \left(-4 \pi ^ 2\frac{n^2}{N^2}\right) u_n(x)
+\end{align*}\]</div>
+</section>
+<section id="summary">
+<h3><span class="section-number">7.4.5. </span>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h3>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+v * w
+= U^H ((U  w) \odot (U  v))
+\end{align*}\]</div>
+<p>or if <span class="math notranslate nohighlight">\(g_w=\mbox{diag}(U w)\)</span> is  filter</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+v * w
+= U^H g_w U  w
+\end{align*}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">U</span> <span class="o">=</span> <span class="n">matrix_U</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">((</span><span class="n">U</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span> <span class="o">@</span> <span class="p">((</span><span class="n">U</span> <span class="o">@</span> <span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">U</span> <span class="o">@</span> <span class="n">w</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([4.75972857, 3.84267706, 4.75547361, 4.69473343, 4.41980675,
+       4.38291796, 3.98819354, 4.36896188, 4.0910097 , 4.60256767,
+       4.9724941 , 5.12207561, 5.60658149, 4.99165311, 4.75559415,
+       4.99484192, 4.8482739 , 4.82087932, 4.5831123 , 4.63790021])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conv</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([4.75972857, 3.84267706, 4.75547361, 4.69473343, 4.41980675,
+       4.38291796, 3.98819354, 4.36896188, 4.0910097 , 4.60256767,
+       4.9724941 , 5.12207561, 5.60658149, 4.99165311, 4.75559415,
+       4.99484192, 4.8482739 , 4.82087932, 4.5831123 , 4.63790021])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="convolution-on-graphs">
+<h2><span class="section-number">7.5. </span>Convolution on graphs<a class="headerlink" href="#convolution-on-graphs" title="Link to this heading">#</a></h2>
+<p><strong>Plan</strong>:
+- Define the graph Laplacian
+- Compute the spectrum
+- Define a Fourier transform
+- Define convolution on a graph</p>
+<p><strong>Note:</strong> From now on <span class="math notranslate nohighlight">\(G = (V, E)\)</span> is an undirected, unweighted, simple graph.</p>
+<section id="graph-laplacian">
+<h3><span class="section-number">7.5.1. </span>Graph Laplacian<a class="headerlink" href="#graph-laplacian" title="Link to this heading">#</a></h3>
+<p>Adjacency matrix</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+A_{ij} = \left\{
+    \begin{array}{ll}
+    1 &amp;\text{ if } e_{ij}\in E\\
+    0 &amp;\text{ if } e_{ij}\notin E
+    \end{array}
+    \right.
+\end{align*}\]</div>
+<p>Degree matrix</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+D_{ij} = \left\{
+    \begin{array}{ll}
+    \mbox{deg}(v_i) &amp;\text{ if } i=j\\
+    0 &amp;\text{ if } i\neq j
+    \end{array}
+    \right.
+\end{align*}\]</div>
+<p>Laplacian</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+L &amp;= D - A.
+\end{align*}\]</div>
+<p>Normalized Laplacian</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+L &amp;= I - D^{-1/2} A D^{-1/2}.
+\end{align*}\]</div>
+</section>
+<section id="graph-spectrum-fourier-transform-and-convolution">
+<h3><span class="section-number">7.5.2. </span>Graph spectrum, Fourier transform, and convolution<a class="headerlink" href="#graph-spectrum-fourier-transform-and-convolution" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Spectral decomposition of the Laplacian:
+\begin{align*}
+L = U \Lambda U^T\
+\end{align*}</p></li>
+<li><p>Fourier transform: if <span class="math notranslate nohighlight">\(v\)</span> is a vector of features on the graph, then
+\begin{align*}
+\mathcal F (v) = U \cdot v, ;;\mathcal F^{-1} (v) = U^T \cdot v\
+\end{align*}</p></li>
+<li><p>Convolution with a filter <span class="math notranslate nohighlight">\(U \cdot w\)</span>
+\begin{align*}
+v * w = U ((U^T  w) \odot (U^T  v) )
+\end{align*}</p></li>
+</ol>
+<p>Or <span class="math notranslate nohighlight">\(g_w = \mbox{diag}(U^T w)\)</span> is a filter, then</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+v * w = U g_w U^T  v
+\end{align*}\]</div>
+</section>
+</section>
+<section id="spectral-convolutional-layers-in-pytorch-geometric">
+<h2><span class="section-number">7.6. </span>Spectral-convolutional layers in PyTorch Geometric<a class="headerlink" href="#spectral-convolutional-layers-in-pytorch-geometric" title="Link to this heading">#</a></h2>
+<p><strong>Problem:</strong> Computing the spectrum is a global and very expensive property.</p>
+<p><strong>Goal:</strong> Implementation as message passing.</p>
+<section id="chebconv">
+<h3><span class="section-number">7.6.1. </span>ChebConv<a class="headerlink" href="#chebconv" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Original <a class="reference external" href="https://arxiv.org/pdf/1606.09375.pdf">paper</a></p></li>
+<li><p>PyTorch <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.conv.ChebConv">doc</a></p></li>
+</ul>
+<section id="goal">
+<h4><span class="section-number">7.6.1.1. </span>Goal:<a class="headerlink" href="#goal" title="Link to this heading">#</a></h4>
+<p>Compute <span class="math notranslate nohighlight">\(U g_w U^T x\)</span> with <span class="math notranslate nohighlight">\(g_w = g_w(\Lambda)\)</span> a filter.</p>
+</section>
+<section id="chebyshev-approximation">
+<h4><span class="section-number">7.6.1.2. </span>Chebyshev approximation<a class="headerlink" href="#chebyshev-approximation" title="Link to this heading">#</a></h4>
+<p>Chebyshev polynomials <span class="math notranslate nohighlight">\(T_k\)</span>:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+T_{k}(x) = 2 x T_{k-1}(x) - T_{k-2}(x), \;\; T_0(x) = 1, T_1(x) = x
+\end{align*}\]</div>
+</section>
+<section id="chebyshev-approximation-of-the-filter">
+<h4><span class="section-number">7.6.1.3. </span>Chebyshev approximation of the filter<a class="headerlink" href="#chebyshev-approximation-of-the-filter" title="Link to this heading">#</a></h4>
+<p>Aproximation of the filter:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+g_w(\Lambda) = \sum_{k=0}^K \theta_k T_k(\tilde \Lambda),\;\;\;\;\tilde \Lambda = \frac{2}{\lambda_\max} \Lambda - I
+\end{align*}\]</div>
+</section>
+<section id="property">
+<h4><span class="section-number">7.6.1.4. </span>Property<a class="headerlink" href="#property" title="Link to this heading">#</a></h4>
+<p>If <span class="math notranslate nohighlight">\(L = U \Lambda U^T\)</span> then <span class="math notranslate nohighlight">\(T_k(L) = U T_k(\Lambda) U^T\)</span>.</p>
+</section>
+<section id="fast-approximated-convolution">
+<h4><span class="section-number">7.6.1.5. </span>Fast approximated convolution<a class="headerlink" href="#fast-approximated-convolution" title="Link to this heading">#</a></h4>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+v * w &amp;= U g_w U^T x
+= U \left(\sum_{k=0}^K \theta_k T_k(\tilde \Lambda) \right)U^T x
+=\sum_{k=0}^K  \theta_k U  T_k(\tilde \Lambda) U^T x\\
+&amp;=\sum_{k=0}^K  \theta_k T_k(\tilde L) x
+\end{align*}\]</div>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\tilde L = \frac{2}{\lambda_\max} L - I
+\end{align*}\]</div>
+</section>
+<section id="properties">
+<h4><span class="section-number">7.6.1.6. </span>Properties:<a class="headerlink" href="#properties" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Depends on <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(\lambda_\max\)</span>, not on <span class="math notranslate nohighlight">\(U, \Sigma\)</span></p></li>
+<li><p>Uses only <span class="math notranslate nohighlight">\(K\)</span>-powers <span class="math notranslate nohighlight">\(\Rightarrow\)</span> only the <span class="math notranslate nohighlight">\(K\)</span>-th neighborhood of each node, localized filter</p></li>
+</ul>
+<p><strong>As message passing:</strong>
+<img alt="" src="https://github.com/AntonioLonga/PytorchGeometricTutorial/blob/main/Tutorial4/fig/cheb_init.png?raw=1" /></p>
+<p><img alt="" src="https://github.com/AntonioLonga/PytorchGeometricTutorial/blob/main/Tutorial4/fig/cheb_norm.png?raw=1" /></p>
+<p><img alt="" src="https://github.com/AntonioLonga/PytorchGeometricTutorial/blob/main/Tutorial4/fig/cheb_forward.png?raw=1" /></p>
+<p><img alt="" src="https://github.com/AntonioLonga/PytorchGeometricTutorial/blob/main/Tutorial4/fig/cheb_message.png?raw=1" /></p>
+</section>
+</section>
+<section id="gcnconv">
+<h3><span class="section-number">7.6.2. </span>GCNConv<a class="headerlink" href="#gcnconv" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Original <a class="reference external" href="https://arxiv.org/pdf/1609.02907.pdf">paper</a></p></li>
+<li><p>PyTorch <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.conv.GCNConv">doc</a></p></li>
+</ul>
+<p>Start from <code class="docutils literal notranslate"><span class="pre">ChebConv</span></code> and assume</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(K=1\)</span> (linear approximation) so
+\begin{align*}
+v * w
+&amp;=\sum_{k=0}^1  \theta_k T_k(\tilde L) x
+= \theta_0 x + \theta_1 \tilde L x\
+\end{align*}</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda_\max =2\)</span> so
+\begin{align*}
+v * w
+&amp;= \theta_0 x + \theta_1 (L - I) x\
+&amp;= \theta_0 x - \theta_1 D^{-1/2} A D^{1/2} x\
+\end{align*}</p></li>
+<li><p><span class="math notranslate nohighlight">\(\theta_0=-\theta_1= \theta\)</span> so
+\begin{align*}
+v * w = \left(I + D^{-1/2} A D^{1/2}\right) x \theta
+\end{align*}</p></li>
+<li><p>Renormalization of <span class="math notranslate nohighlight">\(\theta\)</span> by using
+\begin{align*}
+\tilde A&amp;:= I + A\
+\tilde D_{ii}&amp;:= \sum_j \tilde A_{ij}
+\end{align*}
+so
+\begin{align*}
+v * w = \left(D^{-1/2} A D^{1/2}\right) x \theta
+\end{align*}</p></li>
+</ol>
+<p>If <span class="math notranslate nohighlight">\(x\)</span> is a <span class="math notranslate nohighlight">\(F\)</span>-dimensional feature vector, and we want an <span class="math notranslate nohighlight">\(F'\)</span>-dimensional feature vector as output:
+use <span class="math notranslate nohighlight">\(W'\in \mathbb{R}^{F\times F'}\)</span></p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+v * w = \left(D^{-1/2} A D^{1/2}\right) x \Theta
+\end{align*}\]</div>
+<p>Nodewise:
+<img alt="image.png" src="https://github.com/AntonioLonga/PytorchGeometricTutorial/blob/main/Tutorial4/fig/gcn_nodewise.png?raw=1" /></p>
+<section id="as-message-passing">
+<h4><span class="section-number">7.6.2.1. </span>As message passing<a class="headerlink" href="#as-message-passing" title="Link to this heading">#</a></h4>
+<p>See <a class="reference internal" href="GATs.html#graph-attention-networks"><span class="std std-ref">Tutorial: Graph Attention Networks</span></a></p>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./pages"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="GATs.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">6. </span>Graph Attention Networks</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="4_Scaling_GNNs.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">8. </span>Scaling</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#outline">7.1. Outline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#imports">7.2. Imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-convolution-in-ml">7.3. Why convolution in ML</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#some-theory-on-convolution">7.4. Some theory on convolution</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definition">7.4.1. Definition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fourier-transform">7.4.2. Fourier transform</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#definition-of-the-fourier-transform">7.4.3. Definition of the Fourier transform</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connection-with-the-laplacian">7.4.4. Connection with the Laplacian</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">7.4.5. Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convolution-on-graphs">7.5. Convolution on graphs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graph-laplacian">7.5.1. Graph Laplacian</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graph-spectrum-fourier-transform-and-convolution">7.5.2. Graph spectrum, Fourier transform, and convolution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-convolutional-layers-in-pytorch-geometric">7.6. Spectral-convolutional layers in PyTorch Geometric</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chebconv">7.6.1. ChebConv</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#goal">7.6.1.1. Goal:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#chebyshev-approximation">7.6.1.2. Chebyshev approximation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#chebyshev-approximation-of-the-filter">7.6.1.3. Chebyshev approximation of the filter</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#property">7.6.1.4. Property</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fast-approximated-convolution">7.6.1.5. Fast approximated convolution</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#properties">7.6.1.6. Properties:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gcnconv">7.6.2. GCNConv</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#as-message-passing">7.6.2.1. As message passing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Khairul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
