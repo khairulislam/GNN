@@ -21,6 +21,7 @@ execute:
 
 # Define the name of the latex output file for PDF builds
 latex:
+  latex_engine: pdflatex
   latex_documents:
     targetname: book.tex
 
@@ -39,6 +40,7 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
+  use_edit_page_button: true
 
 sphinx:
   recursive_update: true
@@ -56,3 +58,5 @@ parse:
     # don't forget to list any other extensions you want enabled,
     # including those that are enabled by default! See here: https://jupyterbook.org/en/stable/customize/config.html
     - html_image
+    - amsmath
+    - dollarmath
