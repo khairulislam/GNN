@@ -8,11 +8,11 @@ options:
 
 chapters:
 - file: pages/1_Introduction.ipynb
-- file: pages/Node
+- file: pages/node/Node
   sections:
-  - file: pages/2_Node_Classification.ipynb
-  - file: pages/8_Node_Classification_(with_W&B).ipynb
-  - file: pages/5_Point_Cloud_Classification.ipynb
+  - file: pages/node/Node_Classification.ipynb
+  - file: pages/node/Node_Classification_(with_W&B).ipynb
+  - file: pages/node/Point_Cloud_Classification.ipynb
 - file: pages/Graph 
   sections:
   - file: pages/3_Graph_Classification.ipynb
