@@ -19,4 +19,5 @@ chapters:
 - file: pages/10_Link_Prediction_on_MovieLens.ipynb
 - file: pages/11_Link_Regression_on_Movielens.ipynb
 - file: pages/GATs.ipynb
+- file: pages/Spectral_GCL.ipynb
 - file: pages/references.md
