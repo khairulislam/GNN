@@ -7,26 +7,77 @@ options:
   numbered: true
 
 chapters:
-- file: pages/1_Introduction.ipynb
+- file: pages/Introduction.ipynb
 - file: pages/node/Node
   sections:
   - file: pages/node/Node_Classification.ipynb
   - file: pages/node/Node_Classification_(with_W&B).ipynb
   - file: pages/node/Point_Cloud_Classification.ipynb
-- file: pages/Graph 
+
+- file: pages/graph/Graph 
   sections:
-  - file: pages/3_Graph_Classification.ipynb
-  - file: pages/9_Graph_Classification_with_PyG_and_W&B.ipynb
-- file: pages/Aggregation
+  - file: pages/graph/Graph_Classification.ipynb
+  - file: pages/graph/Graph_Classification_with_PyG_and_W&B.ipynb
+
+- file: pages/agg/Aggregation
   sections:
-  - file: pages/7_Aggregation_Package.ipynb
-  - file: pages/Aggregation Functions.ipynb
-- file: pages/Link
+  - file: pages/agg/Aggregation_Package.ipynb
+  - file: pages/agg/Aggregation Functions.ipynb
+
+- file: pages/link/Link
   sections:
-  - file: pages/10_Link_Prediction_on_MovieLens.ipynb
-  - file: pages/11_Link_Regression_on_Movielens.ipynb
-- file: pages/GATs.ipynb
-- file: pages/Spectral_GCL.ipynb
-- file: pages/4_Scaling_GNNs.ipynb
-- file: pages/6_GNN_Explanation.ipynb
-- file: pages/references.md
+  - file: pages/link/Link_Prediction_on_MovieLens.ipynb
+  - file: pages/link/Link_Regression_on_Movielens.ipynb
+
+- file: pages/ae/Autoencoder
+  sections:
+  - file: pages/ae/Autoencoders.ipynb
+  - file: pages/ae/Adversarially Regularized AE.ipynb
+
+- file: pages/others/Overview
+  sections:
+  - file: pages/others/GATs.ipynb
+  - file: pages/others/Spectral_GCL.ipynb
+  - file: pages/others/Scaling_GNNs.ipynb
+  - file: pages/others/GNN_Explanation.ipynb
+- file: pages/references
+
+# parts:
+# - caption: Overview
+#   chapters:
+#     - file: pages/1_Introduction.ipynb
+# - caption: Node
+#   chapters:
+#     - file: pages/node/Node_Classification.ipynb
+#       sections:
+#       - file: pages/node/Node_Classification_(with_W&B).ipynb
+#       - file: pages/node/Point_Cloud_Classification.ipynb
+
+# - caption: Graph
+#   chapters:
+#     - file: pages/3_Graph_Classification.ipynb
+#     - file: pages/9_Graph_Classification_with_PyG_and_W&B.ipynb
+
+# - caption: Aggregation
+#   chapters:
+#     - file: pages/7_Aggregation_Package.ipynb
+#     - file: pages/Aggregation Functions.ipynb
+
+# - caption: Link
+#   chapters:
+#     - file: pages/10_Link_Prediction_on_MovieLens.ipynb
+#     - file: pages/11_Link_Regression_on_Movielens.ipynb
+
+# - caption: Others
+#   chapters:
+#   - file: pages/GATs.ipynb
+#   - file: pages/Spectral_GCL.ipynb
+#   - file: pages/4_Scaling_GNNs.ipynb
+#   - file: pages/6_GNN_Explanation.ipynb
+#   - file: pages/references.md
+
+# - file: pages/GATs.ipynb
+# - file: pages/Spectral_GCL.ipynb
+# - file: pages/4_Scaling_GNNs.ipynb
+# - file: pages/6_GNN_Explanation.ipynb
+# - file: pages/references.md

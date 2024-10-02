@@ -21,7 +21,7 @@ execute:
 
 # Define the name of the latex output file for PDF builds
 latex:
-  latex_engine: pdflatex
+  latex_engine: xelatex
   latex_documents:
     targetname: book.tex
 
@@ -31,7 +31,7 @@ bibtex_bibfiles:
 
 # Information about where the book exists on the web
 repository:
-  url: https://github.com/khairulislam/Graph-Neural-Network  # Online location of your book
+  url: https://github.com/khairulislam/GNN  # Online location of your book
   path_to_book: docs  # Optional path to your book, relative to the repository root
   branch: master  # Which branch of the repository should be used when creating links (optional)
 
@@ -50,7 +50,7 @@ sphinx:
     # unknown_mime_type - application/vnd.plotly.v1+json and application/vnd.bokehjs_load.v0+json
     # domains - sphinx_proof.domain::prf needs to have `resolve_any_xref` method
     # mime_priority - latex priority not set in myst_nb for text/html, application/javascript
-    suppress_warnings: ["mystnb.unknown_mime_type", "myst.domains", "mystnb.mime_priority", "myst-nb.lexer"]
+    suppress_warnings: ["mystnb.unknown_mime_type", "myst.domains", "mystnb.mime_priority", "myst-nb.lexer", "mystnb.lexer"]
     copybutton_prompt_text: "$"
 
 parse:
