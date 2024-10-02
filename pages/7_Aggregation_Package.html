@@ -1,12 +1,10 @@
 
 <!DOCTYPE html>
 
-
-<html lang="en" data-content_root="../" >
-
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>4.1. Customizing Aggregations within Message Passing &#8212; Graph Neural Network Tutorials</title>
   
@@ -14,162 +12,413 @@
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
 
   
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
 
-    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=7f8ff830"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'pages/7_Aggregation_Package';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="4.2. Aggregation Functions" href="Aggregation%20Functions.html" />
     <link rel="prev" title="4. Aggregation" href="Aggregation.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
   </head>
   
   
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
 
   
   
-  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
-  
-  <div id="pst-scroll-pixel-helper"></div>
-  
-  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
     <div class="search-button__search-container">
-<form class="bd-search d-flex align-items-center"
-      action="../search.html"
-      method="get">
+      
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search"
-         class="form-control"
-         name="q"
-         id="search-input"
-         placeholder="Search this book..."
-         aria-label="Search this book..."
-         autocomplete="off"
-         autocorrect="off"
-         autocapitalize="off"
-         spellcheck="false"/>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
+</form>
+    </div>
   </div>
 
-  <div class="pst-async-banner-revealer d-none">
-  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
-</div>
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../intro.html">
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
-    </header>
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../_static/logo.jpeg" class="logo__image only-light" alt="Logo image">
+    <img src="../_static/logo.jpeg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="1_Introduction.html">
+                        Introduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="node/Node.html">
+                        Nodes
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="Graph.html">
+                        Graph
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="Aggregation.html">
+                        Aggregation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="Link.html">
+                        Links
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="GATs.html">
+                        Graph Attention Networks
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="Spectral_GCL.html">
+                        Spectral methods
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="4_Scaling_GNNs.html">
+                        Scaling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="6_GNN_Explanation.html">
+                        Explain using Captum
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="references.html">
+                        References
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
   
 
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
-      
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
-
   
   <div class="sidebar-header-items sidebar-primary__section">
     
     
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="1_Introduction.html">
+                        Introduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="node/Node.html">
+                        Nodes
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="Graph.html">
+                        Graph
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="Aggregation.html">
+                        Aggregation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="Link.html">
+                        Links
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="GATs.html">
+                        Graph Attention Networks
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="Spectral_GCL.html">
+                        Spectral methods
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="4_Scaling_GNNs.html">
+                        Scaling
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="6_GNN_Explanation.html">
+                        Explain using Captum
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="references.html">
+                        References
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
     
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
     
   </div>
-  
-    <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
 
   
-    
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
   
+
 
 <a class="navbar-brand logo" href="../intro.html">
-  
-  
-  
-  
-  
-    
-    
-      
-    
-    
-    <img src="../_static/logo.jpeg" class="logo__image only-light" alt="Graph Neural Network Tutorials - Home"/>
-    <script>document.write(`<img src="../_static/logo.jpeg" class="logo__image only-dark" alt="Graph Neural Network Tutorials - Home"/>`);</script>
-  
-  
-</a></div>
-        <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../_static/logo.jpeg" class="logo__image only-light" alt="Logo image">
+    <img src="../_static/logo.jpeg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -181,27 +430,27 @@
         </ul>
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="1_Introduction.html">1. Introduction</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="node/Node.html">2. Nodes</a><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="node/Node.html">2. Nodes</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="node/Node_Classification.html">2.1. Node Classification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node/Node_Classification_%28with_W%26B%29.html">2.2. Node Classification with W&amp;B</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node/Point_Cloud_Classification.html">2.3. Point Cloud Classification</a></li>
-</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="Graph.html">3. Graph</a><ul>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="Graph.html">3. Graph</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="3_Graph_Classification.html">3.1. Graph Classification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="9_Graph_Classification_with_PyG_and_W%26B.html">3.2. Graph Classification with W&amp;B</a></li>
-</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
-</details></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="Aggregation.html">4. Aggregation</a><ul class="current">
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="Aggregation.html">4. Aggregation</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">4.1. Customizing Aggregations within Message Passing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Aggregation%20Functions.html">4.2. Aggregation Functions</a></li>
-</ul><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="Link.html">5. Links</a><ul>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="Link.html">5. Links</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="10_Link_Prediction_on_MovieLens.html">5.1. Link Prediction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="11_Link_Regression_on_Movielens.html">5.2. Link Regression</a></li>
-</ul><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary>
-</details></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="GATs.html">6. Graph Attention Networks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Spectral_GCL.html">7. Spectral methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4_Scaling_GNNs.html">8. Scaling</a></li>
@@ -210,47 +459,42 @@
 </ul>
 
     </div>
-</nav></div>
+</nav>
     </div>
-  
-  
-  <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
   
   <div id="rtd-footer-container"></div>
 
-
       </div>
-      
-      <main id="main-content" class="bd-main" role="main">
+      <main id="main-content" class="bd-main">
         
         
 
 <div class="sbt-scroll-pixel-helper"></div>
 
-          <div class="bd-content">
-            <div class="bd-article-container">
-              
-              <div class="bd-header-article d-print-none">
-<div class="header-article-items header-article__inner">
-  
-    <div class="header-article-items__start">
-      
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <span class="fa-solid fa-bars"></span>
-</button></div>
-      
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
     </div>
-  
-  
-    <div class="header-article-items__end">
-      
-        <div class="header-article-item">
-
-<div class="article-header-buttons">
-
-
-
+    <div class="header-article__right">
 
 
 <div class="dropdown dropdown-launch-buttons">
@@ -258,146 +502,30 @@
     <i class="fas fa-rocket"></i>
   </button>
   <ul class="dropdown-menu">
-      
-      
-      
-      <li><a href="https://colab.research.google.com/github/khairulislam/Graph-Neural-Network/blob/master/docs/pages/7_Aggregation_Package.ipynb" target="_blank"
+      <li><a href="https://colab.research.google.com/github/khairulislam/GNN/blob/master/docs/pages/7_Aggregation_Package.ipynb" target="_blank"
    class="btn btn-sm dropdown-item"
-   title="Launch on Colab"
-   data-bs-placement="left" data-bs-toggle="tooltip"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Colab"
 >
   
 
 <span class="btn__icon-container">
   
-    <img alt="Colab logo" src="../_static/images/logo_colab.png">
+    <img src="../_static/images/logo_colab.png">
   </span>
 <span class="btn__text-container">Colab</span>
 </a>
-</li>
+</a>
       
   </ul>
 </div>
-
-
-
-
-
-
-<div class="dropdown dropdown-source-buttons">
-  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
-    <i class="fab fa-github"></i>
-  </button>
-  <ul class="dropdown-menu">
-      
-      
-      
-      <li><a href="https://github.com/khairulislam/Graph-Neural-Network" target="_blank"
-   class="btn btn-sm btn-source-repository-button dropdown-item"
-   title="Source repository"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-<span class="btn__text-container">Repository</span>
-</a>
-</li>
-      
-      
-      
-      
-      <li><a href="https://github.com/khairulislam/Graph-Neural-Network/edit/master/docs/pages/7_Aggregation_Package.ipynb" target="_blank"
-   class="btn btn-sm btn-source-edit-button dropdown-item"
-   title="Suggest edit"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-pencil-alt"></i>
-  </span>
-<span class="btn__text-container">Suggest edit</span>
-</a>
-</li>
-      
-      
-      
-      
-      <li><a href="https://github.com/khairulislam/Graph-Neural-Network/issues/new?title=Issue%20on%20page%20%2Fpages/7_Aggregation_Package.html&body=Your%20issue%20content%20here." target="_blank"
-   class="btn btn-sm btn-source-issues-button dropdown-item"
-   title="Open an issue"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="btn__text-container">Open issue</span>
-</a>
-</li>
-      
-  </ul>
-</div>
-
-
-
-
-
-
-<div class="dropdown dropdown-download-buttons">
-  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
-    <i class="fas fa-download"></i>
-  </button>
-  <ul class="dropdown-menu">
-      
-      
-      
-      <li><a href="../_sources/pages/7_Aggregation_Package.ipynb" target="_blank"
-   class="btn btn-sm btn-download-source-button dropdown-item"
-   title="Download source file"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-file"></i>
-  </span>
-<span class="btn__text-container">.ipynb</span>
-</a>
-</li>
-      
-      
-      
-      
-      <li>
-<button onclick="window.print()"
-  class="btn btn-sm btn-download-pdf-button dropdown-item"
-  title="Print to PDF"
-  data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-file-pdf"></i>
-  </span>
-<span class="btn__text-container">.pdf</span>
-</button>
-</li>
-      
-  </ul>
-</div>
-
-
-
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
-  title="Fullscreen mode"
-  data-bs-placement="bottom" data-bs-toggle="tooltip"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
 >
   
 
@@ -409,35 +537,107 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
   </button>
-`);
-</script>
-
-
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</button>
-</div></div>
-      
-    </div>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/khairulislam/GNN" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
   
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/khairulislam/GNN/issues/new?title=Issue%20on%20page%20%2Fpages/7_Aggregation_Package.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/khairulislam/GNN/edit/master/docs/pages/7_Aggregation_Package.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">suggest edit</span>
+</a>
+</a>
+      
+  </ul>
 </div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../_sources/pages/7_Aggregation_Package.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
 </div>
-              
-              
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
 
 <div id="jb-print-docs-body" class="onlyprint">
     <h1>Customizing Aggregations within Message Passing</h1>
@@ -450,32 +650,80 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-pytorch-and-pyg">4.1.1. Install Pytorch and PyG</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-dataset">4.1.2. Loading the dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-train-test-and-run-functions">4.1.3. Define train, test, and run functions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-a-gnn-class-and-import-aggregations">4.1.4. Define a GNN class and Import Aggregations</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#original-interface-with-string-type-as-the-aggregation-argument">4.1.4.1. Original interface with string type as the aggregation argument</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-a-single-aggregation-module-as-the-aggregation-argument">4.1.4.2. Use a single aggregation module as the aggregation argument</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-a-list-of-aggregation-strings-as-the-aggregation-argument">4.1.4.3. Use a list of aggregation strings as the aggregation argument</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-a-list-of-aggregation-modules-as-the-aggregation-argument">4.1.4.4. Use a list of aggregation modules as the aggregation argument</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-a-list-of-mixed-modules-and-strings-as-the-aggregation-argument">4.1.4.5. Use a list of mixed modules and strings as the aggregation argument</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#define-multiple-aggregations-with-multiaggregation-module">4.1.4.6. Define multiple aggregations with <code class="docutils literal notranslate"><span class="pre">MultiAggregation</span></code> module</a></li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#install-pytorch-and-pyg">
+   4.1.1. Install Pytorch and PyG
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#loading-the-dataset">
+   4.1.2. Loading the dataset
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-train-test-and-run-functions">
+   4.1.3. Define train, test, and run functions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-a-gnn-class-and-import-aggregations">
+   4.1.4. Define a GNN class and Import Aggregations
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#original-interface-with-string-type-as-the-aggregation-argument">
+     4.1.4.1. Original interface with string type as the aggregation argument
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#use-a-single-aggregation-module-as-the-aggregation-argument">
+     4.1.4.2. Use a single aggregation module as the aggregation argument
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#use-a-list-of-aggregation-strings-as-the-aggregation-argument">
+     4.1.4.3. Use a list of aggregation strings as the aggregation argument
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#use-a-list-of-aggregation-modules-as-the-aggregation-argument">
+     4.1.4.4. Use a list of aggregation modules as the aggregation argument
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#use-a-list-of-mixed-modules-and-strings-as-the-aggregation-argument">
+     4.1.4.5. Use a list of mixed modules and strings as the aggregation argument
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#define-multiple-aggregations-with-multiaggregation-module">
+     4.1.4.6. Define multiple aggregations with
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       MultiAggregation
+      </span>
+     </code>
+     module
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   4.1.5. Conclusion
+  </a>
+ </li>
 </ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">4.1.5. Conclusion</a></li>
-</ul>
+
             </nav>
         </div>
     </div>
 </div>
 
+            <article class="bd-article" role="main">
               
-                
-<div id="searchbox"></div>
-                <article class="bd-article">
-                  
   <section class="tex2jax_ignore mathjax_ignore" id="customizing-aggregations-within-message-passing">
-<h1><span class="section-number">4.1. </span>Customizing Aggregations within Message Passing<a class="headerlink" href="#customizing-aggregations-within-message-passing" title="Link to this heading">#</a></h1>
+<h1><span class="section-number">4.1. </span>Customizing Aggregations within Message Passing<a class="headerlink" href="#customizing-aggregations-within-message-passing" title="Permalink to this heading">#</a></h1>
 <p>Aggregation functions play an important role in the message passing framework and the readout function when implementing GNNs. Many works in the GNN literature (<a class="reference external" href="https://cs.stanford.edu/~jure/pubs/graphsage-nips17.pdf">Hamilton et al. (2017)</a>, <a class="reference external" href="https://arxiv.org/abs/1810.00826">Xu et al. (2018)</a>, <a class="reference external" href="https://proceedings.neurips.cc/paper/2020/file/99cad265a1768cc2dd013f0e740300ae-Paper.pdf">Corso et al. (2020)</a>, <a class="reference external" href="https://arxiv.org/abs/2006.07739">Li et al. (2020)</a>), demonstrate that the choice of aggregation functions contributes significantly to the performance of GNN models. In particular, the performance of GNNs with different aggregation functions differs when applied to distinct tasks and datasets. Recent works also show that using multiple aggregations (<a class="reference external" href="https://proceedings.neurips.cc/paper/2020/file/99cad265a1768cc2dd013f0e740300ae-Paper.pdf">Corso et al. (2020)</a>) and learnable aggregations (<a class="reference external" href="https://arxiv.org/abs/2006.07739">Li et al. (2020)</a>) can potentially gain substantial improvements. To facilitate experimentation with these different aggregation schemes and unify concepts of aggregation within GNNs across both <a class="reference external" href="https://github.com/pyg-team/pytorch_geometric/blob/master/torch_geometric/nn/conv/message_passing.py"><code class="docutils literal notranslate"><span class="pre">MessagePassing</span></code></a> and <a class="reference external" href="https://github.com/pyg-team/pytorch_geometric/tree/master/torch_geometric/nn/glob">global readouts</a>, we provide <strong>modular and re-usable aggregations</strong> in the newly defined <code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.aggr.*</span></code> package. Unifying these concepts also helps us to perform optimization and specialized implementations in a single place. In the new integration, the following functionality is applicable:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Original interface with string type as aggregation argument</span>
 <span class="k">class</span> <span class="nc">MyConv</span><span class="p">(</span><span class="n">MessagePassing</span><span class="p">):</span>
@@ -531,7 +779,7 @@ document.write(`
 </pre></div>
 </div>
 <section id="install-pytorch-and-pyg">
-<h2><span class="section-number">4.1.1. </span>Install Pytorch and PyG<a class="headerlink" href="#install-pytorch-and-pyg" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">4.1.1. </span>Install Pytorch and PyG<a class="headerlink" href="#install-pytorch-and-pyg" title="Permalink to this heading">#</a></h2>
 <p>In this tutorial, we explore the new aggregation package with <code class="docutils literal notranslate"><span class="pre">SAGEConv</span></code> (<a class="reference external" href="https://cs.stanford.edu/~jure/pubs/graphsage-nips17.pdf">Hamilton et al. (2017)</a>) and <code class="docutils literal notranslate"><span class="pre">ClusterLoader</span></code> (<a class="reference external" href="https://arxiv.org/abs/1905.07953">Chiang et al. (2019)</a>) and showcase on the <code class="docutils literal notranslate"><span class="pre">PubMed</span></code> graph from the <code class="docutils literal notranslate"><span class="pre">Planetoid</span></code> node classification benchmark suite (<a class="reference external" href="https://arxiv.org/abs/1603.08861">Yang et al. (2016)</a>).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -549,7 +797,7 @@ os.environ[&#39;TORCH&#39;] = torch.__version__
 </div>
 </section>
 <section id="loading-the-dataset">
-<h2><span class="section-number">4.1.2. </span>Loading the dataset<a class="headerlink" href="#loading-the-dataset" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">4.1.2. </span>Loading the dataset<a class="headerlink" href="#loading-the-dataset" title="Permalink to this heading">#</a></h2>
 <p>Let’s first load the <code class="docutils literal notranslate"><span class="pre">Planetoid</span></code> dataset and create subgraphs with <code class="docutils literal notranslate"><span class="pre">ClusterData</span></code> for training.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -601,7 +849,7 @@ Done!
 </div>
 </section>
 <section id="define-train-test-and-run-functions">
-<h2><span class="section-number">4.1.3. </span>Define train, test, and run functions<a class="headerlink" href="#define-train-test-and-run-functions" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">4.1.3. </span>Define train, test, and run functions<a class="headerlink" href="#define-train-test-and-run-functions" title="Permalink to this heading">#</a></h2>
 <p>Here we define a simple <code class="docutils literal notranslate"><span class="pre">run</span></code> function for training the GNN model.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -650,7 +898,7 @@ def run(model, epochs=5):
 </div>
 </section>
 <section id="define-a-gnn-class-and-import-aggregations">
-<h2><span class="section-number">4.1.4. </span>Define a GNN class and Import Aggregations<a class="headerlink" href="#define-a-gnn-class-and-import-aggregations" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">4.1.4. </span>Define a GNN class and Import Aggregations<a class="headerlink" href="#define-a-gnn-class-and-import-aggregations" title="Permalink to this heading">#</a></h2>
 <p>Now, let’s define a GNN helper class and import all those new aggregation operators!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -697,7 +945,7 @@ class GNN(torch.nn.Module):
 </div>
 </div>
 <section id="original-interface-with-string-type-as-the-aggregation-argument">
-<h3><span class="section-number">4.1.4.1. </span>Original interface with string type as the aggregation argument<a class="headerlink" href="#original-interface-with-string-type-as-the-aggregation-argument" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.1.4.1. </span>Original interface with string type as the aggregation argument<a class="headerlink" href="#original-interface-with-string-type-as-the-aggregation-argument" title="Permalink to this heading">#</a></h3>
 <p>Previously, PyG only supports customizing <a class="reference external" href="https://github.com/pyg-team/pytorch_geometric/blob/master/torch_geometric/nn/conv/message_passing.py">MessagePassing</a> with simple aggregations (e.g., <code class="docutils literal notranslate"><span class="pre">'mean'</span></code>, <code class="docutils literal notranslate"><span class="pre">'max'</span></code>, <code class="docutils literal notranslate"><span class="pre">'sum'</span></code>). Let’s define a GNN with <code class="docutils literal notranslate"><span class="pre">mean</span></code> aggregation and run it for 5 epochs.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -725,7 +973,7 @@ Epoch: 004, Train: 0.9000, Val Acc: 0.7200, Test Acc: 0.6920
 </div>
 </section>
 <section id="use-a-single-aggregation-module-as-the-aggregation-argument">
-<h3><span class="section-number">4.1.4.2. </span>Use a single aggregation module as the aggregation argument<a class="headerlink" href="#use-a-single-aggregation-module-as-the-aggregation-argument" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.1.4.2. </span>Use a single aggregation module as the aggregation argument<a class="headerlink" href="#use-a-single-aggregation-module-as-the-aggregation-argument" title="Permalink to this heading">#</a></h3>
 <p>In the new interface, the <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.conv.MessagePassing">MessagePassing</a> class can take an <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.aggr.Aggregation">Aggregation</a> module as an argument. Here we can define the mean aggregation by <code class="docutils literal notranslate"><span class="pre">MeanAggregation</span></code>. We can see the model achieves the same performance as previously.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -752,7 +1000,7 @@ Epoch: 004, Train: 0.9000, Val Acc: 0.7200, Test Acc: 0.6920
 </div>
 </section>
 <section id="use-a-list-of-aggregation-strings-as-the-aggregation-argument">
-<h3><span class="section-number">4.1.4.3. </span>Use a list of aggregation strings as the aggregation argument<a class="headerlink" href="#use-a-list-of-aggregation-strings-as-the-aggregation-argument" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.1.4.3. </span>Use a list of aggregation strings as the aggregation argument<a class="headerlink" href="#use-a-list-of-aggregation-strings-as-the-aggregation-argument" title="Permalink to this heading">#</a></h3>
 <p>For defining multiple aggregations, we can use a list of strings as the input argument. The aggregations will be <strong>resolved from pure strings</strong> via a lookup table, following the design principles of the <a class="reference external" href="https://github.com/cthoyt/class-resolver">class-resolver</a> library, e.g., by simply passing in <code class="docutils literal notranslate"><span class="pre">&quot;mean&quot;</span></code> to the <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.conv.MessagePassing"><strong>MessagePassing</strong></a> module. This will automatically resolve it to the MeanAggregation class. Let’s see how a PNA-like GNN (<a class="reference external" href="https://proceedings.neurips.cc/paper/2020/file/99cad265a1768cc2dd013f0e740300ae-Paper.pdf">Corso et al. (2020)</a>) works. It converges much faster!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -779,7 +1027,7 @@ Epoch: 004, Train: 0.9333, Val Acc: 0.7500, Test Acc: 0.7420
 </div>
 </section>
 <section id="use-a-list-of-aggregation-modules-as-the-aggregation-argument">
-<h3><span class="section-number">4.1.4.4. </span>Use a list of aggregation modules as the aggregation argument<a class="headerlink" href="#use-a-list-of-aggregation-modules-as-the-aggregation-argument" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.1.4.4. </span>Use a list of aggregation modules as the aggregation argument<a class="headerlink" href="#use-a-list-of-aggregation-modules-as-the-aggregation-argument" title="Permalink to this heading">#</a></h3>
 <p>You can also use a list of <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.aggr.Aggregation">Aggregation</a> modules to specify your convolutions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -813,7 +1061,7 @@ Epoch: 004, Train: 0.9333, Val Acc: 0.7500, Test Acc: 0.7420
 </div>
 </section>
 <section id="use-a-list-of-mixed-modules-and-strings-as-the-aggregation-argument">
-<h3><span class="section-number">4.1.4.5. </span>Use a list of mixed modules and strings as the aggregation argument<a class="headerlink" href="#use-a-list-of-mixed-modules-and-strings-as-the-aggregation-argument" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.1.4.5. </span>Use a list of mixed modules and strings as the aggregation argument<a class="headerlink" href="#use-a-list-of-mixed-modules-and-strings-as-the-aggregation-argument" title="Permalink to this heading">#</a></h3>
 <p>And the mix of them is supported as well for your convenience.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -846,7 +1094,7 @@ Epoch: 004, Train: 0.9333, Val Acc: 0.7500, Test Acc: 0.7420
 </div>
 </section>
 <section id="define-multiple-aggregations-with-multiaggregation-module">
-<h3><span class="section-number">4.1.4.6. </span>Define multiple aggregations with <code class="docutils literal notranslate"><span class="pre">MultiAggregation</span></code> module<a class="headerlink" href="#define-multiple-aggregations-with-multiaggregation-module" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">4.1.4.6. </span>Define multiple aggregations with <code class="docutils literal notranslate"><span class="pre">MultiAggregation</span></code> module<a class="headerlink" href="#define-multiple-aggregations-with-multiaggregation-module" title="Permalink to this heading">#</a></h3>
 <p>When a list is taken, <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.conv.MessagePassing">MessagePassing</a> would stack these aggregators in via the <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.aggr.MultiAggregation">MultiAggregation</a> module automatically. But you can also directly pass a <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.aggr.MultiAggregation">MultiAggregation</a> instead of a list. Now let’s see how can we define multiple aggregations with <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.aggr.MultiAggregation">MultiAggregation</a>. Here we use different initial temperatures for <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.aggr.SoftmaxAggregation">SoftmaxAggregation</a> (<a class="reference external" href="https://arxiv.org/abs/2006.07739">Li et al. (2020)</a>). Every different temperature will result in aggregation with different softness.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -889,7 +1137,7 @@ There are many other aggregation operators supported for you to “lego” your 
 </section>
 </section>
 <section id="conclusion">
-<h2><span class="section-number">4.1.5. </span>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">4.1.5. </span>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">#</a></h2>
 <p>In this tutorial, you have been presented with the <code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.aggr</span></code> package which provides a flexible interface to experiment with different aggregation functions with your message passing convolutions and unifies aggregation within GNNs across <a class="reference external" href="https://github.com/pyg-team/pytorch_geometric/blob/master/torch_geometric/nn/conv/message_passing.py"><code class="docutils literal notranslate"><span class="pre">MessagePassing</span></code></a> and <a class="reference external" href="https://github.com/pyg-team/pytorch_geometric/tree/master/torch_geometric/nn/glob">global readouts</a>. This new abstraction also makes designing new types of aggregation functions easier. Now, you can create your own aggregation function with the base <code class="docutils literal notranslate"><span class="pre">Aggregation</span></code> class. Please refer to the <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/_modules/torch_geometric/nn/aggr/base.html#Aggregation">docs</a> for more details.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyAggregation</span><span class="p">(</span><span class="n">Aggregation</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
@@ -925,71 +1173,118 @@ There are many other aggregation operators supported for you to “lego” your 
     </script>
     <script>kernelName = 'python3'</script>
 
-                </article>
-              
+            </article>
+            
 
-              
-              
-              
-              
-                <footer class="prev-next-footer d-print-none">
-                  
-<div class="prev-next-area">
-    <a class="left-prev"
-       href="Aggregation.html"
-       title="previous page">
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="Aggregation.html" title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">4. </span>Aggregation</p>
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title"><span class="section-number">4. </span>Aggregation</p>
       </div>
-    </a>
-    <a class="right-next"
-       href="Aggregation%20Functions.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">4.2. </span>Aggregation Functions</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
-</div>
-                </footer>
-              
-            </div>
-            
-            
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
+  </a>
+  <a class='right-next' id="next-link" href="Aggregation%20Functions.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title"><span class="section-number">4.2. </span>Aggregation Functions</p>
   </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-pytorch-and-pyg">4.1.1. Install Pytorch and PyG</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#loading-the-dataset">4.1.2. Loading the dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-train-test-and-run-functions">4.1.3. Define train, test, and run functions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-a-gnn-class-and-import-aggregations">4.1.4. Define a GNN class and Import Aggregations</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#original-interface-with-string-type-as-the-aggregation-argument">4.1.4.1. Original interface with string type as the aggregation argument</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-a-single-aggregation-module-as-the-aggregation-argument">4.1.4.2. Use a single aggregation module as the aggregation argument</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-a-list-of-aggregation-strings-as-the-aggregation-argument">4.1.4.3. Use a list of aggregation strings as the aggregation argument</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-a-list-of-aggregation-modules-as-the-aggregation-argument">4.1.4.4. Use a list of aggregation modules as the aggregation argument</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-a-list-of-mixed-modules-and-strings-as-the-aggregation-argument">4.1.4.5. Use a list of mixed modules and strings as the aggregation argument</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#define-multiple-aggregations-with-multiaggregation-module">4.1.4.6. Define multiple aggregations with <code class="docutils literal notranslate"><span class="pre">MultiAggregation</span></code> module</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">4.1.5. Conclusion</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
-              
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
             
           </div>
-          <footer class="bd-footer-content">
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#install-pytorch-and-pyg">
+   4.1.1. Install Pytorch and PyG
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#loading-the-dataset">
+   4.1.2. Loading the dataset
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-train-test-and-run-functions">
+   4.1.3. Define train, test, and run functions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-a-gnn-class-and-import-aggregations">
+   4.1.4. Define a GNN class and Import Aggregations
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#original-interface-with-string-type-as-the-aggregation-argument">
+     4.1.4.1. Original interface with string type as the aggregation argument
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#use-a-single-aggregation-module-as-the-aggregation-argument">
+     4.1.4.2. Use a single aggregation module as the aggregation argument
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#use-a-list-of-aggregation-strings-as-the-aggregation-argument">
+     4.1.4.3. Use a list of aggregation strings as the aggregation argument
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#use-a-list-of-aggregation-modules-as-the-aggregation-argument">
+     4.1.4.4. Use a list of aggregation modules as the aggregation argument
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#use-a-list-of-mixed-modules-and-strings-as-the-aggregation-argument">
+     4.1.4.5. Use a list of mixed modules and strings as the aggregation argument
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#define-multiple-aggregations-with-multiaggregation-module">
+     4.1.4.6. Define multiple aggregations with
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       MultiAggregation
+      </span>
+     </code>
+     module
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   4.1.5. Conclusion
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
             
 <div class="bd-footer-content__inner container">
   
@@ -1003,18 +1298,18 @@ By Md Khairul Islam
   
   <div class="footer-item">
     
+<p class="copyright">
 
-  <p class="copyright">
-    
-      © Copyright 2024.
-      <br/>
-    
-  </p>
+    &copy; Copyright 2024.<br>
+
+</p>
 
   </div>
   
   <div class="footer-item">
-    
+    <p class="last-updated">
+Last updated on None.<br>
+</p>
   </div>
   
   <div class="footer-item">
@@ -1022,18 +1317,19 @@ By Md Khairul Islam
   </div>
   
 </div>
-          </footer>
+          </div>
+        </footer>
         
 
       </main>
     </div>
   </div>
-  
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-  <footer class="bd-footer">
-  </footer>
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
   </body>
 </html>

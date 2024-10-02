@@ -1,0 +1,2057 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>5.2. Link Regression &#8212; Graph Neural Network Tutorials</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pages/link/Link_Regression_on_Movielens';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="6. Autoencoder" href="../ae/Autoencoder.html" />
+    <link rel="prev" title="5.1. Link Prediction" href="Link_Prediction_on_MovieLens.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/logo.jpeg" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/logo.jpeg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../Introduction.html">
+                        Introduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../node/Node.html">
+                        Nodes
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../graph/Graph.html">
+                        Graph
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../agg/Aggregation.html">
+                        Aggregation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="Link.html">
+                        Links
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../ae/Autoencoder.html">
+                        Autoencoder
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../others/Overview.html">
+                        Others
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../references.html">
+                        References
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../Introduction.html">
+                        Introduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../node/Node.html">
+                        Nodes
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../graph/Graph.html">
+                        Graph
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../agg/Aggregation.html">
+                        Aggregation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="Link.html">
+                        Links
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../ae/Autoencoder.html">
+                        Autoencoder
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../others/Overview.html">
+                        Others
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../references.html">
+                        References
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/logo.jpeg" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/logo.jpeg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Graph Neural Network
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">1. Introduction</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../node/Node.html">2. Nodes</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../node/Node_Classification.html">2.1. Node Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../node/Node_Classification_%28with_W%26B%29.html">2.2. Node Classification with W&amp;B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../node/Point_Cloud_Classification.html">2.3. Point Cloud Classification</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../graph/Graph.html">3. Graph</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../graph/Graph_Classification.html">3.1. Graph Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph/Graph_Classification_with_PyG_and_W%26B.html">3.2. Graph Classification with W&amp;B</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../agg/Aggregation.html">4. Aggregation</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../agg/Aggregation_Package.html">4.1. Customizing Aggregations within Message Passing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../agg/Aggregation%20Functions.html">4.2. Aggregation Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="Link.html">5. Links</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Link_Prediction_on_MovieLens.html">5.1. Link Prediction</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">5.2. Link Regression</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ae/Autoencoder.html">6. Autoencoder</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ae/Autoencoders.html">6.1. Graph AutoEncoders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ae/Adversarially%20Regularized%20AE.html">6.2. Adversarially Regularized Autoencoder</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../others/Overview.html">7. Others</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../others/GATs.html">7.1. Graph Attention Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../others/Spectral_GCL.html">7.2. Spectral methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../others/Scaling_GNNs.html">7.3. Scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../others/GNN_Explanation.html">7.4. Explain using Captum</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">8. References</a></li>
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://colab.research.google.com/github/khairulislam/GNN/blob/master/docs/pages/link/Link_Regression_on_Movielens.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Colab"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/khairulislam/GNN" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/khairulislam/GNN/issues/new?title=Issue%20on%20page%20%2Fpages/link/Link_Regression_on_Movielens.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/khairulislam/GNN/edit/master/docs/pages/link/Link_Regression_on_Movielens.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">suggest edit</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../_sources/pages/link/Link_Regression_on_Movielens.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Link Regression</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setup">
+   5.2.1. Setup
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-ingestion">
+   5.2.2. Data Ingestion
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#add-your-ratings-manually">
+     5.2.2.1. Add your ratings manually
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#upload-your-imdb-ratings">
+     5.2.2.2. Upload your IMDB ratings
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-preprocessing">
+   5.2.3. Data Preprocessing
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#heterogeneous-graph-construction">
+   5.2.4. Heterogeneous Graph Construction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dataset-splitting">
+   5.2.5. Dataset Splitting
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#graph-neural-network">
+   5.2.6. Graph Neural Network
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#training-a-heterogeneous-gnn">
+   5.2.7. Training a Heterogeneous GNN
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#evaluation">
+   5.2.8. Evaluation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#movie-recommendations">
+   5.2.9. Movie recommendations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#explaining-the-predictions">
+   5.2.10. Explaining the Predictions
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="link-regression">
+<h1><span class="section-number">5.2. </span>Link Regression<a class="headerlink" href="#link-regression" title="Permalink to this heading">#</a></h1>
+<p>This notebook shows how to load a set of <code class="docutils literal notranslate"><span class="pre">*.csv</span></code> files into a <code class="docutils literal notranslate"><span class="pre">torch_geometric.data.HeteroData</span></code> object and how to train a <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/notes/heterogeneous.html#hgtutorial">heterogeneous graph model</a>.</p>
+<p>We are going to use the <a class="reference external" href="https://grouplens.org/datasets/movielens/">Movielens dataset</a>, which is collected by the GroupLens Research group. The toy dataset describes movies, users, and their ratings. We are going to predict the rating of a user for a movie.</p>
+<p>This notebook runs faster on a GPU runtime. To enable it, go to Edit &gt; Notebook Settings &gt; Hardware Accelerator &gt; GPU.</p>
+<section id="setup">
+<h2><span class="section-number">5.2.1. </span>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2.0.0+cu118
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install required packages</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TORCH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">__version__</span>
+<span class="c1"># !pip install pyg-lib -f https://data.pyg.org/whl/nightly/torch-${TORCH}.html</span>
+<span class="c1"># !pip install git+https://github.com/pyg-team/pytorch_geometric.git</span>
+
+<span class="c1"># !pip install sentence_transformers</span>
+<span class="c1"># !pip3 install fuzzywuzzy[speedup]</span>
+<span class="c1"># !pip install captum</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="data-ingestion">
+<h2><span class="section-number">5.2.2. </span>Data Ingestion<a class="headerlink" href="#data-ingestion" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch_geometric.data</span> <span class="kn">import</span> <span class="n">download_url</span><span class="p">,</span> <span class="n">extract_zip</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">dataset_name</span> <span class="o">=</span> <span class="s1">&#39;ml-latest-small&#39;</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;https://files.grouplens.org/datasets/movielens/</span><span class="si">{</span><span class="n">dataset_name</span><span class="si">}</span><span class="s1">.zip&#39;</span>
+<span class="n">extract_zip</span><span class="p">(</span><span class="n">download_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">),</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+
+<span class="n">movies_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;./</span><span class="si">{</span><span class="n">dataset_name</span><span class="si">}</span><span class="s1">/movies.csv&#39;</span>
+<span class="n">ratings_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;./</span><span class="si">{</span><span class="n">dataset_name</span><span class="si">}</span><span class="s1">/ratings.csv&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading https://files.grouplens.org/datasets/movielens/ml-latest-small.zip
+Extracting ./ml-latest-small.zip
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the entire ratings dataframe into memory:</span>
+<span class="n">ratings_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">ratings_path</span><span class="p">)[[</span><span class="s2">&quot;userId&quot;</span><span class="p">,</span> <span class="s2">&quot;movieId&quot;</span><span class="p">,</span> <span class="s2">&quot;rating&quot;</span><span class="p">]]</span>
+
+<span class="c1"># Load the entire movie dataframe into memory:</span>
+<span class="n">movies_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">movies_path</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;movieId&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;movies.csv:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;===========&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">movies_df</span><span class="p">[[</span><span class="s2">&quot;genres&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of movies: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">movies_df</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ratings.csv:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;============&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ratings_df</span><span class="p">[[</span><span class="s2">&quot;userId&quot;</span><span class="p">,</span> <span class="s2">&quot;movieId&quot;</span><span class="p">,</span> <span class="s2">&quot;rating&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of ratings: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ratings_df</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>movies.csv:
+===========
+                                              genres  \
+movieId                                                
+1        Adventure|Animation|Children|Comedy|Fantasy   
+2                         Adventure|Children|Fantasy   
+3                                     Comedy|Romance   
+4                               Comedy|Drama|Romance   
+5                                             Comedy   
+
+                                      title  
+movieId                                      
+1                          Toy Story (1995)  
+2                            Jumanji (1995)  
+3                   Grumpier Old Men (1995)  
+4                  Waiting to Exhale (1995)  
+5        Father of the Bride Part II (1995)  
+Number of movies: 9742
+
+ratings.csv:
+============
+   userId  movieId  rating
+0       1        1     4.0
+1       1        3     4.0
+2       1        6     4.0
+3       1       47     5.0
+4       1       50     5.0
+Number of ratings: 100836
+</pre></div>
+</div>
+</div>
+</div>
+<p>Additionally, let’s add our ratings to the dataset to get predictions for movies we haven’t seen yet.</p>
+<p>There are two ways to add ratings:</p>
+<ol class="arabic simple">
+<li><p><strong>Add ratings manually</strong></p></li>
+<li><p><strong>Upload IMDB ratings</strong></p></li>
+</ol>
+<section id="add-your-ratings-manually">
+<h3><span class="section-number">5.2.2.1. </span>Add your ratings manually<a class="headerlink" href="#add-your-ratings-manually" title="Permalink to this heading">#</a></h3>
+<p>We recommend adding at least 10 ratings. Let’s first check out the most rated movies. Additional movies in the table are: <em>Avatar</em>, <em>The Dark Knight</em>, <em>Pretty Women</em>,
+<em>Titanic</em>, <em>The Lion King</em>, <em>Jurassic Park</em>, <em>The Matrix</em>, <em>The Lord of the Rings</em> and <em>The Avengers</em>. Please note that the article in the movie title is often at the end of the title.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fuzzywuzzy</span> <span class="kn">import</span> <span class="n">fuzz</span>
+
+<span class="c1"># Specify your userId</span>
+<span class="n">our_user_id</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;userId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Most rated movies:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;==================&#39;</span><span class="p">)</span>
+<span class="n">most_rated_movies</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;movieId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">movies_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">most_rated_movies</span><span class="o">.</span><span class="n">index</span><span class="p">][[</span><span class="s2">&quot;title&quot;</span><span class="p">]])</span>
+
+<span class="c1"># Initialize your rating list</span>
+<span class="n">ratings</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Most rated movies:
+==================
+                                          title
+356                         Forrest Gump (1994)
+318            Shawshank Redemption, The (1994)
+296                         Pulp Fiction (1994)
+593            Silence of the Lambs, The (1991)
+2571                         Matrix, The (1999)
+260   Star Wars: Episode IV - A New Hope (1977)
+480                        Jurassic Park (1993)
+110                           Braveheart (1995)
+589           Terminator 2: Judgment Day (1991)
+527                     Schindler&#39;s List (1993)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add your ratings here:</span>
+<span class="n">num_ratings</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">ratings</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">num_ratings</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Select the </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ratings</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">. movie:&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=====================================&#39;</span><span class="p">)</span>
+    <span class="n">movie</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Please enter the movie title: &#39;</span><span class="p">)</span>
+    <span class="n">movies_df</span><span class="p">[</span><span class="s1">&#39;title_score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">movies_df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">fuzz</span><span class="o">.</span><span class="n">ratio</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">movie</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">movies_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;title_score&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[[</span><span class="s1">&#39;title&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+    <span class="n">movie_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Please enter the movie id: &#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">movie_id</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="n">movie_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">movie_id</span><span class="p">)</span>
+    <span class="n">rating</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Please enter your rating: &#39;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rating</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">rating</span> <span class="o">&lt;=</span> <span class="mi">5</span>
+    <span class="n">ratings</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;movieId&#39;</span><span class="p">:</span> <span class="n">movie_id</span><span class="p">,</span> <span class="s1">&#39;rating&#39;</span><span class="p">:</span> <span class="n">rating</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">:</span> <span class="n">our_user_id</span><span class="p">})</span>
+    <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Select the 1. movie:
+=====================================
+Please enter the movie title: avatar
+                       title
+movieId                     
+72998          Avatar (2009)
+156605              Paterson
+110586        Calvary (2014)
+131098   Saving Santa (2013)
+4704          Hatari! (1962)
+Please enter the movie id: 72998
+Please enter your rating: 5
+
+Select the 2. movie:
+=====================================
+Please enter the movie title: Forrest Gump
+                            title
+movieId                          
+356           Forrest Gump (1994)
+26819             Fortress (1992)
+840           House Arrest (1996)
+4019     Finding Forrester (2000)
+34534        Four Brothers (2005)
+Please enter the movie id: 356
+Please enter your rating: 5
+
+Select the 3. movie:
+=====================================
+Please enter the movie title: Matrix, The
+                         title
+movieId                       
+2571        Matrix, The (1999)
+27660    Animatrix, The (2003)
+96728       Master, The (2012)
+48596       Marine, The (2006)
+41716      Matador, The (2005)
+Please enter the movie id: 2571
+Please enter your rating: 3
+
+Select the 4. movie:
+=====================================
+Please enter the movie title: Schindler&#39;s List
+                           title
+movieId                         
+527      Schindler&#39;s List (1993)
+58879       Shine a Light (2008)
+2727        Killer&#39;s Kiss (1955)
+3261              Singles (1992)
+5420          Windtalkers (2002)
+Please enter the movie id: 527
+Please enter your rating: 5
+
+Select the 5. movie:
+=====================================
+Please enter the movie title: Jurassic Park
+                                         title
+movieId                                       
+480                       Jurassic Park (1993)
+4638                  Jurassic Park III (2001)
+117529                   Jurassic World (2015)
+1544     Lost World: Jurassic Park, The (1997)
+53447                     Paranoid Park (2007)
+Please enter the movie id: 480
+Please enter your rating: 3
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add your ratings to the rating dataframe</span>
+<span class="n">ratings_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ratings_df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_records</span><span class="p">(</span><span class="n">ratings</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="upload-your-imdb-ratings">
+<h3><span class="section-number">5.2.2.2. </span>Upload your IMDB ratings<a class="headerlink" href="#upload-your-imdb-ratings" title="Permalink to this heading">#</a></h3>
+<p>If you have an IMDB account, you can also upload your IMDB ratings. To do so, please follow the following steps:</p>
+<ol class="arabic simple">
+<li><p>Go to https://www.imdb.com/</p></li>
+<li><p>Login to your account</p></li>
+<li><p>Go to <code class="docutils literal notranslate"><span class="pre">Your</span> <span class="pre">Ratings</span></code></p></li>
+<li><p>Click on <code class="docutils literal notranslate"><span class="pre">Export</span> <span class="pre">Ratings</span></code> after clicking the three dots in the upper right corner</p></li>
+<li><p>Upload the downloaded <code class="docutils literal notranslate"><span class="pre">ratings.csv</span></code> file to the current directory</p></li>
+<li><p>Rename the file to <code class="docutils literal notranslate"><span class="pre">imdb_ratings.csv</span></code></p></li>
+<li><p>Run the following cell</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select our userId</span>
+<span class="n">our_user_id</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;userId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="c1"># Load the IMDB ratings:</span>
+<span class="n">imdb_rating_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;./imdb_ratings.csv&#39;</span>
+<span class="n">imdb_ratings_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">imdb_rating_path</span><span class="p">)</span>
+<span class="n">imdb_ratings_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">imdb_ratings_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+<span class="c1"># The IMDB movie titles / ids do not match the movie titles /ids in the movielens dataframes</span>
+<span class="c1"># so we need to map them:</span>
+<span class="n">imdb_ratings_df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">imdb_ratings_df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; (&#39;</span> <span class="o">+</span> <span class="n">imdb_ratings_df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span>
+<span class="n">imdb_ratings_df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">imdb_ratings_df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="n">movies_df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">movies_df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="n">imdb_ratings_df</span> <span class="o">=</span> <span class="n">imdb_ratings_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">movies_df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(),</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="p">)</span>
+
+<span class="c1"># The ratings are on a scale from 1 to 10, so we need to transform them to a scale from 0 to 5:</span>
+<span class="n">imdb_ratings_df</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">imdb_ratings_df</span><span class="p">[</span><span class="s1">&#39;your rating&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># Your ratings that we are going to use:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Your IMDB ratings:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;==================&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">imdb_ratings_df</span><span class="p">[[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;rating&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="c1"># Finally, we can add the ratings to the ratings data frame:</span>
+<span class="n">imdb_ratings_df</span><span class="p">[</span><span class="s1">&#39;userId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">our_user_id</span>
+<span class="n">ratings_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">ratings_df</span><span class="p">,</span> <span class="n">imdb_ratings_df</span><span class="p">[[</span><span class="s1">&#39;movieId&#39;</span><span class="p">,</span> <span class="s1">&#39;rating&#39;</span><span class="p">,</span> <span class="s1">&#39;userId&#39;</span><span class="p">]]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="data-preprocessing">
+<h2><span class="section-number">5.2.3. </span>Data Preprocessing<a class="headerlink" href="#data-preprocessing" title="Permalink to this heading">#</a></h2>
+<p>We are going to use the genre as well as the title of the movie as node features. For the <code class="docutils literal notranslate"><span class="pre">title</span></code> features, we are going to use a pre-trained <a class="reference external" href="https://www.sbert.net/">sentence transformer</a> model to encode the title into a vector.
+For the <code class="docutils literal notranslate"><span class="pre">genre</span></code> features, we are going to use a one-hot encoding.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
+
+<span class="c1"># One-hot encode the genres:</span>
+<span class="n">genres</span> <span class="o">=</span> <span class="n">movies_df</span><span class="p">[</span><span class="s1">&#39;genres&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+<span class="n">genres</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">genres</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+<span class="c1"># Load the pre-trained sentence transformer model and encode the movie titles:</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="s1">&#39;all-MiniLM-L6-v2&#39;</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">titles</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">movies_df</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">convert_to_tensor</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">titles</span> <span class="o">=</span> <span class="n">titles</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+
+<span class="c1"># Concatenate the genres and title features:</span>
+<span class="n">movie_features</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">genres</span><span class="p">,</span> <span class="n">titles</span><span class="p">],</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># We don&#39;t have user features, which is why we use an identity matrix</span>
+<span class="n">user_features</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;userId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">ratings.csv</span></code> file contains the ratings of users for movies. From this
+file we are extracting the <code class="docutils literal notranslate"><span class="pre">userId</span></code>. We create a mapping from the <code class="docutils literal notranslate"><span class="pre">userId</span></code>
+to a unique consecutive value in the range <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">num_users]</span></code>. This is needed as we want our final data representation to be as compact as possible, <em>e.g.</em>, the representation of a user in the first row should be accessible via <code class="docutils literal notranslate"><span class="pre">x[0]</span></code>.
+The same we do for the <code class="docutils literal notranslate"><span class="pre">movieId</span></code>.
+Afterwards, we obtain the final <code class="docutils literal notranslate"><span class="pre">edge_index</span></code> representation of shape <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">num_ratings]</span></code> from <code class="docutils literal notranslate"><span class="pre">ratings.csv</span></code> by merging mapped user and movie indices with the raw indices given by the original data frame.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a mapping from the userId to a unique consecutive value in the range [0, num_users]:</span>
+<span class="n">unique_user_id</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;userId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="n">unique_user_id</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span>
+    <span class="s1">&#39;userId&#39;</span><span class="p">:</span> <span class="n">unique_user_id</span><span class="p">,</span>
+    <span class="s1">&#39;mappedUserId&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">RangeIndex</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_user_id</span><span class="p">))</span>
+    <span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mapping of user IDs to consecutive values:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==========================================&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">unique_user_id</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># Create a mapping from the movieId to a unique consecutive value in the range [0, num_movies]:</span>
+<span class="n">unique_movie_id</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;movieId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="n">unique_movie_id</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span>
+    <span class="s1">&#39;movieId&#39;</span><span class="p">:</span> <span class="n">unique_movie_id</span><span class="p">,</span>
+    <span class="s1">&#39;mappedMovieId&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">RangeIndex</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_movie_id</span><span class="p">))</span>
+    <span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mapping of movie IDs to consecutive values:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========================================&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">unique_movie_id</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># Merge the mappings with the original data frame:</span>
+<span class="n">ratings_df</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">unique_user_id</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;userId&#39;</span><span class="p">)</span>
+<span class="n">ratings_df</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">unique_movie_id</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;movieId&#39;</span><span class="p">)</span>
+
+<span class="c1"># With this, we are ready to create the edge_index representation in COO format</span>
+<span class="c1"># following the PyTorch Geometric semantics:</span>
+<span class="n">edge_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;mappedUserId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;mappedMovieId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)]</span>
+    <span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">edge_index</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ratings_df</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final edge indices pointing from users to movies:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;================================================&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">edge_index</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">10</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mapping of user IDs to consecutive values:
+==========================================
+   userId  mappedUserId
+0       1             0
+1       2             1
+2       3             2
+3       4             3
+4       5             4
+
+Mapping of movie IDs to consecutive values:
+===========================================
+   movieId  mappedMovieId
+0        1              0
+1        3              1
+2        6              2
+3       47              3
+4       50              4
+
+Final edge indices pointing from users to movies:
+================================================
+tensor([[ 0,  4,  6, 14, 16, 17, 18, 20, 26, 30],
+        [ 0,  0,  0,  0,  0,  0,  0,  0,  0,  0]])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="heterogeneous-graph-construction">
+<h2><span class="section-number">5.2.4. </span>Heterogeneous Graph Construction<a class="headerlink" href="#heterogeneous-graph-construction" title="Permalink to this heading">#</a></h2>
+<p>With this we are ready to initialize our heterogeneous graph data object and pass the
+necessary information to it.</p>
+<p>We also take care of adding reverse edges to the <code class="docutils literal notranslate"><span class="pre">HeteroData</span></code> object. This allows our GNN
+model to use both directions of the edges for the message passing.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch_geometric.transforms</span> <span class="k">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.data</span> <span class="kn">import</span> <span class="n">HeteroData</span>
+
+<span class="c1"># Create the heterogeneous graph data object:</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">HeteroData</span><span class="p">()</span>
+
+<span class="c1"># Add the user nodes:</span>
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">user_features</span>  <span class="c1"># [num_users, num_features_users]</span>
+
+<span class="c1"># Add the movie nodes:</span>
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">movie_features</span>  <span class="c1"># [num_movies, num_features_movies]</span>
+
+<span class="c1"># Add the rating edges:</span>
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;rates&#39;</span><span class="p">,</span> <span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_index</span> <span class="o">=</span> <span class="n">edge_index</span>  <span class="c1"># [2, num_ratings]</span>
+
+<span class="c1"># Add the rating labels:</span>
+<span class="n">rating</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;rates&#39;</span><span class="p">,</span> <span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label</span> <span class="o">=</span> <span class="n">rating</span>  <span class="c1"># [num_ratings]</span>
+
+<span class="c1"># We also need to make sure to add the reverse edges from movies to users</span>
+<span class="c1"># in order to let a GNN be able to pass messages in both directions.</span>
+<span class="c1"># We can leverage the `T.ToUndirected()` transform for this from PyG:</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">ToUndirected</span><span class="p">()(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># With the above transformation we also got reversed labels for the edges.</span>
+<span class="c1"># We are going to remove them:</span>
+<span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;movie&#39;</span><span class="p">,</span> <span class="s1">&#39;rev_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label</span>
+
+<span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">num_nodes</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_user_id</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;rates&#39;</span><span class="p">,</span> <span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">num_edges</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">ratings_df</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">num_features</span> <span class="o">==</span> <span class="mi">404</span>
+
+<span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>HeteroData(
+  <span class=" -Color -Color-Bold">user</span>={ x=[611, 611] },
+  <span class=" -Color -Color-Bold">movie</span>={ x=[9742, 404] },
+  <span class=" -Color -Color-Bold">(user, rates, movie)</span>={
+    edge_index=[2, 100841],
+    edge_label=[100841]
+  },
+  <span class=" -Color -Color-Bold">(movie, rev_rates, user)</span>={ edge_index=[2, 100841] }
+)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="dataset-splitting">
+<h2><span class="section-number">5.2.5. </span>Dataset Splitting<a class="headerlink" href="#dataset-splitting" title="Permalink to this heading">#</a></h2>
+<p>We can now split our data into a training, validation and test set. We are going to use
+the <code class="docutils literal notranslate"><span class="pre">T.RandomLinkSplit</span></code> transform from PyG to do this. This transform will randomly
+split the links with their label/rating into training, validation and test set.
+We are going to use 80% of the edges for training, 10% for validation and 10% for testing.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span><span class="p">,</span> <span class="n">test_data</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">RandomLinkSplit</span><span class="p">(</span>
+    <span class="n">num_val</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">num_test</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">neg_sampling_ratio</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">edge_types</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;rates&#39;</span><span class="p">,</span> <span class="s1">&#39;movie&#39;</span><span class="p">)],</span>
+    <span class="n">rev_edge_types</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;movie&#39;</span><span class="p">,</span> <span class="s1">&#39;rev_rates&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">)],</span>
+<span class="p">)(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(HeteroData(
+   <span class=" -Color -Color-Bold">user</span>={ x=[611, 611] },
+   <span class=" -Color -Color-Bold">movie</span>={ x=[9742, 404] },
+   <span class=" -Color -Color-Bold">(user, rates, movie)</span>={
+     edge_index=[2, 80673],
+     edge_label=[80673],
+     edge_label_index=[2, 80673]
+   },
+   <span class=" -Color -Color-Bold">(movie, rev_rates, user)</span>={ edge_index=[2, 80673] }
+ ),
+ HeteroData(
+   <span class=" -Color -Color-Bold">user</span>={ x=[611, 611] },
+   <span class=" -Color -Color-Bold">movie</span>={ x=[9742, 404] },
+   <span class=" -Color -Color-Bold">(user, rates, movie)</span>={
+     edge_index=[2, 80673],
+     edge_label=[10084],
+     edge_label_index=[2, 10084]
+   },
+   <span class=" -Color -Color-Bold">(movie, rev_rates, user)</span>={ edge_index=[2, 80673] }
+ ))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="graph-neural-network">
+<h2><span class="section-number">5.2.6. </span>Graph Neural Network<a class="headerlink" href="#graph-neural-network" title="Permalink to this heading">#</a></h2>
+<p>We are now ready to define our GNN model. We are going to use a simple GNN model with
+two message passing layers for the encoding of the user and movie nodes.
+Additionally, we are going to use a decoder to predict the rating for the encoded
+user-movie combination.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch_geometric.nn</span> <span class="kn">import</span> <span class="n">SAGEConv</span><span class="p">,</span> <span class="n">to_hetero</span>
+
+<span class="k">class</span> <span class="nc">GNNEncoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">SAGEConv</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">hidden_channels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">SAGEConv</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">out_channels</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">)</span><span class="o">.</span><span class="n">relu</span><span class="p">()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+
+<span class="k">class</span> <span class="nc">EdgeDecoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lin1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">hidden_channels</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lin2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z_dict</span><span class="p">,</span> <span class="n">edge_label_index</span><span class="p">):</span>
+        <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">edge_label_index</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">z_dict</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">][</span><span class="n">row</span><span class="p">],</span> <span class="n">z_dict</span><span class="p">[</span><span class="s1">&#39;movie&#39;</span><span class="p">][</span><span class="n">col</span><span class="p">]],</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lin1</span><span class="p">(</span><span class="n">z</span><span class="p">)</span><span class="o">.</span><span class="n">relu</span><span class="p">()</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lin2</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">z</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">GNNEncoder</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">to_hetero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">metadata</span><span class="p">(),</span> <span class="n">aggr</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">EdgeDecoder</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_dict</span><span class="p">,</span> <span class="n">edge_index_dict</span><span class="p">,</span> <span class="n">edge_label_index</span><span class="p">):</span>
+        <span class="n">z_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x_dict</span><span class="p">,</span> <span class="n">edge_index_dict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">z_dict</span><span class="p">,</span> <span class="n">edge_label_index</span><span class="p">)</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">hidden_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model(
+  (encoder): GraphModule(
+    (conv1): ModuleDict(
+      (user__rates__movie): SAGEConv((-1, -1), 32, aggr=mean)
+      (movie__rev_rates__user): SAGEConv((-1, -1), 32, aggr=mean)
+    )
+    (conv2): ModuleDict(
+      (user__rates__movie): SAGEConv((-1, -1), 32, aggr=mean)
+      (movie__rev_rates__user): SAGEConv((-1, -1), 32, aggr=mean)
+    )
+  )
+  (decoder): EdgeDecoder(
+    (lin1): Linear(in_features=64, out_features=32, bias=True)
+    (lin2): Linear(in_features=32, out_features=1, bias=True)
+  )
+)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="training-a-heterogeneous-gnn">
+<h2><span class="section-number">5.2.7. </span>Training a Heterogeneous GNN<a class="headerlink" href="#training-a-heterogeneous-gnn" title="Permalink to this heading">#</a></h2>
+<p>Training our GNN is then similar to training any PyTorch model.
+We move the model to the desired device, and initialize an optimizer that takes care of adjusting model parameters via stochastic gradient descent.</p>
+<p>The training loop applies the forward computation of the model, computes the loss from ground-truth labels and obtained predictions, and adjusts model parameters via back-propagation and stochastic gradient descent.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">train</span><span class="p">():</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">train_data</span><span class="o">.</span><span class="n">x_dict</span><span class="p">,</span> <span class="n">train_data</span><span class="o">.</span><span class="n">edge_index_dict</span><span class="p">,</span>
+                 <span class="n">train_data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label_index</span><span class="p">)</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+
+<span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">x_dict</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_index_dict</span><span class="p">,</span>
+                 <span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label_index</span><span class="p">)</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+    <span class="n">rmse</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">rmse</span><span class="p">)</span>
+
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">301</span><span class="p">):</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="n">train_data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">train</span><span class="p">()</span>
+    <span class="n">train_rmse</span> <span class="o">=</span> <span class="n">test</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+    <span class="n">val_rmse</span> <span class="o">=</span> <span class="n">test</span><span class="p">(</span><span class="n">val_data</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Epoch: </span><span class="si">{</span><span class="n">epoch</span><span class="si">:</span><span class="s1">03d</span><span class="si">}</span><span class="s1">, Loss: </span><span class="si">{</span><span class="n">loss</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, Train: </span><span class="si">{</span><span class="n">train_rmse</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, &#39;</span>
+          <span class="sa">f</span><span class="s1">&#39;Val: </span><span class="si">{</span><span class="n">val_rmse</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch: 001, Loss: 12.4464, Train: 3.1510, Val: 3.1654
+Epoch: 002, Loss: 9.9285, Train: 2.4629, Val: 2.4839
+Epoch: 003, Loss: 6.0660, Train: 1.2864, Val: 1.3148
+Epoch: 004, Loss: 1.6548, Train: 1.8166, Val: 1.7829
+Epoch: 005, Loss: 4.5889, Train: 1.6941, Val: 1.6642
+Epoch: 006, Loss: 2.9848, Train: 1.0629, Val: 1.0682
+Epoch: 007, Loss: 1.1297, Train: 1.2230, Val: 1.2504
+Epoch: 008, Loss: 1.4958, Train: 1.5172, Val: 1.5451
+Epoch: 009, Loss: 2.3018, Train: 1.6078, Val: 1.6351
+Epoch: 010, Loss: 2.5851, Train: 1.5181, Val: 1.5459
+Epoch: 011, Loss: 2.3047, Train: 1.3071, Val: 1.3353
+Epoch: 012, Loss: 1.7085, Train: 1.0813, Val: 1.1053
+Epoch: 013, Loss: 1.1691, Train: 1.0429, Val: 1.0510
+Epoch: 014, Loss: 1.0877, Train: 1.2272, Val: 1.2183
+Epoch: 015, Loss: 1.5061, Train: 1.3361, Val: 1.3217
+Epoch: 016, Loss: 1.7853, Train: 1.2307, Val: 1.2220
+Epoch: 017, Loss: 1.5145, Train: 1.0612, Val: 1.0664
+Epoch: 018, Loss: 1.1261, Train: 1.0160, Val: 1.0354
+Epoch: 019, Loss: 1.0324, Train: 1.0894, Val: 1.1154
+Epoch: 020, Loss: 1.1868, Train: 1.1675, Val: 1.1954
+Epoch: 021, Loss: 1.3630, Train: 1.1877, Val: 1.2160
+Epoch: 022, Loss: 1.4106, Train: 1.1434, Val: 1.1713
+Epoch: 023, Loss: 1.3073, Train: 1.0630, Val: 1.0892
+Epoch: 024, Loss: 1.1300, Train: 1.0032, Val: 1.0241
+Epoch: 025, Loss: 1.0063, Train: 1.0142, Val: 1.0267
+Epoch: 026, Loss: 1.0287, Train: 1.0721, Val: 1.0773
+Epoch: 027, Loss: 1.1495, Train: 1.0976, Val: 1.1006
+Epoch: 028, Loss: 1.2047, Train: 1.0595, Val: 1.0662
+Epoch: 029, Loss: 1.1225, Train: 1.0039, Val: 1.0181
+Epoch: 030, Loss: 1.0078, Train: 0.9868, Val: 1.0084
+Epoch: 031, Loss: 0.9737, Train: 1.0094, Val: 1.0357
+Epoch: 032, Loss: 1.0190, Train: 1.0355, Val: 1.0637
+Epoch: 033, Loss: 1.0722, Train: 1.0378, Val: 1.0664
+Epoch: 034, Loss: 1.0770, Train: 1.0145, Val: 1.0424
+Epoch: 035, Loss: 1.0292, Train: 0.9845, Val: 1.0101
+Epoch: 036, Loss: 0.9692, Train: 0.9728, Val: 0.9944
+Epoch: 037, Loss: 0.9463, Train: 0.9857, Val: 1.0029
+Epoch: 038, Loss: 0.9716, Train: 1.0013, Val: 1.0159
+Epoch: 039, Loss: 1.0025, Train: 0.9966, Val: 1.0119
+Epoch: 040, Loss: 0.9932, Train: 0.9759, Val: 0.9947
+Epoch: 041, Loss: 0.9525, Train: 0.9614, Val: 0.9846
+Epoch: 042, Loss: 0.9244, Train: 0.9636, Val: 0.9903
+Epoch: 043, Loss: 0.9285, Train: 0.9728, Val: 1.0014
+Epoch: 044, Loss: 0.9463, Train: 0.9748, Val: 1.0041
+Epoch: 045, Loss: 0.9503, Train: 0.9657, Val: 0.9946
+Epoch: 046, Loss: 0.9326, Train: 0.9531, Val: 0.9804
+Epoch: 047, Loss: 0.9083, Train: 0.9476, Val: 0.9726
+Epoch: 048, Loss: 0.8980, Train: 0.9513, Val: 0.9739
+Epoch: 049, Loss: 0.9050, Train: 0.9550, Val: 0.9764
+Epoch: 050, Loss: 0.9119, Train: 0.9506, Val: 0.9727
+Epoch: 051, Loss: 0.9036, Train: 0.9415, Val: 0.9657
+Epoch: 052, Loss: 0.8864, Train: 0.9362, Val: 0.9630
+Epoch: 053, Loss: 0.8766, Train: 0.9372, Val: 0.9658
+Epoch: 054, Loss: 0.8784, Train: 0.9390, Val: 0.9686
+Epoch: 055, Loss: 0.8818, Train: 0.9366, Val: 0.9663
+Epoch: 056, Loss: 0.8772, Train: 0.9307, Val: 0.9596
+Epoch: 057, Loss: 0.8661, Train: 0.9261, Val: 0.9536
+Epoch: 058, Loss: 0.8576, Train: 0.9256, Val: 0.9517
+Epoch: 059, Loss: 0.8567, Train: 0.9265, Val: 0.9516
+Epoch: 060, Loss: 0.8583, Train: 0.9246, Val: 0.9499
+Epoch: 061, Loss: 0.8549, Train: 0.9204, Val: 0.9467
+Epoch: 062, Loss: 0.8470, Train: 0.9172, Val: 0.9450
+Epoch: 063, Loss: 0.8413, Train: 0.9168, Val: 0.9458
+Epoch: 064, Loss: 0.8405, Train: 0.9169, Val: 0.9465
+Epoch: 065, Loss: 0.8407, Train: 0.9152, Val: 0.9448
+Epoch: 066, Loss: 0.8377, Train: 0.9123, Val: 0.9412
+Epoch: 067, Loss: 0.8323, Train: 0.9103, Val: 0.9383
+Epoch: 068, Loss: 0.8287, Train: 0.9101, Val: 0.9372
+Epoch: 069, Loss: 0.8282, Train: 0.9099, Val: 0.9366
+Epoch: 070, Loss: 0.8279, Train: 0.9084, Val: 0.9354
+Epoch: 071, Loss: 0.8251, Train: 0.9064, Val: 0.9342
+Epoch: 072, Loss: 0.8215, Train: 0.9054, Val: 0.9340
+Epoch: 073, Loss: 0.8197, Train: 0.9052, Val: 0.9345
+Epoch: 074, Loss: 0.8195, Train: 0.9047, Val: 0.9342
+Epoch: 075, Loss: 0.8186, Train: 0.9035, Val: 0.9327
+Epoch: 076, Loss: 0.8162, Train: 0.9022, Val: 0.9310
+Epoch: 077, Loss: 0.8140, Train: 0.9018, Val: 0.9300
+Epoch: 078, Loss: 0.8132, Train: 0.9016, Val: 0.9296
+Epoch: 079, Loss: 0.8129, Train: 0.9009, Val: 0.9290
+Epoch: 080, Loss: 0.8117, Train: 0.8999, Val: 0.9285
+Epoch: 081, Loss: 0.8098, Train: 0.8992, Val: 0.9285
+Epoch: 082, Loss: 0.8086, Train: 0.8989, Val: 0.9288
+Epoch: 083, Loss: 0.8081, Train: 0.8986, Val: 0.9286
+Epoch: 084, Loss: 0.8074, Train: 0.8978, Val: 0.9279
+Epoch: 085, Loss: 0.8061, Train: 0.8971, Val: 0.9270
+Epoch: 086, Loss: 0.8048, Train: 0.8967, Val: 0.9264
+Epoch: 087, Loss: 0.8041, Train: 0.8964, Val: 0.9261
+Epoch: 088, Loss: 0.8036, Train: 0.8958, Val: 0.9258
+Epoch: 089, Loss: 0.8026, Train: 0.8952, Val: 0.9257
+Epoch: 090, Loss: 0.8014, Train: 0.8947, Val: 0.9257
+Epoch: 091, Loss: 0.8006, Train: 0.8944, Val: 0.9259
+Epoch: 092, Loss: 0.8000, Train: 0.8939, Val: 0.9256
+Epoch: 093, Loss: 0.7992, Train: 0.8934, Val: 0.9251
+Epoch: 094, Loss: 0.7981, Train: 0.8929, Val: 0.9246
+Epoch: 095, Loss: 0.7973, Train: 0.8925, Val: 0.9243
+Epoch: 096, Loss: 0.7966, Train: 0.8921, Val: 0.9241
+Epoch: 097, Loss: 0.7959, Train: 0.8916, Val: 0.9239
+Epoch: 098, Loss: 0.7950, Train: 0.8911, Val: 0.9239
+Epoch: 099, Loss: 0.7941, Train: 0.8907, Val: 0.9240
+Epoch: 100, Loss: 0.7934, Train: 0.8903, Val: 0.9239
+Epoch: 101, Loss: 0.7927, Train: 0.8898, Val: 0.9236
+Epoch: 102, Loss: 0.7919, Train: 0.8894, Val: 0.9232
+Epoch: 103, Loss: 0.7910, Train: 0.8890, Val: 0.9229
+Epoch: 104, Loss: 0.7903, Train: 0.8886, Val: 0.9227
+Epoch: 105, Loss: 0.7896, Train: 0.8881, Val: 0.9226
+Epoch: 106, Loss: 0.7888, Train: 0.8876, Val: 0.9225
+Epoch: 107, Loss: 0.7880, Train: 0.8872, Val: 0.9225
+Epoch: 108, Loss: 0.7872, Train: 0.8868, Val: 0.9224
+Epoch: 109, Loss: 0.7865, Train: 0.8863, Val: 0.9222
+Epoch: 110, Loss: 0.7857, Train: 0.8859, Val: 0.9218
+Epoch: 111, Loss: 0.7848, Train: 0.8854, Val: 0.9215
+Epoch: 112, Loss: 0.7841, Train: 0.8850, Val: 0.9213
+Epoch: 113, Loss: 0.7833, Train: 0.8845, Val: 0.9211
+Epoch: 114, Loss: 0.7825, Train: 0.8841, Val: 0.9210
+Epoch: 115, Loss: 0.7816, Train: 0.8836, Val: 0.9209
+Epoch: 116, Loss: 0.7808, Train: 0.8832, Val: 0.9207
+Epoch: 117, Loss: 0.7801, Train: 0.8827, Val: 0.9205
+Epoch: 118, Loss: 0.7792, Train: 0.8822, Val: 0.9202
+Epoch: 119, Loss: 0.7784, Train: 0.8818, Val: 0.9199
+Epoch: 120, Loss: 0.7776, Train: 0.8813, Val: 0.9197
+Epoch: 121, Loss: 0.7768, Train: 0.8808, Val: 0.9195
+Epoch: 122, Loss: 0.7760, Train: 0.8804, Val: 0.9193
+Epoch: 123, Loss: 0.7751, Train: 0.8799, Val: 0.9192
+Epoch: 124, Loss: 0.7743, Train: 0.8794, Val: 0.9190
+Epoch: 125, Loss: 0.7735, Train: 0.8789, Val: 0.9188
+Epoch: 126, Loss: 0.7727, Train: 0.8785, Val: 0.9185
+Epoch: 127, Loss: 0.7718, Train: 0.8780, Val: 0.9182
+Epoch: 128, Loss: 0.7710, Train: 0.8775, Val: 0.9180
+Epoch: 129, Loss: 0.7702, Train: 0.8771, Val: 0.9179
+Epoch: 130, Loss: 0.7694, Train: 0.8766, Val: 0.9177
+Epoch: 131, Loss: 0.7686, Train: 0.8761, Val: 0.9176
+Epoch: 132, Loss: 0.7678, Train: 0.8757, Val: 0.9174
+Epoch: 133, Loss: 0.7670, Train: 0.8752, Val: 0.9172
+Epoch: 134, Loss: 0.7662, Train: 0.8748, Val: 0.9170
+Epoch: 135, Loss: 0.7654, Train: 0.8743, Val: 0.9168
+Epoch: 136, Loss: 0.7646, Train: 0.8739, Val: 0.9167
+Epoch: 137, Loss: 0.7638, Train: 0.8734, Val: 0.9165
+Epoch: 138, Loss: 0.7630, Train: 0.8730, Val: 0.9164
+Epoch: 139, Loss: 0.7623, Train: 0.8725, Val: 0.9163
+Epoch: 140, Loss: 0.7615, Train: 0.8721, Val: 0.9162
+Epoch: 141, Loss: 0.7608, Train: 0.8717, Val: 0.9161
+Epoch: 142, Loss: 0.7600, Train: 0.8712, Val: 0.9159
+Epoch: 143, Loss: 0.7593, Train: 0.8708, Val: 0.9158
+Epoch: 144, Loss: 0.7585, Train: 0.8704, Val: 0.9158
+Epoch: 145, Loss: 0.7578, Train: 0.8700, Val: 0.9157
+Epoch: 146, Loss: 0.7571, Train: 0.8696, Val: 0.9156
+Epoch: 147, Loss: 0.7564, Train: 0.8692, Val: 0.9156
+Epoch: 148, Loss: 0.7558, Train: 0.8688, Val: 0.9155
+Epoch: 149, Loss: 0.7551, Train: 0.8684, Val: 0.9155
+Epoch: 150, Loss: 0.7544, Train: 0.8681, Val: 0.9154
+Epoch: 151, Loss: 0.7538, Train: 0.8677, Val: 0.9154
+Epoch: 152, Loss: 0.7532, Train: 0.8673, Val: 0.9154
+Epoch: 153, Loss: 0.7526, Train: 0.8670, Val: 0.9154
+Epoch: 154, Loss: 0.7519, Train: 0.8666, Val: 0.9154
+Epoch: 155, Loss: 0.7514, Train: 0.8663, Val: 0.9153
+Epoch: 156, Loss: 0.7508, Train: 0.8660, Val: 0.9153
+Epoch: 157, Loss: 0.7502, Train: 0.8657, Val: 0.9153
+Epoch: 158, Loss: 0.7497, Train: 0.8653, Val: 0.9154
+Epoch: 159, Loss: 0.7491, Train: 0.8650, Val: 0.9154
+Epoch: 160, Loss: 0.7486, Train: 0.8647, Val: 0.9154
+Epoch: 161, Loss: 0.7481, Train: 0.8645, Val: 0.9155
+Epoch: 162, Loss: 0.7476, Train: 0.8642, Val: 0.9155
+Epoch: 163, Loss: 0.7471, Train: 0.8639, Val: 0.9155
+Epoch: 164, Loss: 0.7467, Train: 0.8636, Val: 0.9156
+Epoch: 165, Loss: 0.7462, Train: 0.8634, Val: 0.9156
+Epoch: 166, Loss: 0.7458, Train: 0.8631, Val: 0.9157
+Epoch: 167, Loss: 0.7454, Train: 0.8629, Val: 0.9157
+Epoch: 168, Loss: 0.7450, Train: 0.8626, Val: 0.9158
+Epoch: 169, Loss: 0.7446, Train: 0.8624, Val: 0.9158
+Epoch: 170, Loss: 0.7442, Train: 0.8622, Val: 0.9158
+Epoch: 171, Loss: 0.7438, Train: 0.8620, Val: 0.9159
+Epoch: 172, Loss: 0.7434, Train: 0.8618, Val: 0.9159
+Epoch: 173, Loss: 0.7431, Train: 0.8616, Val: 0.9160
+Epoch: 174, Loss: 0.7427, Train: 0.8614, Val: 0.9160
+Epoch: 175, Loss: 0.7424, Train: 0.8612, Val: 0.9161
+Epoch: 176, Loss: 0.7421, Train: 0.8610, Val: 0.9161
+Epoch: 177, Loss: 0.7418, Train: 0.8608, Val: 0.9162
+Epoch: 178, Loss: 0.7415, Train: 0.8606, Val: 0.9162
+Epoch: 179, Loss: 0.7412, Train: 0.8605, Val: 0.9163
+Epoch: 180, Loss: 0.7409, Train: 0.8603, Val: 0.9163
+Epoch: 181, Loss: 0.7406, Train: 0.8601, Val: 0.9164
+Epoch: 182, Loss: 0.7403, Train: 0.8600, Val: 0.9164
+Epoch: 183, Loss: 0.7401, Train: 0.8598, Val: 0.9164
+Epoch: 184, Loss: 0.7398, Train: 0.8597, Val: 0.9165
+Epoch: 185, Loss: 0.7396, Train: 0.8595, Val: 0.9165
+Epoch: 186, Loss: 0.7393, Train: 0.8594, Val: 0.9165
+Epoch: 187, Loss: 0.7391, Train: 0.8593, Val: 0.9166
+Epoch: 188, Loss: 0.7388, Train: 0.8591, Val: 0.9166
+Epoch: 189, Loss: 0.7386, Train: 0.8590, Val: 0.9166
+Epoch: 190, Loss: 0.7384, Train: 0.8589, Val: 0.9167
+Epoch: 191, Loss: 0.7382, Train: 0.8588, Val: 0.9167
+Epoch: 192, Loss: 0.7380, Train: 0.8586, Val: 0.9167
+Epoch: 193, Loss: 0.7378, Train: 0.8585, Val: 0.9167
+Epoch: 194, Loss: 0.7376, Train: 0.8584, Val: 0.9167
+Epoch: 195, Loss: 0.7374, Train: 0.8583, Val: 0.9168
+Epoch: 196, Loss: 0.7372, Train: 0.8582, Val: 0.9168
+Epoch: 197, Loss: 0.7370, Train: 0.8581, Val: 0.9168
+Epoch: 198, Loss: 0.7368, Train: 0.8580, Val: 0.9168
+Epoch: 199, Loss: 0.7367, Train: 0.8579, Val: 0.9168
+Epoch: 200, Loss: 0.7365, Train: 0.8578, Val: 0.9168
+Epoch: 201, Loss: 0.7363, Train: 0.8577, Val: 0.9168
+Epoch: 202, Loss: 0.7361, Train: 0.8576, Val: 0.9168
+Epoch: 203, Loss: 0.7360, Train: 0.8575, Val: 0.9168
+Epoch: 204, Loss: 0.7358, Train: 0.8574, Val: 0.9168
+Epoch: 205, Loss: 0.7357, Train: 0.8573, Val: 0.9169
+Epoch: 206, Loss: 0.7355, Train: 0.8572, Val: 0.9169
+Epoch: 207, Loss: 0.7354, Train: 0.8571, Val: 0.9169
+Epoch: 208, Loss: 0.7352, Train: 0.8570, Val: 0.9169
+Epoch: 209, Loss: 0.7351, Train: 0.8570, Val: 0.9169
+Epoch: 210, Loss: 0.7349, Train: 0.8569, Val: 0.9169
+Epoch: 211, Loss: 0.7348, Train: 0.8568, Val: 0.9169
+Epoch: 212, Loss: 0.7346, Train: 0.8567, Val: 0.9169
+Epoch: 213, Loss: 0.7345, Train: 0.8566, Val: 0.9169
+Epoch: 214, Loss: 0.7344, Train: 0.8566, Val: 0.9169
+Epoch: 215, Loss: 0.7342, Train: 0.8565, Val: 0.9169
+Epoch: 216, Loss: 0.7341, Train: 0.8564, Val: 0.9169
+Epoch: 217, Loss: 0.7340, Train: 0.8563, Val: 0.9169
+Epoch: 218, Loss: 0.7338, Train: 0.8563, Val: 0.9169
+Epoch: 219, Loss: 0.7337, Train: 0.8562, Val: 0.9169
+Epoch: 220, Loss: 0.7336, Train: 0.8561, Val: 0.9169
+Epoch: 221, Loss: 0.7335, Train: 0.8560, Val: 0.9169
+Epoch: 222, Loss: 0.7333, Train: 0.8560, Val: 0.9169
+Epoch: 223, Loss: 0.7332, Train: 0.8559, Val: 0.9169
+Epoch: 224, Loss: 0.7331, Train: 0.8558, Val: 0.9169
+Epoch: 225, Loss: 0.7330, Train: 0.8558, Val: 0.9169
+Epoch: 226, Loss: 0.7329, Train: 0.8557, Val: 0.9169
+Epoch: 227, Loss: 0.7328, Train: 0.8556, Val: 0.9170
+Epoch: 228, Loss: 0.7326, Train: 0.8556, Val: 0.9170
+Epoch: 229, Loss: 0.7325, Train: 0.8555, Val: 0.9170
+Epoch: 230, Loss: 0.7324, Train: 0.8555, Val: 0.9170
+Epoch: 231, Loss: 0.7323, Train: 0.8554, Val: 0.9170
+Epoch: 232, Loss: 0.7322, Train: 0.8553, Val: 0.9170
+Epoch: 233, Loss: 0.7321, Train: 0.8553, Val: 0.9170
+Epoch: 234, Loss: 0.7320, Train: 0.8552, Val: 0.9170
+Epoch: 235, Loss: 0.7319, Train: 0.8551, Val: 0.9170
+Epoch: 236, Loss: 0.7318, Train: 0.8551, Val: 0.9171
+Epoch: 237, Loss: 0.7317, Train: 0.8550, Val: 0.9171
+Epoch: 238, Loss: 0.7316, Train: 0.8550, Val: 0.9171
+Epoch: 239, Loss: 0.7315, Train: 0.8549, Val: 0.9171
+Epoch: 240, Loss: 0.7314, Train: 0.8548, Val: 0.9171
+Epoch: 241, Loss: 0.7313, Train: 0.8548, Val: 0.9171
+Epoch: 242, Loss: 0.7312, Train: 0.8547, Val: 0.9171
+Epoch: 243, Loss: 0.7311, Train: 0.8547, Val: 0.9172
+Epoch: 244, Loss: 0.7310, Train: 0.8546, Val: 0.9172
+Epoch: 245, Loss: 0.7309, Train: 0.8546, Val: 0.9172
+Epoch: 246, Loss: 0.7308, Train: 0.8545, Val: 0.9172
+Epoch: 247, Loss: 0.7307, Train: 0.8545, Val: 0.9172
+Epoch: 248, Loss: 0.7306, Train: 0.8544, Val: 0.9173
+Epoch: 249, Loss: 0.7305, Train: 0.8543, Val: 0.9173
+Epoch: 250, Loss: 0.7304, Train: 0.8543, Val: 0.9173
+Epoch: 251, Loss: 0.7303, Train: 0.8542, Val: 0.9173
+Epoch: 252, Loss: 0.7302, Train: 0.8542, Val: 0.9173
+Epoch: 253, Loss: 0.7301, Train: 0.8541, Val: 0.9174
+Epoch: 254, Loss: 0.7301, Train: 0.8541, Val: 0.9174
+Epoch: 255, Loss: 0.7300, Train: 0.8540, Val: 0.9174
+Epoch: 256, Loss: 0.7299, Train: 0.8540, Val: 0.9174
+Epoch: 257, Loss: 0.7298, Train: 0.8539, Val: 0.9175
+Epoch: 258, Loss: 0.7297, Train: 0.8539, Val: 0.9175
+Epoch: 259, Loss: 0.7296, Train: 0.8538, Val: 0.9175
+Epoch: 260, Loss: 0.7295, Train: 0.8538, Val: 0.9175
+Epoch: 261, Loss: 0.7294, Train: 0.8537, Val: 0.9176
+Epoch: 262, Loss: 0.7293, Train: 0.8537, Val: 0.9176
+Epoch: 263, Loss: 0.7292, Train: 0.8536, Val: 0.9176
+Epoch: 264, Loss: 0.7292, Train: 0.8536, Val: 0.9176
+Epoch: 265, Loss: 0.7291, Train: 0.8535, Val: 0.9176
+Epoch: 266, Loss: 0.7290, Train: 0.8535, Val: 0.9177
+Epoch: 267, Loss: 0.7289, Train: 0.8534, Val: 0.9177
+Epoch: 268, Loss: 0.7288, Train: 0.8534, Val: 0.9177
+Epoch: 269, Loss: 0.7287, Train: 0.8533, Val: 0.9177
+Epoch: 270, Loss: 0.7286, Train: 0.8532, Val: 0.9178
+Epoch: 271, Loss: 0.7286, Train: 0.8532, Val: 0.9178
+Epoch: 272, Loss: 0.7285, Train: 0.8531, Val: 0.9178
+Epoch: 273, Loss: 0.7284, Train: 0.8531, Val: 0.9178
+Epoch: 274, Loss: 0.7283, Train: 0.8530, Val: 0.9179
+Epoch: 275, Loss: 0.7282, Train: 0.8530, Val: 0.9179
+Epoch: 276, Loss: 0.7281, Train: 0.8529, Val: 0.9179
+Epoch: 277, Loss: 0.7280, Train: 0.8529, Val: 0.9179
+Epoch: 278, Loss: 0.7280, Train: 0.8528, Val: 0.9179
+Epoch: 279, Loss: 0.7279, Train: 0.8528, Val: 0.9180
+Epoch: 280, Loss: 0.7278, Train: 0.8527, Val: 0.9180
+Epoch: 281, Loss: 0.7277, Train: 0.8527, Val: 0.9180
+Epoch: 282, Loss: 0.7276, Train: 0.8526, Val: 0.9180
+Epoch: 283, Loss: 0.7275, Train: 0.8526, Val: 0.9180
+Epoch: 284, Loss: 0.7274, Train: 0.8526, Val: 0.9181
+Epoch: 285, Loss: 0.7274, Train: 0.8525, Val: 0.9181
+Epoch: 286, Loss: 0.7273, Train: 0.8525, Val: 0.9181
+Epoch: 287, Loss: 0.7272, Train: 0.8524, Val: 0.9181
+Epoch: 288, Loss: 0.7271, Train: 0.8524, Val: 0.9181
+Epoch: 289, Loss: 0.7270, Train: 0.8523, Val: 0.9182
+Epoch: 290, Loss: 0.7269, Train: 0.8523, Val: 0.9182
+Epoch: 291, Loss: 0.7269, Train: 0.8522, Val: 0.9182
+Epoch: 292, Loss: 0.7268, Train: 0.8522, Val: 0.9182
+Epoch: 293, Loss: 0.7267, Train: 0.8521, Val: 0.9183
+Epoch: 294, Loss: 0.7266, Train: 0.8521, Val: 0.9183
+Epoch: 295, Loss: 0.7265, Train: 0.8520, Val: 0.9183
+Epoch: 296, Loss: 0.7264, Train: 0.8520, Val: 0.9183
+Epoch: 297, Loss: 0.7264, Train: 0.8519, Val: 0.9183
+Epoch: 298, Loss: 0.7263, Train: 0.8519, Val: 0.9184
+Epoch: 299, Loss: 0.7262, Train: 0.8518, Val: 0.9184
+Epoch: 300, Loss: 0.7261, Train: 0.8518, Val: 0.9184
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="evaluation">
+<h2><span class="section-number">5.2.8. </span>Evaluation<a class="headerlink" href="#evaluation" title="Permalink to this heading">#</a></h2>
+<p>From the validation results, our model can generalize well to unseen data. The val RMSE is should be around 0.9, meaning that, on average our model is off by 0.9 stars. We can now evaluate our model on the test set and take a closer look into the predictions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">test_data</span> <span class="o">=</span> <span class="n">test_data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">test_data</span><span class="o">.</span><span class="n">x_dict</span><span class="p">,</span> <span class="n">test_data</span><span class="o">.</span><span class="n">edge_index_dict</span><span class="p">,</span>
+                 <span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label_index</span><span class="p">)</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+    <span class="n">rmse</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Test RMSE: </span><span class="si">{</span><span class="n">rmse</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">userId</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">movieId</span> <span class="o">=</span> <span class="n">test_data</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">pred</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;userId&#39;</span><span class="p">:</span> <span class="n">userId</span><span class="p">,</span> <span class="s1">&#39;movieId&#39;</span><span class="p">:</span> <span class="n">movieId</span><span class="p">,</span> <span class="s1">&#39;rating&#39;</span><span class="p">:</span> <span class="n">pred</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">target</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Test RMSE: 0.9019
+       userId  movieId    rating  target
+0         479     8519  2.135704     3.5
+1         297     1101  2.977981     4.0
+2         436     2169  3.580478     3.0
+3         476     2797  4.409225     4.5
+4         231     5972  2.864197     3.5
+...       ...      ...       ...     ...
+10079     380     1263  3.515715     4.0
+10080     225     1433  2.715594     3.0
+10081     221     2130  3.272181     2.5
+10082     516     4728  2.036030     4.0
+10083     560      267  3.976371     4.0
+
+[10084 rows x 4 columns]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="movie-recommendations">
+<h2><span class="section-number">5.2.9. </span>Movie recommendations<a class="headerlink" href="#movie-recommendations" title="Permalink to this heading">#</a></h2>
+<p>We can now use the model to generate ratings for a movie we haven’t seen.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Your mappedUserId</span>
+<span class="n">mapped_user_id</span> <span class="o">=</span> <span class="n">unique_user_id</span><span class="p">[</span><span class="n">unique_user_id</span><span class="p">[</span><span class="s1">&#39;userId&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">our_user_id</span><span class="p">][</span><span class="s1">&#39;mappedUserId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Select movies that you haven&#39;t seen before</span>
+<span class="n">movies_rated</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="p">[</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;mappedUserId&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">mapped_user_id</span><span class="p">]</span>
+<span class="n">movies_not_rated</span> <span class="o">=</span> <span class="n">movies_df</span><span class="p">[</span><span class="o">~</span><span class="n">movies_df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">movies_rated</span><span class="p">[</span><span class="s1">&#39;movieId&#39;</span><span class="p">])]</span>
+<span class="n">movies_not_rated</span> <span class="o">=</span> <span class="n">movies_not_rated</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">unique_movie_id</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;movieId&#39;</span><span class="p">)</span>
+<span class="n">movie</span> <span class="o">=</span> <span class="n">movies_not_rated</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The movie we want to predict a raiting for is:  </span><span class="si">{</span><span class="n">movie</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The movie we want to predict a raiting for is:  Jack (1996)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create new `edge_label_index` between the user and the movie</span>
+<span class="n">edge_label_index</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span>
+    <span class="n">mapped_user_id</span><span class="p">,</span>
+    <span class="n">movie</span><span class="o">.</span><span class="n">mappedMovieId</span><span class="o">.</span><span class="n">item</span><span class="p">()])</span>
+
+
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">test_data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">test_data</span><span class="o">.</span><span class="n">x_dict</span><span class="p">,</span> <span class="n">test_data</span><span class="o">.</span><span class="n">edge_index_dict</span><span class="p">,</span> <span class="n">edge_label_index</span><span class="p">)</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">pred</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pred</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.0309882164001465
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="explaining-the-predictions">
+<h2><span class="section-number">5.2.10. </span>Explaining the Predictions<a class="headerlink" href="#explaining-the-predictions" title="Permalink to this heading">#</a></h2>
+<p>PyTorch Geometric also provides a way to explain the predictions of a GNN. Let’s check which movie ratings have influenced this prediction the most.</p>
+<p>We will use the <a class="reference external" href="https://captum.ai/">captum</a> library to explain the predictions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch_geometric.explain</span> <span class="kn">import</span> <span class="n">Explainer</span><span class="p">,</span> <span class="n">CaptumExplainer</span>
+
+<span class="n">explainer</span> <span class="o">=</span> <span class="n">Explainer</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">algorithm</span><span class="o">=</span><span class="n">CaptumExplainer</span><span class="p">(</span><span class="s1">&#39;IntegratedGradients&#39;</span><span class="p">),</span>
+    <span class="n">explanation_type</span><span class="o">=</span><span class="s1">&#39;model&#39;</span><span class="p">,</span>
+    <span class="n">model_config</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">,</span>
+        <span class="n">task_level</span><span class="o">=</span><span class="s1">&#39;edge&#39;</span><span class="p">,</span>
+        <span class="n">return_type</span><span class="o">=</span><span class="s1">&#39;raw&#39;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">node_mask_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">edge_mask_type</span><span class="o">=</span><span class="s1">&#39;object&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">explanation</span> <span class="o">=</span> <span class="n">explainer</span><span class="p">(</span>
+    <span class="n">test_data</span><span class="o">.</span><span class="n">x_dict</span><span class="p">,</span> <span class="n">test_data</span><span class="o">.</span><span class="n">edge_index_dict</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">edge_label_index</span><span class="o">=</span><span class="n">edge_label_index</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+<span class="n">explanation</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>HeteroExplanation(
+  prediction=[1],
+  target=[1],
+  index=0,
+  edge_label_index=[2],
+  <span class=" -Color -Color-Bold">user</span>={ x=[611, 611] },
+  <span class=" -Color -Color-Bold">movie</span>={ x=[9742, 404] },
+  <span class=" -Color -Color-Bold">(user, rates, movie)</span>={
+    edge_mask=[90757],
+    edge_index=[2, 90757]
+  },
+  <span class=" -Color -Color-Bold">(movie, rev_rates, user)</span>={
+    edge_mask=[90757],
+    edge_index=[2, 90757]
+  }
+)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># User to movie link + attribution</span>
+<span class="n">user_to_movie</span> <span class="o">=</span> <span class="n">explanation</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_index</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+<span class="n">user_to_movie_attr</span> <span class="o">=</span> <span class="n">explanation</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;movie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_mask</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+<span class="n">user_to_movie_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">user_to_movie</span><span class="p">,</span> <span class="n">user_to_movie_attr</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)]),</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mappedUserId&#39;</span><span class="p">,</span> <span class="s1">&#39;mappedMovieId&#39;</span><span class="p">,</span> <span class="s1">&#39;attr&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Movie to user link + attribution</span>
+<span class="n">movie_to_user</span> <span class="o">=</span> <span class="n">explanation</span><span class="p">[</span><span class="s1">&#39;movie&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_index</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+<span class="n">movie_to_user_attr</span> <span class="o">=</span> <span class="n">explanation</span><span class="p">[</span> <span class="s1">&#39;movie&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_mask</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+<span class="n">movie_to_user_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">movie_to_user</span><span class="p">,</span> <span class="n">movie_to_user_attr</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)]),</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mappedMovieId&#39;</span><span class="p">,</span> <span class="s1">&#39;mappedUserId&#39;</span><span class="p">,</span><span class="s1">&#39;attr&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">explanation_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">user_to_movie_df</span><span class="p">,</span> <span class="n">movie_to_user_df</span><span class="p">])</span>
+<span class="n">explanation_df</span><span class="p">[[</span><span class="s2">&quot;mappedUserId&quot;</span><span class="p">,</span> <span class="s2">&quot;mappedMovieId&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">explanation_df</span><span class="p">[[</span><span class="s2">&quot;mappedUserId&quot;</span><span class="p">,</span> <span class="s2">&quot;mappedMovieId&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Attribtion for all edges towards prediction of movie rating of movie:</span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">movie</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==========================================================================================&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">explanation_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;attr&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Attribtion for all edges towards prediction of movie rating of movie:
+ Jack (1996)
+==========================================================================================
+       mappedUserId  mappedMovieId      attr
+57723           275            690 -0.012362
+3848              5            690 -0.011254
+71472           491            690 -0.010652
+30759           150            690 -0.009278
+69702           216            690 -0.006919
+...             ...            ...       ...
+60076           610             28  0.036200
+81322           567            690  0.046985
+31685           610            166  0.047016
+76142           610             26  0.049234
+28134           610             20  0.054034
+
+[181514 rows x 3 columns]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select links that connect to our user</span>
+<span class="n">explanation_df</span> <span class="o">=</span> <span class="n">explanation_df</span><span class="p">[</span><span class="n">explanation_df</span><span class="p">[</span><span class="s1">&#39;mappedUserId&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">mapped_user_id</span><span class="p">]</span>
+
+<span class="c1"># We group the attribution scores by movie</span>
+<span class="n">explanation_df</span> <span class="o">=</span> <span class="n">explanation_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;mappedMovieId&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<span class="c1"># Merge with movies_df to receive title</span>
+<span class="c1"># But first, we need to add the original id</span>
+<span class="n">explanation_df</span> <span class="o">=</span> <span class="n">explanation_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">unique_movie_id</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;mappedMovieId&#39;</span><span class="p">)</span>
+<span class="n">explanation_df</span> <span class="o">=</span> <span class="n">explanation_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">movies_df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;movieId&#39;</span><span class="p">)</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">float_format</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:,.9f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Top movies that influenced the prediction:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==============================================&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">explanation_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;attr&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">))[[</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;attr&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Top movies that influenced the prediction:
+==============================================
+                     title        attr
+0      Forrest Gump (1994) 0.054058370
+1     Jurassic Park (1993) 0.049267028
+3       Matrix, The (1999) 0.047048138
+2  Schindler&#39;s List (1993) 0.036232221
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./pages\link"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="Link_Prediction_on_MovieLens.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title"><span class="section-number">5.1. </span>Link Prediction</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="../ae/Autoencoder.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title"><span class="section-number">6. </span>Autoencoder</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setup">
+   5.2.1. Setup
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-ingestion">
+   5.2.2. Data Ingestion
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#add-your-ratings-manually">
+     5.2.2.1. Add your ratings manually
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#upload-your-imdb-ratings">
+     5.2.2.2. Upload your IMDB ratings
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-preprocessing">
+   5.2.3. Data Preprocessing
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#heterogeneous-graph-construction">
+   5.2.4. Heterogeneous Graph Construction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dataset-splitting">
+   5.2.5. Dataset Splitting
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#graph-neural-network">
+   5.2.6. Graph Neural Network
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#training-a-heterogeneous-gnn">
+   5.2.7. Training a Heterogeneous GNN
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#evaluation">
+   5.2.8. Evaluation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#movie-recommendations">
+   5.2.9. Movie recommendations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#explaining-the-predictions">
+   5.2.10. Explaining the Predictions
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Khairul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2024.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on None.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

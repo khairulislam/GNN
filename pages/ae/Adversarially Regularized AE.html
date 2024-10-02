@@ -1,0 +1,1331 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>6.2. Adversarially Regularized Autoencoder &#8212; Graph Neural Network Tutorials</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pages/ae/Adversarially Regularized AE';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="7. Others" href="../others/Overview.html" />
+    <link rel="prev" title="6.1. Graph AutoEncoders" href="Autoencoders.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/logo.jpeg" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/logo.jpeg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../Introduction.html">
+                        Introduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../node/Node.html">
+                        Nodes
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../graph/Graph.html">
+                        Graph
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../agg/Aggregation.html">
+                        Aggregation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../link/Link.html">
+                        Links
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="Autoencoder.html">
+                        Autoencoder
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../others/Overview.html">
+                        Others
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../references.html">
+                        References
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../Introduction.html">
+                        Introduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../node/Node.html">
+                        Nodes
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../graph/Graph.html">
+                        Graph
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../agg/Aggregation.html">
+                        Aggregation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../link/Link.html">
+                        Links
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="Autoencoder.html">
+                        Autoencoder
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../others/Overview.html">
+                        Others
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../references.html">
+                        References
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/logo.jpeg" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/logo.jpeg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Graph Neural Network
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">1. Introduction</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../node/Node.html">2. Nodes</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../node/Node_Classification.html">2.1. Node Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../node/Node_Classification_%28with_W%26B%29.html">2.2. Node Classification with W&amp;B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../node/Point_Cloud_Classification.html">2.3. Point Cloud Classification</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../graph/Graph.html">3. Graph</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../graph/Graph_Classification.html">3.1. Graph Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph/Graph_Classification_with_PyG_and_W%26B.html">3.2. Graph Classification with W&amp;B</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../agg/Aggregation.html">4. Aggregation</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../agg/Aggregation_Package.html">4.1. Customizing Aggregations within Message Passing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../agg/Aggregation%20Functions.html">4.2. Aggregation Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../link/Link.html">5. Links</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../link/Link_Prediction_on_MovieLens.html">5.1. Link Prediction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../link/Link_Regression_on_Movielens.html">5.2. Link Regression</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="Autoencoder.html">6. Autoencoder</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Autoencoders.html">6.1. Graph AutoEncoders</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">6.2. Adversarially Regularized Autoencoder</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../others/Overview.html">7. Others</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../others/GATs.html">7.1. Graph Attention Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../others/Spectral_GCL.html">7.2. Spectral methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../others/Scaling_GNNs.html">7.3. Scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../others/GNN_Explanation.html">7.4. Explain using Captum</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">8. References</a></li>
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://colab.research.google.com/github/khairulislam/GNN/blob/master/docs/pages/ae/Adversarially Regularized AE.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Colab"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/khairulislam/GNN" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/khairulislam/GNN/issues/new?title=Issue%20on%20page%20%2Fpages/ae/Adversarially Regularized AE.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/khairulislam/GNN/edit/master/docs/pages/ae/Adversarially Regularized AE.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">suggest edit</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../_sources/pages/ae/Adversarially Regularized AE.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Adversarially Regularized Autoencoder</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#imports">
+   6.2.1. Imports
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-the-dataset">
+   6.2.2. Define the dataset
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-the-model">
+   6.2.3. Define the model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#initialize-the-model">
+   6.2.4. Initialize the model
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#train-the-model">
+     6.2.4.1. Train the model
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="adversarially-regularized-autoencoder">
+<h1><span class="section-number">6.2. </span>Adversarially Regularized Autoencoder<a class="headerlink" href="#adversarially-regularized-autoencoder" title="Permalink to this heading">#</a></h1>
+<p>Paper:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.ijcai.org/Proceedings/2018/0362.pdf">Adversarially Regularized Graph Autoencoder for Graph Embedding</a></p></li>
+</ul>
+<p>Code:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/_modules/torch_geometric/nn/models/autoencoder.html">ARGA &amp; ARVGA</a></p></li>
+<li><p><a class="reference external" href="https://github.com/rusty1s/pytorch_geometric/blob/master/examples/argva_node_clustering.py">Example on clustering</a></p></li>
+</ul>
+<p>Acknowledgement: <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/get_started/colabs.html">PyTorch Geometric Tutorial Project</a></p>
+<div align="left">
+      <a href="https://www.youtube.com/watch?v=hZkLu2OaHD0">
+         <img 
+            src="https://img.youtube.com/vi/hZkLu2OaHD0/0.jpg" style="width:45%;" 
+            alt="Pytorch Geometric tutorial: ARGA & ARVG"
+            >
+      </a>
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TORCH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">__version__</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+
+<span class="c1"># !pip install -q torch-scatter -f https://data.pyg.org/whl/torch-${TORCH}.html</span>
+<span class="c1"># !pip install -q torch-sparse -f https://data.pyg.org/whl/torch-${TORCH}.html</span>
+<span class="c1"># !pip install -q git+https://github.com/pyg-team/pytorch_geometric.git</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/antonio/anaconda3/envs/geometric_new/lib/python3.9/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.11.0
+</pre></div>
+</div>
+</div>
+</div>
+<section id="imports">
+<h2><span class="section-number">6.2.1. </span>Imports<a class="headerlink" href="#imports" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics.cluster</span> <span class="kn">import</span> <span class="p">(</span><span class="n">v_measure_score</span><span class="p">,</span> <span class="n">homogeneity_score</span><span class="p">,</span> <span class="n">completeness_score</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">sklearn.manifold</span> <span class="kn">import</span> <span class="n">TSNE</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">torch_geometric.transforms</span> <span class="k">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.datasets</span> <span class="kn">import</span> <span class="n">Planetoid</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.nn</span> <span class="kn">import</span> <span class="n">GCNConv</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.nn.models.autoencoder</span> <span class="kn">import</span> <span class="n">ARGVA</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.utils</span> <span class="kn">import</span> <span class="n">train_test_split_edges</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">use_cuda</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-the-dataset">
+<h2><span class="section-number">6.2.2. </span>Define the dataset<a class="headerlink" href="#define-the-dataset" title="Permalink to this heading">#</a></h2>
+<p>Download the dataset</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="s1">&#39;Cora&#39;</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">Planetoid</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">T</span><span class="o">.</span><span class="n">NormalizeFeatures</span><span class="p">())</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading https://github.com/kimiyoung/planetoid/raw/master/data/ind.cora.x
+Downloading https://github.com/kimiyoung/planetoid/raw/master/data/ind.cora.tx
+Downloading https://github.com/kimiyoung/planetoid/raw/master/data/ind.cora.allx
+Downloading https://github.com/kimiyoung/planetoid/raw/master/data/ind.cora.y
+Downloading https://github.com/kimiyoung/planetoid/raw/master/data/ind.cora.ty
+Downloading https://github.com/kimiyoung/planetoid/raw/master/data/ind.cora.ally
+Downloading https://github.com/kimiyoung/planetoid/raw/master/data/ind.cora.graph
+Downloading https://github.com/kimiyoung/planetoid/raw/master/data/ind.cora.test.index
+Processing...
+Done!
+</pre></div>
+</div>
+</div>
+</div>
+<p>Get the number of nodes</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_nodes</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Create the train/val/test data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">train_mask</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">val_mask</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">test_mask</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">train_test_split_edges</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/antonio/anaconda3/envs/geometric_new/lib/python3.9/site-packages/torch_geometric/deprecation.py:12: UserWarning: &#39;train_test_split_edges&#39; is deprecated, use &#39;transforms.RandomLinkSplit&#39; instead
+  warnings.warn(out)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data(x=[2708, 1433], y=[2708], val_pos_edge_index=[2, 263], test_pos_edge_index=[2, 527], train_pos_edge_index=[2, 8976], train_neg_adj_mask=[2708, 2708], val_neg_edge_index=[2, 263], test_neg_edge_index=[2, 527])
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-the-model">
+<h2><span class="section-number">6.2.3. </span>Define the model<a class="headerlink" href="#define-the-model" title="Permalink to this heading">#</a></h2>
+<p>Define the encoder classes (the same as in <code class="docutils literal notranslate"><span class="pre">Tutorial</span> <span class="pre">6</span></code>)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">VEncoder</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">VEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">GCNConv</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">cached</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv_mu</span> <span class="o">=</span> <span class="n">GCNConv</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">cached</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv_logstd</span> <span class="o">=</span> <span class="n">GCNConv</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">cached</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_mu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_logstd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Define the discriminator class</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Discriminator</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Discriminator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lin1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lin2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lin3</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lin1</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lin2</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lin3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Define the training algorithm</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train</span><span class="p">():</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="n">encoder_optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+    <span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">train_pos_edge_index</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">)</span>
+        <span class="n">discriminator</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+        <span class="n">discriminator_optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">discriminator_loss</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">discriminator_loss</span><span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="c1"># Comment</span>
+        <span class="n">discriminator_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span><span class="n">retain_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">discriminator_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="n">loss</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span> <span class="o">+</span> <span class="n">model</span><span class="o">.</span><span class="n">reg_loss</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>  <span class="c1"># Comment</span>
+
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span> <span class="o">+</span> <span class="n">model</span><span class="o">.</span><span class="n">recon_loss</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">train_pos_edge_index</span><span class="p">)</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">data</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">)</span> <span class="o">*</span> <span class="n">model</span><span class="o">.</span><span class="n">kl_loss</span><span class="p">()</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+    <span class="n">encoder_optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">loss</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Define a training test method</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">train_pos_edge_index</span><span class="p">)</span>
+
+    <span class="c1"># Cluster embedded values using k-means.</span>
+    <span class="n">kmeans_input</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">kmeans_input</span><span class="p">)</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">kmeans_input</span><span class="p">)</span>
+
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="n">completeness</span> <span class="o">=</span> <span class="n">completeness_score</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+    <span class="n">hm</span> <span class="o">=</span> <span class="n">homogeneity_score</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+    <span class="n">nmi</span> <span class="o">=</span> <span class="n">v_measure_score</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+
+    <span class="n">auc</span><span class="p">,</span> <span class="n">ap</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">test_pos_edge_index</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">test_neg_edge_index</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">auc</span><span class="p">,</span> <span class="n">ap</span><span class="p">,</span> <span class="n">completeness</span><span class="p">,</span> <span class="n">hm</span><span class="p">,</span> <span class="n">nmi</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="initialize-the-model">
+<h2><span class="section-number">6.2.4. </span>Initialize the model<a class="headerlink" href="#initialize-the-model" title="Permalink to this heading">#</a></h2>
+<p>Initialize an encoder and a discriminator</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">latent_size</span> <span class="o">=</span> <span class="mi">32</span>
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">VEncoder</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">num_features</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">latent_size</span><span class="p">)</span>
+
+<span class="n">discriminator</span> <span class="o">=</span> <span class="n">Discriminator</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="n">latent_size</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+                              <span class="n">out_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Comment</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Initialize the model and move everything to the GPU</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ARGVA</span><span class="p">(</span><span class="n">encoder</span><span class="p">,</span> <span class="n">discriminator</span><span class="p">)</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="n">use_cuda</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+<span class="n">model</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">),</span> <span class="n">data</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Define the optimizers</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">discriminator_optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">discriminator</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="n">encoder_optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">encoder</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.005</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="train-the-model">
+<h3><span class="section-number">6.2.4.1. </span>Train the model<a class="headerlink" href="#train-the-model" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">201</span><span class="p">):</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">train</span><span class="p">()</span>
+    <span class="n">auc</span><span class="p">,</span> <span class="n">ap</span><span class="p">,</span> <span class="n">completeness</span><span class="p">,</span> <span class="n">hm</span><span class="p">,</span> <span class="n">nmi</span> <span class="o">=</span> <span class="n">test</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">((</span><span class="sa">f</span><span class="s1">&#39;Epoch: </span><span class="si">{</span><span class="n">epoch</span><span class="si">:</span><span class="s1">03d</span><span class="si">}</span><span class="s1">, Loss: </span><span class="si">{</span><span class="n">loss</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">, AUC: </span><span class="si">{</span><span class="n">auc</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">, &#39;</span>
+           <span class="sa">f</span><span class="s1">&#39;AP: </span><span class="si">{</span><span class="n">ap</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">, Completeness: </span><span class="si">{</span><span class="n">completeness</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">, &#39;</span>
+           <span class="sa">f</span><span class="s1">&#39;Homogeneity: </span><span class="si">{</span><span class="n">hm</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">, NMI: </span><span class="si">{</span><span class="n">nmi</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch: 001, Loss: 5.462, AUC: 0.710, AP: 0.739, Completeness: 0.118, Homogeneity: 0.118, NMI: 0.118
+Epoch: 002, Loss: 4.772, AUC: 0.680, AP: 0.714, Completeness: 0.091, Homogeneity: 0.090, NMI: 0.091
+Epoch: 003, Loss: 4.237, AUC: 0.668, AP: 0.704, Completeness: 0.074, Homogeneity: 0.071, NMI: 0.072
+Epoch: 004, Loss: 3.706, AUC: 0.665, AP: 0.700, Completeness: 0.079, Homogeneity: 0.075, NMI: 0.077
+Epoch: 005, Loss: 3.361, AUC: 0.667, AP: 0.700, Completeness: 0.071, Homogeneity: 0.068, NMI: 0.069
+Epoch: 006, Loss: 3.041, AUC: 0.674, AP: 0.703, Completeness: 0.083, Homogeneity: 0.078, NMI: 0.081
+Epoch: 007, Loss: 2.740, AUC: 0.689, AP: 0.712, Completeness: 0.103, Homogeneity: 0.102, NMI: 0.102
+Epoch: 008, Loss: 2.487, AUC: 0.706, AP: 0.725, Completeness: 0.130, Homogeneity: 0.132, NMI: 0.131
+Epoch: 009, Loss: 2.323, AUC: 0.714, AP: 0.733, Completeness: 0.139, Homogeneity: 0.142, NMI: 0.140
+Epoch: 010, Loss: 2.177, AUC: 0.722, AP: 0.743, Completeness: 0.149, Homogeneity: 0.150, NMI: 0.150
+Epoch: 011, Loss: 2.119, AUC: 0.724, AP: 0.747, Completeness: 0.164, Homogeneity: 0.163, NMI: 0.163
+Epoch: 012, Loss: 2.161, AUC: 0.719, AP: 0.745, Completeness: 0.174, Homogeneity: 0.172, NMI: 0.173
+Epoch: 013, Loss: 2.262, AUC: 0.721, AP: 0.747, Completeness: 0.185, Homogeneity: 0.186, NMI: 0.185
+Epoch: 014, Loss: 2.326, AUC: 0.727, AP: 0.753, Completeness: 0.199, Homogeneity: 0.200, NMI: 0.199
+Epoch: 015, Loss: 2.345, AUC: 0.735, AP: 0.758, Completeness: 0.221, Homogeneity: 0.224, NMI: 0.223
+Epoch: 016, Loss: 2.342, AUC: 0.741, AP: 0.762, Completeness: 0.221, Homogeneity: 0.222, NMI: 0.221
+Epoch: 017, Loss: 2.359, AUC: 0.750, AP: 0.769, Completeness: 0.227, Homogeneity: 0.230, NMI: 0.228
+Epoch: 018, Loss: 2.417, AUC: 0.762, AP: 0.779, Completeness: 0.234, Homogeneity: 0.235, NMI: 0.235
+Epoch: 019, Loss: 2.448, AUC: 0.773, AP: 0.787, Completeness: 0.243, Homogeneity: 0.248, NMI: 0.245
+Epoch: 020, Loss: 2.510, AUC: 0.777, AP: 0.789, Completeness: 0.289, Homogeneity: 0.291, NMI: 0.290
+Epoch: 021, Loss: 2.603, AUC: 0.773, AP: 0.785, Completeness: 0.304, Homogeneity: 0.314, NMI: 0.309
+Epoch: 022, Loss: 2.726, AUC: 0.770, AP: 0.780, Completeness: 0.295, Homogeneity: 0.306, NMI: 0.300
+Epoch: 023, Loss: 2.945, AUC: 0.769, AP: 0.778, Completeness: 0.296, Homogeneity: 0.307, NMI: 0.302
+Epoch: 024, Loss: 3.170, AUC: 0.773, AP: 0.779, Completeness: 0.305, Homogeneity: 0.318, NMI: 0.311
+Epoch: 025, Loss: 3.335, AUC: 0.780, AP: 0.783, Completeness: 0.316, Homogeneity: 0.327, NMI: 0.322
+Epoch: 026, Loss: 3.439, AUC: 0.789, AP: 0.790, Completeness: 0.350, Homogeneity: 0.361, NMI: 0.355
+Epoch: 027, Loss: 3.506, AUC: 0.797, AP: 0.799, Completeness: 0.346, Homogeneity: 0.362, NMI: 0.354
+Epoch: 028, Loss: 3.528, AUC: 0.799, AP: 0.803, Completeness: 0.368, Homogeneity: 0.376, NMI: 0.372
+Epoch: 029, Loss: 3.577, AUC: 0.797, AP: 0.801, Completeness: 0.356, Homogeneity: 0.367, NMI: 0.361
+Epoch: 030, Loss: 3.713, AUC: 0.792, AP: 0.795, Completeness: 0.353, Homogeneity: 0.365, NMI: 0.359
+Epoch: 031, Loss: 3.839, AUC: 0.788, AP: 0.791, Completeness: 0.356, Homogeneity: 0.368, NMI: 0.362
+Epoch: 032, Loss: 4.028, AUC: 0.789, AP: 0.790, Completeness: 0.356, Homogeneity: 0.357, NMI: 0.357
+Epoch: 033, Loss: 4.102, AUC: 0.794, AP: 0.794, Completeness: 0.364, Homogeneity: 0.366, NMI: 0.365
+Epoch: 034, Loss: 4.186, AUC: 0.800, AP: 0.798, Completeness: 0.367, Homogeneity: 0.368, NMI: 0.367
+Epoch: 035, Loss: 4.184, AUC: 0.806, AP: 0.803, Completeness: 0.373, Homogeneity: 0.372, NMI: 0.373
+Epoch: 036, Loss: 4.362, AUC: 0.809, AP: 0.806, Completeness: 0.370, Homogeneity: 0.367, NMI: 0.368
+Epoch: 037, Loss: 4.382, AUC: 0.805, AP: 0.804, Completeness: 0.370, Homogeneity: 0.367, NMI: 0.369
+Epoch: 038, Loss: 4.352, AUC: 0.795, AP: 0.797, Completeness: 0.370, Homogeneity: 0.365, NMI: 0.367
+Epoch: 039, Loss: 4.439, AUC: 0.781, AP: 0.785, Completeness: 0.362, Homogeneity: 0.353, NMI: 0.358
+Epoch: 040, Loss: 4.455, AUC: 0.769, AP: 0.773, Completeness: 0.357, Homogeneity: 0.345, NMI: 0.351
+Epoch: 041, Loss: 4.379, AUC: 0.760, AP: 0.763, Completeness: 0.349, Homogeneity: 0.343, NMI: 0.346
+Epoch: 042, Loss: 4.435, AUC: 0.756, AP: 0.757, Completeness: 0.349, Homogeneity: 0.344, NMI: 0.347
+Epoch: 043, Loss: 4.348, AUC: 0.759, AP: 0.756, Completeness: 0.355, Homogeneity: 0.346, NMI: 0.350
+Epoch: 044, Loss: 4.384, AUC: 0.767, AP: 0.759, Completeness: 0.359, Homogeneity: 0.349, NMI: 0.354
+Epoch: 045, Loss: 4.351, AUC: 0.779, AP: 0.766, Completeness: 0.361, Homogeneity: 0.351, NMI: 0.356
+Epoch: 046, Loss: 4.297, AUC: 0.793, AP: 0.776, Completeness: 0.364, Homogeneity: 0.353, NMI: 0.358
+Epoch: 047, Loss: 4.286, AUC: 0.807, AP: 0.788, Completeness: 0.364, Homogeneity: 0.354, NMI: 0.359
+Epoch: 048, Loss: 4.194, AUC: 0.819, AP: 0.800, Completeness: 0.384, Homogeneity: 0.380, NMI: 0.382
+Epoch: 049, Loss: 4.118, AUC: 0.829, AP: 0.812, Completeness: 0.386, Homogeneity: 0.383, NMI: 0.385
+Epoch: 050, Loss: 4.119, AUC: 0.836, AP: 0.821, Completeness: 0.398, Homogeneity: 0.403, NMI: 0.400
+Epoch: 051, Loss: 4.046, AUC: 0.840, AP: 0.827, Completeness: 0.397, Homogeneity: 0.402, NMI: 0.399
+Epoch: 052, Loss: 3.925, AUC: 0.842, AP: 0.829, Completeness: 0.394, Homogeneity: 0.401, NMI: 0.398
+Epoch: 053, Loss: 3.887, AUC: 0.842, AP: 0.829, Completeness: 0.399, Homogeneity: 0.406, NMI: 0.403
+Epoch: 054, Loss: 3.823, AUC: 0.842, AP: 0.829, Completeness: 0.400, Homogeneity: 0.409, NMI: 0.404
+Epoch: 055, Loss: 3.823, AUC: 0.841, AP: 0.829, Completeness: 0.400, Homogeneity: 0.410, NMI: 0.405
+Epoch: 056, Loss: 3.803, AUC: 0.840, AP: 0.828, Completeness: 0.403, Homogeneity: 0.413, NMI: 0.408
+Epoch: 057, Loss: 3.775, AUC: 0.838, AP: 0.828, Completeness: 0.401, Homogeneity: 0.413, NMI: 0.407
+Epoch: 058, Loss: 3.802, AUC: 0.838, AP: 0.827, Completeness: 0.402, Homogeneity: 0.415, NMI: 0.408
+Epoch: 059, Loss: 3.834, AUC: 0.839, AP: 0.829, Completeness: 0.401, Homogeneity: 0.414, NMI: 0.408
+Epoch: 060, Loss: 3.866, AUC: 0.842, AP: 0.832, Completeness: 0.401, Homogeneity: 0.413, NMI: 0.407
+Epoch: 061, Loss: 3.926, AUC: 0.845, AP: 0.835, Completeness: 0.398, Homogeneity: 0.411, NMI: 0.404
+Epoch: 062, Loss: 3.963, AUC: 0.848, AP: 0.839, Completeness: 0.398, Homogeneity: 0.411, NMI: 0.405
+Epoch: 063, Loss: 4.018, AUC: 0.851, AP: 0.841, Completeness: 0.398, Homogeneity: 0.410, NMI: 0.404
+Epoch: 064, Loss: 4.084, AUC: 0.854, AP: 0.844, Completeness: 0.401, Homogeneity: 0.417, NMI: 0.409
+Epoch: 065, Loss: 4.106, AUC: 0.856, AP: 0.845, Completeness: 0.402, Homogeneity: 0.419, NMI: 0.410
+Epoch: 066, Loss: 4.182, AUC: 0.858, AP: 0.846, Completeness: 0.432, Homogeneity: 0.433, NMI: 0.433
+Epoch: 067, Loss: 4.281, AUC: 0.859, AP: 0.846, Completeness: 0.435, Homogeneity: 0.436, NMI: 0.436
+Epoch: 068, Loss: 4.233, AUC: 0.860, AP: 0.846, Completeness: 0.431, Homogeneity: 0.427, NMI: 0.429
+Epoch: 069, Loss: 4.184, AUC: 0.861, AP: 0.845, Completeness: 0.431, Homogeneity: 0.433, NMI: 0.432
+Epoch: 070, Loss: 4.249, AUC: 0.862, AP: 0.846, Completeness: 0.431, Homogeneity: 0.433, NMI: 0.432
+Epoch: 071, Loss: 4.236, AUC: 0.863, AP: 0.849, Completeness: 0.430, Homogeneity: 0.432, NMI: 0.431
+Epoch: 072, Loss: 4.280, AUC: 0.865, AP: 0.852, Completeness: 0.432, Homogeneity: 0.434, NMI: 0.433
+Epoch: 073, Loss: 4.228, AUC: 0.867, AP: 0.855, Completeness: 0.435, Homogeneity: 0.437, NMI: 0.436
+Epoch: 074, Loss: 4.325, AUC: 0.868, AP: 0.857, Completeness: 0.437, Homogeneity: 0.440, NMI: 0.439
+Epoch: 075, Loss: 4.180, AUC: 0.870, AP: 0.860, Completeness: 0.437, Homogeneity: 0.440, NMI: 0.439
+Epoch: 076, Loss: 4.162, AUC: 0.871, AP: 0.862, Completeness: 0.435, Homogeneity: 0.439, NMI: 0.437
+Epoch: 077, Loss: 4.151, AUC: 0.872, AP: 0.864, Completeness: 0.437, Homogeneity: 0.442, NMI: 0.439
+Epoch: 078, Loss: 4.121, AUC: 0.872, AP: 0.864, Completeness: 0.436, Homogeneity: 0.442, NMI: 0.439
+Epoch: 079, Loss: 4.012, AUC: 0.872, AP: 0.864, Completeness: 0.435, Homogeneity: 0.441, NMI: 0.438
+Epoch: 080, Loss: 4.103, AUC: 0.873, AP: 0.864, Completeness: 0.437, Homogeneity: 0.442, NMI: 0.439
+Epoch: 081, Loss: 3.958, AUC: 0.873, AP: 0.864, Completeness: 0.437, Homogeneity: 0.443, NMI: 0.440
+Epoch: 082, Loss: 3.985, AUC: 0.874, AP: 0.863, Completeness: 0.440, Homogeneity: 0.446, NMI: 0.443
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch: 083, Loss: 4.044, AUC: 0.876, AP: 0.864, Completeness: 0.440, Homogeneity: 0.446, NMI: 0.443
+Epoch: 084, Loss: 4.002, AUC: 0.878, AP: 0.866, Completeness: 0.443, Homogeneity: 0.449, NMI: 0.446
+Epoch: 085, Loss: 3.997, AUC: 0.880, AP: 0.868, Completeness: 0.445, Homogeneity: 0.451, NMI: 0.448
+Epoch: 086, Loss: 3.912, AUC: 0.882, AP: 0.871, Completeness: 0.450, Homogeneity: 0.456, NMI: 0.453
+Epoch: 087, Loss: 3.941, AUC: 0.885, AP: 0.874, Completeness: 0.455, Homogeneity: 0.459, NMI: 0.457
+Epoch: 088, Loss: 3.959, AUC: 0.886, AP: 0.876, Completeness: 0.462, Homogeneity: 0.467, NMI: 0.464
+Epoch: 089, Loss: 4.057, AUC: 0.888, AP: 0.879, Completeness: 0.465, Homogeneity: 0.470, NMI: 0.467
+Epoch: 090, Loss: 3.970, AUC: 0.889, AP: 0.881, Completeness: 0.464, Homogeneity: 0.469, NMI: 0.466
+Epoch: 091, Loss: 4.002, AUC: 0.890, AP: 0.882, Completeness: 0.465, Homogeneity: 0.469, NMI: 0.467
+Epoch: 092, Loss: 3.970, AUC: 0.891, AP: 0.883, Completeness: 0.455, Homogeneity: 0.459, NMI: 0.457
+Epoch: 093, Loss: 3.931, AUC: 0.892, AP: 0.884, Completeness: 0.456, Homogeneity: 0.459, NMI: 0.457
+Epoch: 094, Loss: 3.932, AUC: 0.892, AP: 0.885, Completeness: 0.449, Homogeneity: 0.453, NMI: 0.451
+Epoch: 095, Loss: 3.903, AUC: 0.893, AP: 0.886, Completeness: 0.450, Homogeneity: 0.454, NMI: 0.452
+Epoch: 096, Loss: 3.911, AUC: 0.893, AP: 0.886, Completeness: 0.450, Homogeneity: 0.453, NMI: 0.451
+Epoch: 097, Loss: 3.888, AUC: 0.893, AP: 0.886, Completeness: 0.448, Homogeneity: 0.451, NMI: 0.450
+Epoch: 098, Loss: 3.849, AUC: 0.893, AP: 0.886, Completeness: 0.448, Homogeneity: 0.451, NMI: 0.449
+Epoch: 099, Loss: 3.840, AUC: 0.892, AP: 0.886, Completeness: 0.448, Homogeneity: 0.451, NMI: 0.450
+Epoch: 100, Loss: 3.876, AUC: 0.892, AP: 0.886, Completeness: 0.449, Homogeneity: 0.454, NMI: 0.451
+Epoch: 101, Loss: 3.854, AUC: 0.892, AP: 0.887, Completeness: 0.449, Homogeneity: 0.454, NMI: 0.451
+Epoch: 102, Loss: 3.863, AUC: 0.894, AP: 0.888, Completeness: 0.451, Homogeneity: 0.457, NMI: 0.454
+Epoch: 103, Loss: 3.878, AUC: 0.895, AP: 0.890, Completeness: 0.453, Homogeneity: 0.460, NMI: 0.456
+Epoch: 104, Loss: 3.771, AUC: 0.896, AP: 0.892, Completeness: 0.454, Homogeneity: 0.461, NMI: 0.457
+Epoch: 105, Loss: 3.785, AUC: 0.897, AP: 0.893, Completeness: 0.490, Homogeneity: 0.492, NMI: 0.491
+Epoch: 106, Loss: 3.860, AUC: 0.898, AP: 0.894, Completeness: 0.490, Homogeneity: 0.493, NMI: 0.491
+Epoch: 107, Loss: 3.827, AUC: 0.899, AP: 0.895, Completeness: 0.488, Homogeneity: 0.490, NMI: 0.489
+Epoch: 108, Loss: 3.753, AUC: 0.900, AP: 0.896, Completeness: 0.484, Homogeneity: 0.487, NMI: 0.485
+Epoch: 109, Loss: 3.789, AUC: 0.901, AP: 0.897, Completeness: 0.485, Homogeneity: 0.489, NMI: 0.487
+Epoch: 110, Loss: 3.796, AUC: 0.902, AP: 0.898, Completeness: 0.485, Homogeneity: 0.488, NMI: 0.486
+Epoch: 111, Loss: 3.793, AUC: 0.902, AP: 0.898, Completeness: 0.485, Homogeneity: 0.489, NMI: 0.487
+Epoch: 112, Loss: 3.752, AUC: 0.902, AP: 0.898, Completeness: 0.486, Homogeneity: 0.490, NMI: 0.488
+Epoch: 113, Loss: 3.803, AUC: 0.902, AP: 0.899, Completeness: 0.487, Homogeneity: 0.492, NMI: 0.490
+Epoch: 114, Loss: 3.808, AUC: 0.902, AP: 0.899, Completeness: 0.486, Homogeneity: 0.491, NMI: 0.488
+Epoch: 115, Loss: 3.888, AUC: 0.902, AP: 0.900, Completeness: 0.487, Homogeneity: 0.493, NMI: 0.490
+Epoch: 116, Loss: 3.777, AUC: 0.903, AP: 0.901, Completeness: 0.489, Homogeneity: 0.495, NMI: 0.492
+Epoch: 117, Loss: 3.887, AUC: 0.904, AP: 0.902, Completeness: 0.486, Homogeneity: 0.494, NMI: 0.490
+Epoch: 118, Loss: 3.879, AUC: 0.905, AP: 0.904, Completeness: 0.490, Homogeneity: 0.496, NMI: 0.493
+Epoch: 119, Loss: 3.847, AUC: 0.907, AP: 0.905, Completeness: 0.487, Homogeneity: 0.494, NMI: 0.491
+Epoch: 120, Loss: 3.774, AUC: 0.908, AP: 0.906, Completeness: 0.489, Homogeneity: 0.497, NMI: 0.493
+Epoch: 121, Loss: 3.821, AUC: 0.909, AP: 0.908, Completeness: 0.489, Homogeneity: 0.496, NMI: 0.493
+Epoch: 122, Loss: 3.764, AUC: 0.910, AP: 0.909, Completeness: 0.490, Homogeneity: 0.498, NMI: 0.494
+Epoch: 123, Loss: 3.820, AUC: 0.910, AP: 0.910, Completeness: 0.491, Homogeneity: 0.498, NMI: 0.494
+Epoch: 124, Loss: 3.842, AUC: 0.911, AP: 0.911, Completeness: 0.491, Homogeneity: 0.498, NMI: 0.494
+Epoch: 125, Loss: 3.864, AUC: 0.911, AP: 0.911, Completeness: 0.489, Homogeneity: 0.497, NMI: 0.493
+Epoch: 126, Loss: 3.819, AUC: 0.912, AP: 0.912, Completeness: 0.490, Homogeneity: 0.498, NMI: 0.494
+Epoch: 127, Loss: 3.793, AUC: 0.912, AP: 0.912, Completeness: 0.490, Homogeneity: 0.498, NMI: 0.494
+Epoch: 128, Loss: 3.811, AUC: 0.913, AP: 0.913, Completeness: 0.490, Homogeneity: 0.498, NMI: 0.494
+Epoch: 129, Loss: 3.825, AUC: 0.913, AP: 0.913, Completeness: 0.490, Homogeneity: 0.499, NMI: 0.495
+Epoch: 130, Loss: 3.804, AUC: 0.913, AP: 0.913, Completeness: 0.488, Homogeneity: 0.496, NMI: 0.492
+Epoch: 131, Loss: 3.792, AUC: 0.914, AP: 0.913, Completeness: 0.489, Homogeneity: 0.497, NMI: 0.493
+Epoch: 132, Loss: 3.856, AUC: 0.913, AP: 0.912, Completeness: 0.488, Homogeneity: 0.497, NMI: 0.492
+Epoch: 133, Loss: 3.685, AUC: 0.913, AP: 0.912, Completeness: 0.491, Homogeneity: 0.500, NMI: 0.496
+Epoch: 134, Loss: 3.787, AUC: 0.913, AP: 0.911, Completeness: 0.494, Homogeneity: 0.503, NMI: 0.498
+Epoch: 135, Loss: 3.690, AUC: 0.912, AP: 0.910, Completeness: 0.490, Homogeneity: 0.500, NMI: 0.495
+Epoch: 136, Loss: 3.698, AUC: 0.912, AP: 0.909, Completeness: 0.489, Homogeneity: 0.500, NMI: 0.495
+Epoch: 137, Loss: 3.740, AUC: 0.912, AP: 0.909, Completeness: 0.491, Homogeneity: 0.502, NMI: 0.496
+Epoch: 138, Loss: 3.687, AUC: 0.912, AP: 0.909, Completeness: 0.490, Homogeneity: 0.501, NMI: 0.496
+Epoch: 139, Loss: 3.606, AUC: 0.913, AP: 0.909, Completeness: 0.488, Homogeneity: 0.500, NMI: 0.494
+Epoch: 140, Loss: 3.617, AUC: 0.913, AP: 0.910, Completeness: 0.490, Homogeneity: 0.502, NMI: 0.496
+Epoch: 141, Loss: 3.747, AUC: 0.913, AP: 0.910, Completeness: 0.482, Homogeneity: 0.496, NMI: 0.489
+Epoch: 142, Loss: 3.655, AUC: 0.913, AP: 0.910, Completeness: 0.484, Homogeneity: 0.498, NMI: 0.491
+Epoch: 143, Loss: 3.676, AUC: 0.913, AP: 0.910, Completeness: 0.483, Homogeneity: 0.497, NMI: 0.490
+Epoch: 144, Loss: 3.637, AUC: 0.913, AP: 0.909, Completeness: 0.483, Homogeneity: 0.497, NMI: 0.490
+Epoch: 145, Loss: 3.633, AUC: 0.913, AP: 0.908, Completeness: 0.473, Homogeneity: 0.487, NMI: 0.480
+Epoch: 146, Loss: 3.606, AUC: 0.913, AP: 0.907, Completeness: 0.470, Homogeneity: 0.486, NMI: 0.478
+Epoch: 147, Loss: 3.619, AUC: 0.912, AP: 0.906, Completeness: 0.469, Homogeneity: 0.484, NMI: 0.476
+Epoch: 148, Loss: 3.674, AUC: 0.912, AP: 0.905, Completeness: 0.470, Homogeneity: 0.485, NMI: 0.477
+Epoch: 149, Loss: 3.658, AUC: 0.911, AP: 0.905, Completeness: 0.470, Homogeneity: 0.485, NMI: 0.478
+Epoch: 150, Loss: 3.660, AUC: 0.911, AP: 0.904, Completeness: 0.447, Homogeneity: 0.452, NMI: 0.449
+Epoch: 151, Loss: 3.677, AUC: 0.911, AP: 0.904, Completeness: 0.468, Homogeneity: 0.483, NMI: 0.475
+Epoch: 152, Loss: 3.590, AUC: 0.911, AP: 0.904, Completeness: 0.466, Homogeneity: 0.482, NMI: 0.474
+Epoch: 153, Loss: 3.667, AUC: 0.911, AP: 0.905, Completeness: 0.428, Homogeneity: 0.438, NMI: 0.433
+Epoch: 154, Loss: 3.634, AUC: 0.911, AP: 0.906, Completeness: 0.428, Homogeneity: 0.437, NMI: 0.432
+Epoch: 155, Loss: 3.643, AUC: 0.911, AP: 0.906, Completeness: 0.426, Homogeneity: 0.436, NMI: 0.431
+Epoch: 156, Loss: 3.643, AUC: 0.911, AP: 0.906, Completeness: 0.422, Homogeneity: 0.432, NMI: 0.427
+Epoch: 157, Loss: 3.569, AUC: 0.911, AP: 0.907, Completeness: 0.450, Homogeneity: 0.465, NMI: 0.457
+Epoch: 158, Loss: 3.614, AUC: 0.911, AP: 0.908, Completeness: 0.443, Homogeneity: 0.457, NMI: 0.450
+Epoch: 159, Loss: 3.567, AUC: 0.911, AP: 0.908, Completeness: 0.441, Homogeneity: 0.455, NMI: 0.448
+Epoch: 160, Loss: 3.455, AUC: 0.911, AP: 0.909, Completeness: 0.438, Homogeneity: 0.452, NMI: 0.445
+Epoch: 161, Loss: 3.485, AUC: 0.912, AP: 0.909, Completeness: 0.436, Homogeneity: 0.449, NMI: 0.442
+Epoch: 162, Loss: 3.457, AUC: 0.912, AP: 0.909, Completeness: 0.397, Homogeneity: 0.411, NMI: 0.404
+Epoch: 163, Loss: 3.526, AUC: 0.912, AP: 0.909, Completeness: 0.440, Homogeneity: 0.453, NMI: 0.447
+Epoch: 164, Loss: 3.501, AUC: 0.911, AP: 0.910, Completeness: 0.441, Homogeneity: 0.454, NMI: 0.447
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch: 165, Loss: 3.475, AUC: 0.910, AP: 0.910, Completeness: 0.391, Homogeneity: 0.406, NMI: 0.399
+Epoch: 166, Loss: 3.490, AUC: 0.909, AP: 0.910, Completeness: 0.383, Homogeneity: 0.398, NMI: 0.391
+Epoch: 167, Loss: 3.477, AUC: 0.909, AP: 0.910, Completeness: 0.383, Homogeneity: 0.398, NMI: 0.390
+Epoch: 168, Loss: 3.524, AUC: 0.908, AP: 0.909, Completeness: 0.380, Homogeneity: 0.395, NMI: 0.387
+Epoch: 169, Loss: 3.537, AUC: 0.907, AP: 0.909, Completeness: 0.376, Homogeneity: 0.391, NMI: 0.384
+Epoch: 170, Loss: 3.493, AUC: 0.906, AP: 0.908, Completeness: 0.372, Homogeneity: 0.388, NMI: 0.380
+Epoch: 171, Loss: 3.520, AUC: 0.905, AP: 0.907, Completeness: 0.375, Homogeneity: 0.391, NMI: 0.383
+Epoch: 172, Loss: 3.581, AUC: 0.904, AP: 0.906, Completeness: 0.372, Homogeneity: 0.389, NMI: 0.380
+Epoch: 173, Loss: 3.584, AUC: 0.903, AP: 0.905, Completeness: 0.364, Homogeneity: 0.381, NMI: 0.372
+Epoch: 174, Loss: 3.544, AUC: 0.902, AP: 0.904, Completeness: 0.369, Homogeneity: 0.386, NMI: 0.377
+Epoch: 175, Loss: 3.546, AUC: 0.901, AP: 0.903, Completeness: 0.370, Homogeneity: 0.386, NMI: 0.378
+Epoch: 176, Loss: 3.532, AUC: 0.900, AP: 0.902, Completeness: 0.368, Homogeneity: 0.385, NMI: 0.376
+Epoch: 177, Loss: 3.598, AUC: 0.900, AP: 0.902, Completeness: 0.366, Homogeneity: 0.383, NMI: 0.374
+Epoch: 178, Loss: 3.514, AUC: 0.899, AP: 0.902, Completeness: 0.362, Homogeneity: 0.379, NMI: 0.370
+Epoch: 179, Loss: 3.441, AUC: 0.899, AP: 0.902, Completeness: 0.363, Homogeneity: 0.380, NMI: 0.372
+Epoch: 180, Loss: 3.470, AUC: 0.899, AP: 0.902, Completeness: 0.363, Homogeneity: 0.380, NMI: 0.371
+Epoch: 181, Loss: 3.479, AUC: 0.900, AP: 0.903, Completeness: 0.364, Homogeneity: 0.381, NMI: 0.372
+Epoch: 182, Loss: 3.460, AUC: 0.900, AP: 0.903, Completeness: 0.370, Homogeneity: 0.386, NMI: 0.378
+Epoch: 183, Loss: 3.483, AUC: 0.900, AP: 0.904, Completeness: 0.374, Homogeneity: 0.391, NMI: 0.382
+Epoch: 184, Loss: 3.435, AUC: 0.901, AP: 0.904, Completeness: 0.372, Homogeneity: 0.388, NMI: 0.380
+Epoch: 185, Loss: 3.476, AUC: 0.901, AP: 0.904, Completeness: 0.388, Homogeneity: 0.401, NMI: 0.395
+Epoch: 186, Loss: 3.484, AUC: 0.900, AP: 0.904, Completeness: 0.392, Homogeneity: 0.408, NMI: 0.400
+Epoch: 187, Loss: 3.519, AUC: 0.900, AP: 0.904, Completeness: 0.385, Homogeneity: 0.402, NMI: 0.393
+Epoch: 188, Loss: 3.450, AUC: 0.899, AP: 0.903, Completeness: 0.392, Homogeneity: 0.407, NMI: 0.399
+Epoch: 189, Loss: 3.425, AUC: 0.898, AP: 0.903, Completeness: 0.391, Homogeneity: 0.407, NMI: 0.399
+Epoch: 190, Loss: 3.461, AUC: 0.897, AP: 0.902, Completeness: 0.394, Homogeneity: 0.410, NMI: 0.402
+Epoch: 191, Loss: 3.499, AUC: 0.897, AP: 0.902, Completeness: 0.395, Homogeneity: 0.411, NMI: 0.403
+Epoch: 192, Loss: 3.401, AUC: 0.896, AP: 0.902, Completeness: 0.395, Homogeneity: 0.411, NMI: 0.403
+Epoch: 193, Loss: 3.523, AUC: 0.896, AP: 0.902, Completeness: 0.396, Homogeneity: 0.411, NMI: 0.403
+Epoch: 194, Loss: 3.433, AUC: 0.896, AP: 0.903, Completeness: 0.398, Homogeneity: 0.413, NMI: 0.406
+Epoch: 195, Loss: 3.448, AUC: 0.897, AP: 0.904, Completeness: 0.361, Homogeneity: 0.374, NMI: 0.367
+Epoch: 196, Loss: 3.404, AUC: 0.897, AP: 0.905, Completeness: 0.414, Homogeneity: 0.429, NMI: 0.422
+Epoch: 197, Loss: 3.416, AUC: 0.898, AP: 0.906, Completeness: 0.391, Homogeneity: 0.407, NMI: 0.399
+Epoch: 198, Loss: 3.408, AUC: 0.898, AP: 0.907, Completeness: 0.364, Homogeneity: 0.377, NMI: 0.370
+Epoch: 199, Loss: 3.487, AUC: 0.899, AP: 0.908, Completeness: 0.452, Homogeneity: 0.473, NMI: 0.462
+Epoch: 200, Loss: 3.412, AUC: 0.899, AP: 0.908, Completeness: 0.455, Homogeneity: 0.475, NMI: 0.465
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">plot_points</span><span class="p">(</span><span class="n">colors</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">train_pos_edge_index</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">num_classes</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">z</span><span class="p">[</span><span class="n">y</span> <span class="o">==</span> <span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#%%</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;#ffc0cb&#39;</span><span class="p">,</span> <span class="s1">&#39;#bada55&#39;</span><span class="p">,</span> <span class="s1">&#39;#008080&#39;</span><span class="p">,</span> <span class="s1">&#39;#420420&#39;</span><span class="p">,</span> <span class="s1">&#39;#7fe5f0&#39;</span><span class="p">,</span> <span class="s1">&#39;#065535&#39;</span><span class="p">,</span> <span class="s1">&#39;#ffd700&#39;</span>
+<span class="p">]</span>
+<span class="n">plot_points</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/antonio/anaconda3/envs/geometric_new/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:780: FutureWarning: The default initialization in TSNE will change from &#39;random&#39; to &#39;pca&#39; in 1.2.
+  warnings.warn(
+/home/antonio/anaconda3/envs/geometric_new/lib/python3.9/site-packages/sklearn/manifold/_t_sne.py:790: FutureWarning: The default learning rate in TSNE will change from 200.0 to &#39;auto&#39; in 1.2.
+  warnings.warn(
+</pre></div>
+</div>
+<img alt="../../_images/70027bcbd70f72792601e8882b619ce04165073c7722c91aab2088b5495530eb.png" src="../../_images/70027bcbd70f72792601e8882b619ce04165073c7722c91aab2088b5495530eb.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./pages\ae"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="Autoencoders.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title"><span class="section-number">6.1. </span>Graph AutoEncoders</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="../others/Overview.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title"><span class="section-number">7. </span>Others</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#imports">
+   6.2.1. Imports
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-the-dataset">
+   6.2.2. Define the dataset
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#define-the-model">
+   6.2.3. Define the model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#initialize-the-model">
+   6.2.4. Initialize the model
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#train-the-model">
+     6.2.4.1. Train the model
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Khairul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2024.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on None.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

@@ -1,0 +1,1457 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>5.1. Link Prediction &#8212; Graph Neural Network Tutorials</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pages/link/Link_Prediction_on_MovieLens';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="5.2. Link Regression" href="Link_Regression_on_Movielens.html" />
+    <link rel="prev" title="5. Links" href="Link.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/logo.jpeg" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/logo.jpeg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../Introduction.html">
+                        Introduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../node/Node.html">
+                        Nodes
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../graph/Graph.html">
+                        Graph
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../agg/Aggregation.html">
+                        Aggregation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="Link.html">
+                        Links
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../ae/Autoencoder.html">
+                        Autoencoder
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../others/Overview.html">
+                        Others
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../references.html">
+                        References
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../Introduction.html">
+                        Introduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../node/Node.html">
+                        Nodes
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../graph/Graph.html">
+                        Graph
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../agg/Aggregation.html">
+                        Aggregation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="Link.html">
+                        Links
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../ae/Autoencoder.html">
+                        Autoencoder
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../others/Overview.html">
+                        Others
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../references.html">
+                        References
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/logo.jpeg" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/logo.jpeg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Graph Neural Network
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">1. Introduction</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../node/Node.html">2. Nodes</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../node/Node_Classification.html">2.1. Node Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../node/Node_Classification_%28with_W%26B%29.html">2.2. Node Classification with W&amp;B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../node/Point_Cloud_Classification.html">2.3. Point Cloud Classification</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../graph/Graph.html">3. Graph</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../graph/Graph_Classification.html">3.1. Graph Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph/Graph_Classification_with_PyG_and_W%26B.html">3.2. Graph Classification with W&amp;B</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../agg/Aggregation.html">4. Aggregation</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../agg/Aggregation_Package.html">4.1. Customizing Aggregations within Message Passing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../agg/Aggregation%20Functions.html">4.2. Aggregation Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="Link.html">5. Links</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">5.1. Link Prediction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Link_Regression_on_Movielens.html">5.2. Link Regression</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ae/Autoencoder.html">6. Autoencoder</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ae/Autoencoders.html">6.1. Graph AutoEncoders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ae/Adversarially%20Regularized%20AE.html">6.2. Adversarially Regularized Autoencoder</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../others/Overview.html">7. Others</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../others/GATs.html">7.1. Graph Attention Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../others/Spectral_GCL.html">7.2. Spectral methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../others/Scaling_GNNs.html">7.3. Scaling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../others/GNN_Explanation.html">7.4. Explain using Captum</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">8. References</a></li>
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://colab.research.google.com/github/khairulislam/GNN/blob/master/docs/pages/link/Link_Prediction_on_MovieLens.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Colab"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/khairulislam/GNN" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/khairulislam/GNN/issues/new?title=Issue%20on%20page%20%2Fpages/link/Link_Prediction_on_MovieLens.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/khairulislam/GNN/edit/master/docs/pages/link/Link_Prediction_on_MovieLens.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">suggest edit</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../_sources/pages/link/Link_Prediction_on_MovieLens.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Link Prediction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#heterogeneous-graph-creation">
+   5.1.1. Heterogeneous Graph Creation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#defining-edge-level-training-splits">
+   5.1.2. Defining Edge-level Training Splits
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#defining-mini-batch-loaders">
+   5.1.3. Defining Mini-batch Loaders
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-a-heterogeneous-link-level-gnn">
+   5.1.4. Creating a Heterogeneous Link-level GNN
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#training-a-heterogeneous-link-level-gnn">
+   5.1.5. Training a Heterogeneous Link-level GNN
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#evaluating-a-heterogeneous-link-level-gnn">
+   5.1.6. Evaluating a Heterogeneous Link-level GNN
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="link-prediction">
+<h1><span class="section-number">5.1. </span>Link Prediction<a class="headerlink" href="#link-prediction" title="Permalink to this heading">#</a></h1>
+<p>This colab notebook shows how to load a set of <code class="docutils literal notranslate"><span class="pre">*.csv</span></code> files as input and construct a heterogeneous graph from it.
+We will then use this dataset as input into a <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/notes/heterogeneous.html#hgtutorial">heterogeneous graph model</a>, and use it for the task of link prediction.
+A few code cells require user input to let the code run through successfully.
+If you are stuck on cells that require input, take a look at the fully filled out tutorial <a class="reference external" href="https://medium.com/&#64;pytorch_geometric/link-prediction-on-heterogeneous-graphs-with-pyg-6d5c29677c70">here</a>.</p>
+<p>We are going to use the <a class="reference external" href="https://grouplens.org/datasets/movielens/">MovieLens dataset</a> collected by the GroupLens research group.
+This toy dataset describes ratings and tagging activity from MovieLens.
+The dataset contains approximately 100k ratings across more than 9k movies from more than 600 users.
+We are going to use this dataset to generate two node types holding data for movies and users, respectively, and one edge type connecting users and movies, representing the relation of whether a user has rated a specific movie.</p>
+<p>The link prediction task then tries to predict missing ratings, and can, for example, be used to recommend users new movies.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.13.1+cu116
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install required packages.</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;TORCH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">__version__</span>
+
+<span class="c1"># !pip install torch-scatter -f https://data.pyg.org/whl/torch-${TORCH}.html</span>
+<span class="c1"># !pip install torch-sparse -f https://data.pyg.org/whl/torch-${TORCH}.html</span>
+<span class="c1"># !pip install pyg-lib -f https://data.pyg.org/whl/nightly/torch-${TORCH}.html</span>
+<span class="c1"># !pip install git+https://github.com/pyg-team/pytorch_geometric.git</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="heterogeneous-graph-creation">
+<h2><span class="section-number">5.1.1. </span>Heterogeneous Graph Creation<a class="headerlink" href="#heterogeneous-graph-creation" title="Permalink to this heading">#</a></h2>
+<p>First, we download the dataset to an arbitrary folder (in this case, the current directory):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch_geometric.data</span> <span class="kn">import</span> <span class="n">download_url</span><span class="p">,</span> <span class="n">extract_zip</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://files.grouplens.org/datasets/movielens/ml-latest-small.zip&#39;</span>
+<span class="n">extract_zip</span><span class="p">(</span><span class="n">download_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">),</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+
+<span class="n">movies_path</span> <span class="o">=</span> <span class="s1">&#39;./ml-latest-small/movies.csv&#39;</span>
+<span class="n">ratings_path</span> <span class="o">=</span> <span class="s1">&#39;./ml-latest-small/ratings.csv&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading https://files.grouplens.org/datasets/movielens/ml-latest-small.zip
+Extracting ./ml-latest-small.zip
+</pre></div>
+</div>
+</div>
+</div>
+<p>Before we create the heterogeneous graph, let’s take a look at the data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;movies.csv:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;===========&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">movies_path</span><span class="p">)[[</span><span class="s2">&quot;movieId&quot;</span><span class="p">,</span> <span class="s2">&quot;genres&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ratings.csv:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;============&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">ratings_path</span><span class="p">)[[</span><span class="s2">&quot;userId&quot;</span><span class="p">,</span> <span class="s2">&quot;movieId&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>movies.csv:
+===========
+   movieId                                       genres
+0        1  Adventure|Animation|Children|Comedy|Fantasy
+1        2                   Adventure|Children|Fantasy
+2        3                               Comedy|Romance
+3        4                         Comedy|Drama|Romance
+4        5                                       Comedy
+
+ratings.csv:
+============
+   userId  movieId
+0       1        1
+1       1        3
+2       1        6
+3       1       47
+4       1       50
+</pre></div>
+</div>
+</div>
+</div>
+<p>We see that the <code class="docutils literal notranslate"><span class="pre">movies.csv</span></code> file provides two useful columns: <code class="docutils literal notranslate"><span class="pre">movieId</span></code> assigns a unique identifier to each movie, while the <code class="docutils literal notranslate"><span class="pre">genres</span></code> column represent genres of the given movie.
+We can make use of this column to define a feature representation that can be easily interpreted by machine learning models.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the entire movie data frame into memory:</span>
+<span class="n">movies_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">movies_path</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;movieId&#39;</span><span class="p">)</span>
+
+<span class="c1"># Split genres and convert into indicator variables:</span>
+<span class="n">genres</span> <span class="o">=</span> <span class="n">movies_df</span><span class="p">[</span><span class="s1">&#39;genres&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">genres</span><span class="p">[[</span><span class="s2">&quot;Action&quot;</span><span class="p">,</span> <span class="s2">&quot;Adventure&quot;</span><span class="p">,</span> <span class="s2">&quot;Drama&quot;</span><span class="p">,</span> <span class="s2">&quot;Horror&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+
+<span class="c1"># Use genres as movie input features:</span>
+<span class="n">movie_feat</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">genres</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">movie_feat</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="p">(</span><span class="mi">9742</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>  <span class="c1"># 20 genres in total.</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>         Action  Adventure  Drama  Horror
+movieId                                  
+1             0          1      0       0
+2             0          1      0       0
+3             0          0      0       0
+4             0          0      1       0
+5             0          0      0       0
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">ratings.csv</span></code> data connects users (as given by <code class="docutils literal notranslate"><span class="pre">userId</span></code>) and movies (as given by <code class="docutils literal notranslate"><span class="pre">movieId</span></code>).
+Due to simplicity, we do not make use of the additional <code class="docutils literal notranslate"><span class="pre">timestamp</span></code> and <code class="docutils literal notranslate"><span class="pre">rating</span></code> information.
+Here, we first read the <code class="docutils literal notranslate"><span class="pre">*.csv</span></code> file from disk, and create a mapping that maps entry IDs to a consecutive value in the range <code class="docutils literal notranslate"><span class="pre">{</span> <span class="pre">0,</span> <span class="pre">...,</span> <span class="pre">num_rows</span> <span class="pre">-</span> <span class="pre">1</span> <span class="pre">}</span></code>.
+This is needed as we want our final data representation to be as compact as possible, <em>e.g.</em>, the representation of a movie in the first row should be accessible via <code class="docutils literal notranslate"><span class="pre">x[0]</span></code>.</p>
+<p>Afterwards, we obtain the final <code class="docutils literal notranslate"><span class="pre">edge_index</span></code> representation of shape <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">num_ratings]</span></code> from <code class="docutils literal notranslate"><span class="pre">ratings.csv</span></code> by merging mapped user and movie indices with the raw indices given by the original data frame.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the entire ratings data frame into memory:</span>
+<span class="n">ratings_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">ratings_path</span><span class="p">)</span>
+
+<span class="c1"># Create a mapping from unique user indices to range [0, num_user_nodes):</span>
+<span class="n">unique_user_id</span> <span class="o">=</span> <span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;userId&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="n">unique_user_id</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span>
+    <span class="s1">&#39;userId&#39;</span><span class="p">:</span> <span class="n">unique_user_id</span><span class="p">,</span>
+    <span class="s1">&#39;mappedID&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">RangeIndex</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_user_id</span><span class="p">)),</span>
+<span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mapping of user IDs to consecutive values:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==========================================&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">unique_user_id</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="c1"># Create a mapping from unique movie indices to range [0, num_movie_nodes):</span>
+<span class="n">unique_movie_id</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">{</span>
+    <span class="s1">&#39;movieId&#39;</span><span class="p">:</span> <span class="n">movies_df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+    <span class="s1">&#39;mappedID&#39;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">RangeIndex</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">movies_df</span><span class="p">)),</span>
+<span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mapping of movie IDs to consecutive values:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========================================&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">unique_movie_id</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+
+<span class="c1"># Perform merge to obtain the edges from users and movies:</span>
+<span class="n">ratings_user_id</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;userId&#39;</span><span class="p">],</span> <span class="n">unique_user_id</span><span class="p">,</span>
+                            <span class="n">left_on</span><span class="o">=</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+<span class="n">ratings_user_id</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">ratings_user_id</span><span class="p">[</span><span class="s1">&#39;mappedID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">ratings_movie_id</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ratings_df</span><span class="p">[</span><span class="s1">&#39;movieId&#39;</span><span class="p">],</span> <span class="n">unique_movie_id</span><span class="p">,</span>
+                            <span class="n">left_on</span><span class="o">=</span><span class="s1">&#39;movieId&#39;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">&#39;movieId&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+<span class="n">ratings_movie_id</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">ratings_movie_id</span><span class="p">[</span><span class="s1">&#39;mappedID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+<span class="c1"># With this, we are ready to construct our `edge_index` in COO format</span>
+<span class="c1"># following PyG semantics:</span>
+<span class="n">edge_index_user_to_movie</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">ratings_user_id</span><span class="p">,</span> <span class="n">ratings_movie_id</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">edge_index_user_to_movie</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">100836</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final edge indices pointing from users to movies:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=================================================&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">edge_index_user_to_movie</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mapping of user IDs to consecutive values:
+==========================================
+   userId  mappedID
+0       1         0
+1       2         1
+2       3         2
+3       4         3
+4       5         4
+
+Mapping of movie IDs to consecutive values:
+===========================================
+   movieId  mappedID
+0        1         0
+1        2         1
+2        3         2
+3        4         3
+4        5         4
+
+Final edge indices pointing from users to movies:
+=================================================
+tensor([[   0,    0,    0,  ...,  609,  609,  609],
+        [   0,    2,    5,  ..., 9462, 9463, 9503]])
+</pre></div>
+</div>
+</div>
+</div>
+<p>With this, we are ready to initialize our <code class="docutils literal notranslate"><span class="pre">HeteroData</span></code> object and pass the necessary information to it.
+Note that we also pass in a <code class="docutils literal notranslate"><span class="pre">node_id</span></code> vector to each node type in order to reconstruct the original node indices from sampled subgraphs.
+We also take care of adding reverse edges to the <code class="docutils literal notranslate"><span class="pre">HeteroData</span></code> object.
+This allows our GNN model to use both directions of the edge for message passing:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch_geometric.data</span> <span class="kn">import</span> <span class="n">HeteroData</span>
+<span class="kn">import</span> <span class="nn">torch_geometric.transforms</span> <span class="k">as</span> <span class="nn">T</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">HeteroData</span><span class="p">()</span>
+
+<span class="c1"># Save node indices:</span>
+<span class="n">data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">node_id</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_user_id</span><span class="p">))</span>
+<span class="n">data</span><span class="p">[</span><span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">node_id</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">movies_df</span><span class="p">))</span>
+
+<span class="c1"># Add the node features and edge indices:</span>
+<span class="n">data</span><span class="p">[</span><span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># TODO</span>
+<span class="n">data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_index</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># TODO</span>
+
+<span class="c1"># We also need to make sure to add the reverse edges from movies to users</span>
+<span class="c1"># in order to let a GNN be able to pass messages in both directions.</span>
+<span class="c1"># We can leverage the `T.ToUndirected()` transform for this from PyG:</span>
+
+<span class="c1"># TODO:</span>
+<span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">data</span><span class="o">.</span><span class="n">node_types</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span>
+<span class="k">assert</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_types</span> <span class="o">==</span> <span class="p">[(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">),</span>
+                           <span class="p">(</span><span class="s2">&quot;movie&quot;</span><span class="p">,</span> <span class="s2">&quot;rev_rates&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">)]</span>
+<span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">num_nodes</span> <span class="o">==</span> <span class="mi">610</span>
+<span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">num_features</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">num_nodes</span> <span class="o">==</span> <span class="mi">9742</span>
+<span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">num_features</span> <span class="o">==</span> <span class="mi">20</span>
+<span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">num_edges</span> <span class="o">==</span> <span class="mi">100836</span>
+<span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;movie&quot;</span><span class="p">,</span> <span class="s2">&quot;rev_rates&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">num_edges</span> <span class="o">==</span> <span class="mi">100836</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>HeteroData(
+  <span class=" -Color -Color-Bold">user</span>={ node_id=[610] },
+  <span class=" -Color -Color-Bold">movie</span>={
+    node_id=[9742],
+    x=[9742, 20]
+  },
+  <span class=" -Color -Color-Bold">(user, rates, movie)</span>={ edge_index=[2, 100836] }
+)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="defining-edge-level-training-splits">
+<h2><span class="section-number">5.1.2. </span>Defining Edge-level Training Splits<a class="headerlink" href="#defining-edge-level-training-splits" title="Permalink to this heading">#</a></h2>
+<p>Since our data is now ready-to-be-used, we can split the ratings of users into training, validation, and test splits.
+This is needed in order to ensure that we leak no information about edges used during evaluation into the training phase.
+For this, we make use of the <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/transforms.html#torch_geometric.transforms.RandomLinkSplit"><code class="docutils literal notranslate"><span class="pre">transforms.RandomLinkSplit</span></code></a> transformation from PyG.
+This transforms randomly divides the edges in the <code class="docutils literal notranslate"><span class="pre">(&quot;user&quot;,</span> <span class="pre">&quot;rates&quot;,</span> <span class="pre">&quot;movie&quot;)</span></code> into training, validation and test edges.
+The <code class="docutils literal notranslate"><span class="pre">disjoint_train_ratio</span></code> parameter further separates edges in the training split into edges used for message passing (<code class="docutils literal notranslate"><span class="pre">edge_index</span></code>) and edges used for supervision (<code class="docutils literal notranslate"><span class="pre">edge_label_index</span></code>).
+Note that we also need to specify the reverse edge type <code class="docutils literal notranslate"><span class="pre">(&quot;movie&quot;,</span> <span class="pre">&quot;rev_rates&quot;,</span> <span class="pre">&quot;user&quot;)</span></code>.
+This allows the <code class="docutils literal notranslate"><span class="pre">RandomLinkSplit</span></code> transform to drop reverse edges accordingly to not leak any information into the training phase.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For this, we first split the set of edges into</span>
+<span class="c1"># training (80%), validation (10%), and testing edges (10%).</span>
+<span class="c1"># Across the training edges, we use 70% of edges for message passing,</span>
+<span class="c1"># and 30% of edges for supervision.</span>
+<span class="c1"># We further want to generate fixed negative edges for evaluation with a ratio of 2:1.</span>
+<span class="c1"># Negative edges during training will be generated on-the-fly, so we don&#39;t want to</span>
+<span class="c1"># add them to the graph right away.</span>
+<span class="c1"># Overall, we can leverage the `RandomLinkSplit()` transform for this from PyG:</span>
+<span class="n">transform</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">RandomLinkSplit</span><span class="p">(</span>
+    <span class="n">num_val</span><span class="o">=...</span><span class="p">,</span>  <span class="c1"># TODO</span>
+    <span class="n">num_test</span><span class="o">=...</span><span class="p">,</span>  <span class="c1"># TODO</span>
+    <span class="n">disjoint_train_ratio</span><span class="o">=...</span><span class="p">,</span>  <span class="c1"># TODO</span>
+    <span class="n">neg_sampling_ratio</span><span class="o">=...</span><span class="p">,</span>  <span class="c1"># TODO</span>
+    <span class="n">add_negative_train_samples</span><span class="o">=...</span><span class="p">,</span>  <span class="c1"># TODO</span>
+    <span class="n">edge_types</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">),</span>
+    <span class="n">rev_edge_types</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;movie&quot;</span><span class="p">,</span> <span class="s2">&quot;rev_rates&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">train_data</span><span class="p">,</span> <span class="n">val_data</span><span class="p">,</span> <span class="n">test_data</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Training data:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;==============&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Validation data:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;================&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">val_data</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">train_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">num_edges</span> <span class="o">==</span> <span class="mi">56469</span>
+<span class="k">assert</span> <span class="n">train_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label_index</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">24201</span>
+<span class="k">assert</span> <span class="n">train_data</span><span class="p">[</span><span class="s2">&quot;movie&quot;</span><span class="p">,</span> <span class="s2">&quot;rev_rates&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">num_edges</span> <span class="o">==</span> <span class="mi">56469</span>
+<span class="c1"># No negative edges added:</span>
+<span class="k">assert</span> <span class="n">train_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
+<span class="k">assert</span> <span class="n">train_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
+
+<span class="k">assert</span> <span class="n">val_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">num_edges</span> <span class="o">==</span> <span class="mi">80670</span>
+<span class="k">assert</span> <span class="n">val_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label_index</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">30249</span>
+<span class="k">assert</span> <span class="n">val_data</span><span class="p">[</span><span class="s2">&quot;movie&quot;</span><span class="p">,</span> <span class="s2">&quot;rev_rates&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">num_edges</span> <span class="o">==</span> <span class="mi">80670</span>
+<span class="c1"># Negative edges with ratio 2:1:</span>
+<span class="k">assert</span> <span class="n">val_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label</span><span class="o">.</span><span class="n">long</span><span class="p">()</span><span class="o">.</span><span class="n">bincount</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="o">==</span> <span class="p">[</span><span class="mi">20166</span><span class="p">,</span> <span class="mi">10083</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="defining-mini-batch-loaders">
+<h2><span class="section-number">5.1.3. </span>Defining Mini-batch Loaders<a class="headerlink" href="#defining-mini-batch-loaders" title="Permalink to this heading">#</a></h2>
+<p>We are now ready to create a mini-batch loader that will generate subgraphs that can be used as input into our GNN.
+While this step is not strictly necessary for small-scale graphs, it is absolutely necessary to apply GNNs on larger graphs that do not fit onto GPU memory otherwise.
+Here, we make use of the <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/loader.html#torch_geometric.loader.LinkNeighborLoader"><code class="docutils literal notranslate"><span class="pre">loader.LinkNeighborLoader</span></code></a> which samples multiple hops from both ends of a link and creates a subgraph from it.
+Here, <code class="docutils literal notranslate"><span class="pre">edge_label_index</span></code> serves as the “seed links” to start sampling from.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In the first hop, we sample at most 20 neighbors.</span>
+<span class="c1"># In the second hop, we sample at most 10 neighbors.</span>
+<span class="c1"># In addition, during training, we want to sample negative edges on-the-fly with</span>
+<span class="c1"># a ratio of 2:1.</span>
+<span class="c1"># We can make use of the `loader.LinkNeighborLoader` from PyG:</span>
+<span class="kn">from</span> <span class="nn">torch_geometric.loader</span> <span class="kn">import</span> <span class="n">LinkNeighborLoader</span>
+
+<span class="c1"># Define seed edges:</span>
+<span class="n">edge_label_index</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label_index</span>
+<span class="n">edge_label</span> <span class="o">=</span> <span class="n">train_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label</span>
+
+<span class="n">train_loader</span> <span class="o">=</span> <span class="n">LinkNeighborLoader</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=...</span><span class="p">,</span>  <span class="c1"># TODO</span>
+    <span class="n">num_neighbors</span><span class="o">=...</span><span class="p">,</span>  <span class="c1"># TODO</span>
+    <span class="n">neg_sampling_ratio</span><span class="o">=...</span><span class="p">,</span>  <span class="c1"># TODO</span>
+    <span class="n">edge_label_index</span><span class="o">=</span><span class="p">((</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">),</span> <span class="n">edge_label_index</span><span class="p">),</span>
+    <span class="n">edge_label</span><span class="o">=</span><span class="n">edge_label</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+    <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Inspect a sample:</span>
+<span class="n">sampled_data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sampled mini-batch:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===================&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sampled_data</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">sampled_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label_index</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">128</span>
+<span class="k">assert</span> <span class="n">sampled_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="k">assert</span> <span class="n">sampled_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampled mini-batch:
+===================
+HeteroData(
+  <span class=" -Color -Color-Bold">user</span>={ node_id=[606] },
+  <span class=" -Color -Color-Bold">movie</span>={
+    node_id=[2769],
+    x=[2769, 20]
+  },
+  <span class=" -Color -Color-Bold">(user, rates, movie)</span>={
+    edge_index=[2, 17686],
+    edge_label=[384],
+    edge_label_index=[2, 384],
+    input_id=[128]
+  },
+  <span class=" -Color -Color-Bold">(movie, rev_rates, user)</span>={ edge_index=[2, 7808] }
+)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="creating-a-heterogeneous-link-level-gnn">
+<h2><span class="section-number">5.1.4. </span>Creating a Heterogeneous Link-level GNN<a class="headerlink" href="#creating-a-heterogeneous-link-level-gnn" title="Permalink to this heading">#</a></h2>
+<p>We are now ready to create our heterogeneous GNN.
+The GNN is responsible for learning enriched node representations from the surrounding subgraphs, which can be then used to derive edge-level predictions.
+For defining our heterogenous GNN, we make use of <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.conv.SAGEConv"><code class="docutils literal notranslate"><span class="pre">nn.SAGEConv</span></code></a> and the <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/modules/nn.html#torch_geometric.nn.to_hetero_transformer.to_hetero"><code class="docutils literal notranslate"><span class="pre">nn.to_hetero()</span></code></a> function, which transforms a GNN defined on homogeneous graphs to be applied on heterogeneous ones.</p>
+<p>In addition, we define a final link-level classifier, which simply takes both node embeddings of the link we are trying to predict, and applies a dot-product on them.</p>
+<p>As users do not have any node-level information, we choose to learn their features jointly via a <code class="docutils literal notranslate"><span class="pre">torch.nn.Embedding</span></code> layer. In order to improve the expressiveness of movie features, we do the same for movie nodes, and simply add their shallow embeddings to the pre-defined genre features.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch_geometric.nn</span> <span class="kn">import</span> <span class="n">SAGEConv</span><span class="p">,</span> <span class="n">to_hetero</span>
+
+
+<span class="k">class</span> <span class="nc">GNN</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">SAGEConv</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">SAGEConv</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="c1"># Define a 2-layer GNN computation graph.</span>
+        <span class="c1"># Use a *single* `ReLU` non-linearity in-between.</span>
+        <span class="c1"># TODO:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="c1"># Our final classifier applies the dot-product between source and destination</span>
+<span class="c1"># node embeddings to derive edge-level predictions:</span>
+<span class="k">class</span> <span class="nc">Classifier</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_user</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">x_movie</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">edge_label_index</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="c1"># Convert node embeddings to edge-level representations:</span>
+        <span class="n">edge_feat_user</span> <span class="o">=</span> <span class="n">x_user</span><span class="p">[</span><span class="n">edge_label_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">edge_feat_movie</span> <span class="o">=</span> <span class="n">x_movie</span><span class="p">[</span><span class="n">edge_label_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+        <span class="c1"># Apply dot-product to get a prediction per supervision edge:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">edge_feat_user</span> <span class="o">*</span> <span class="n">edge_feat_movie</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># Since the dataset does not come with rich features, we also learn two</span>
+        <span class="c1"># embedding matrices for users and movies:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">movie_lin</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_emb</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">movie_emb</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">hidden_channels</span><span class="p">)</span>
+
+        <span class="c1"># Instantiate homogeneous GNN:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gnn</span> <span class="o">=</span> <span class="n">GNN</span><span class="p">(</span><span class="n">hidden_channels</span><span class="p">)</span>
+
+        <span class="c1"># Convert GNN model into a heterogeneous variant:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gnn</span> <span class="o">=</span> <span class="n">to_hetero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gnn</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">metadata</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">Classifier</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">HeteroData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">x_dict</span> <span class="o">=</span> <span class="p">{</span>
+          <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_emb</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">node_id</span><span class="p">),</span>
+          <span class="s2">&quot;movie&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">movie_lin</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">movie_emb</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">node_id</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># `x_dict` holds feature matrices of all node types</span>
+        <span class="c1"># `edge_index_dict` holds all edge indices of all edge types</span>
+        <span class="n">x_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gnn</span><span class="p">(</span><span class="n">x_dict</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_index_dict</span><span class="p">)</span>
+
+        <span class="n">pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="p">(</span>
+            <span class="n">x_dict</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">],</span>
+            <span class="n">x_dict</span><span class="p">[</span><span class="s2">&quot;movie&quot;</span><span class="p">],</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label_index</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pred</span>
+
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">hidden_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Model(
+  (movie_lin): Linear(in_features=20, out_features=64, bias=True)
+  (user_emb): Embedding(610, 64)
+  (movie_emb): Embedding(9742, 64)
+  (gnn): GraphModule(
+    (conv1): ModuleDict(
+      (user__rates__movie): SAGEConv(64, 64, aggr=mean)
+      (movie__rev_rates__user): SAGEConv(64, 64, aggr=mean)
+    )
+    (conv2): ModuleDict(
+      (user__rates__movie): SAGEConv(64, 64, aggr=mean)
+      (movie__rev_rates__user): SAGEConv(64, 64, aggr=mean)
+    )
+  )
+  (classifier): Classifier()
+)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="training-a-heterogeneous-link-level-gnn">
+<h2><span class="section-number">5.1.5. </span>Training a Heterogeneous Link-level GNN<a class="headerlink" href="#training-a-heterogeneous-link-level-gnn" title="Permalink to this heading">#</a></h2>
+<p>Training our GNN is then similar to training any PyTorch model.
+We move the model to the desired device, and initialize an optimizer that takes care of adjusting model parameters via stochastic gradient descent.</p>
+<p>The training loop then iterates over our mini-batches, applies the forward computation of the model, computes the loss from ground-truth labels and obtained predictions (here we make use of binary cross entropy), and adjusts model parameters via back-propagation and stochastic gradient descent.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tqdm</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s1">&#39;cuda&#39;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Device: &#39;</span><span class="si">{</span><span class="n">device</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+    <span class="n">total_loss</span> <span class="o">=</span> <span class="n">total_examples</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">sampled_data</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span><span class="p">(</span><span class="n">train_loader</span><span class="p">):</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+        <span class="c1"># TODO: Move `sampled_data` to the respective `device`</span>
+        <span class="c1"># TODO: Run `forward` pass of the model</span>
+        <span class="c1"># TODO: Apply binary cross entropy via</span>
+        <span class="c1"># `F.binary_cross_entropy_with_logits(pred, ground_truth)`</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="n">total_loss</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span> <span class="o">*</span> <span class="n">pred</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
+        <span class="n">total_examples</span> <span class="o">+=</span> <span class="n">pred</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Epoch: </span><span class="si">{</span><span class="n">epoch</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">, Loss: </span><span class="si">{</span><span class="n">total_loss</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">total_examples</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Device: &#39;cpu&#39;
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 190/190 [00:11&lt;00:00, 16.58it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch: 001, Loss: 0.4392
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 190/190 [00:11&lt;00:00, 16.29it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch: 002, Loss: 0.3498
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 190/190 [00:11&lt;00:00, 16.77it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch: 003, Loss: 0.3290
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 190/190 [00:11&lt;00:00, 16.76it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch: 004, Loss: 0.3138
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 190/190 [00:13&lt;00:00, 14.46it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch: 005, Loss: 0.2988
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="evaluating-a-heterogeneous-link-level-gnn">
+<h2><span class="section-number">5.1.6. </span>Evaluating a Heterogeneous Link-level GNN<a class="headerlink" href="#evaluating-a-heterogeneous-link-level-gnn" title="Permalink to this heading">#</a></h2>
+<p>After training, we evaluate our model on useen data coming from the validation set.
+For this, we define a new <code class="docutils literal notranslate"><span class="pre">LinkNeighborLoader</span></code> (which now iterates over the edges in the validation set), obtain the predictions on validation edges by running the model, and finally evaluate the performance of the model by computing the AUC score over the set of predictions and their corresponding ground-truth edges (including both positive and negative edges).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the validation seed edges:</span>
+<span class="n">edge_label_index</span> <span class="o">=</span> <span class="n">val_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label_index</span>
+<span class="n">edge_label</span> <span class="o">=</span> <span class="n">val_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label</span>
+
+<span class="n">val_loader</span> <span class="o">=</span> <span class="n">LinkNeighborLoader</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">val_data</span><span class="p">,</span>
+    <span class="n">num_neighbors</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+    <span class="n">edge_label_index</span><span class="o">=</span><span class="p">((</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">),</span> <span class="n">edge_label_index</span><span class="p">),</span>
+    <span class="n">edge_label</span><span class="o">=</span><span class="n">edge_label</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">3</span> <span class="o">*</span> <span class="mi">128</span><span class="p">,</span>
+    <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">sampled_data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">val_loader</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sampled mini-batch:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===================&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sampled_data</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="n">sampled_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label_index</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">128</span>
+<span class="k">assert</span> <span class="n">sampled_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+<span class="k">assert</span> <span class="n">sampled_data</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;rates&quot;</span><span class="p">,</span> <span class="s2">&quot;movie&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edge_label</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sampled mini-batch:
+===================
+HeteroData(
+  <span class=" -Color -Color-Bold">user</span>={ node_id=[610] },
+  <span class=" -Color -Color-Bold">movie</span>={
+    node_id=[2624],
+    x=[2624, 20]
+  },
+  <span class=" -Color -Color-Bold">(user, rates, movie)</span>={
+    edge_index=[2, 18595],
+    edge_label=[384],
+    edge_label_index=[2, 384],
+    input_id=[384]
+  },
+  <span class=" -Color -Color-Bold">(movie, rev_rates, user)</span>={ edge_index=[2, 7785] }
+)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_auc_score</span>
+
+<span class="n">preds</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">ground_truths</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">sampled_data</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="o">.</span><span class="n">tqdm</span><span class="p">(</span><span class="n">val_loader</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="c1"># TODO: Collect predictions and ground-truths and write them into</span>
+        <span class="c1"># `preds` and `ground_truths`.</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<span class="n">pred</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">preds</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">ground_truth</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">(</span><span class="n">ground_truths</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">ground_truth</span><span class="p">,</span> <span class="n">pred</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Validation AUC: </span><span class="si">{</span><span class="n">auc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 79/79 [00:02&lt;00:00, 29.13it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Validation AUC: 0.9299
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./pages\link"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="Link.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title"><span class="section-number">5. </span>Links</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="Link_Regression_on_Movielens.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title"><span class="section-number">5.2. </span>Link Regression</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#heterogeneous-graph-creation">
+   5.1.1. Heterogeneous Graph Creation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#defining-edge-level-training-splits">
+   5.1.2. Defining Edge-level Training Splits
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#defining-mini-batch-loaders">
+   5.1.3. Defining Mini-batch Loaders
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-a-heterogeneous-link-level-gnn">
+   5.1.4. Creating a Heterogeneous Link-level GNN
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#training-a-heterogeneous-link-level-gnn">
+   5.1.5. Training a Heterogeneous Link-level GNN
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#evaluating-a-heterogeneous-link-level-gnn">
+   5.1.6. Evaluating a Heterogeneous Link-level GNN
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Khairul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2024.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on None.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>

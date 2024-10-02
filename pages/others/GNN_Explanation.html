@@ -1,0 +1,1268 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>7.4. Explain using Captum &#8212; Graph Neural Network Tutorials</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=4ec06e9971c5264fbd345897d5258098f11cc577" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=8bf782fb4ee92b3d3646425e50f299c4e1fd152d"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pages/others/GNN_Explanation';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="8. References" href="../references.html" />
+    <link rel="prev" title="7.3. Scaling" href="Scaling_GNNs.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/logo.jpeg" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/logo.jpeg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../Introduction.html">
+                        Introduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../node/Node.html">
+                        Nodes
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../graph/Graph.html">
+                        Graph
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../agg/Aggregation.html">
+                        Aggregation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../link/Link.html">
+                        Links
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../ae/Autoencoder.html">
+                        Autoencoder
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="Overview.html">
+                        Others
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../references.html">
+                        References
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../Introduction.html">
+                        Introduction
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../node/Node.html">
+                        Nodes
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../graph/Graph.html">
+                        Graph
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../agg/Aggregation.html">
+                        Aggregation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../link/Link.html">
+                        Links
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../ae/Autoencoder.html">
+                        Autoencoder
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="Overview.html">
+                        Others
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../references.html">
+                        References
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item">
+  
+
+
+<a class="navbar-brand logo" href="../../intro.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/logo.jpeg" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/logo.jpeg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    </div>
+    <div class="sidebar-start-items__item">
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Graph Neural Network
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">1. Introduction</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../node/Node.html">2. Nodes</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../node/Node_Classification.html">2.1. Node Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../node/Node_Classification_%28with_W%26B%29.html">2.2. Node Classification with W&amp;B</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../node/Point_Cloud_Classification.html">2.3. Point Cloud Classification</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../graph/Graph.html">3. Graph</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../graph/Graph_Classification.html">3.1. Graph Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graph/Graph_Classification_with_PyG_and_W%26B.html">3.2. Graph Classification with W&amp;B</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../agg/Aggregation.html">4. Aggregation</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../agg/Aggregation_Package.html">4.1. Customizing Aggregations within Message Passing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../agg/Aggregation%20Functions.html">4.2. Aggregation Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../link/Link.html">5. Links</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../link/Link_Prediction_on_MovieLens.html">5.1. Link Prediction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../link/Link_Regression_on_Movielens.html">5.2. Link Regression</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ae/Autoencoder.html">6. Autoencoder</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ae/Autoencoders.html">6.1. Graph AutoEncoders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ae/Adversarially%20Regularized%20AE.html">6.2. Adversarially Regularized Autoencoder</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="Overview.html">7. Others</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="GATs.html">7.1. Graph Attention Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Spectral_GCL.html">7.2. Spectral methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Scaling_GNNs.html">7.3. Scaling</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">7.4. Explain using Captum</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">8. References</a></li>
+</ul>
+
+    </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        <label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" data-toggle="tooltip" data-placement="right" title="Toggle primary sidebar">
+            <span class="fa-solid fa-bars"></span>
+        </label>
+    </div>
+    <div class="header-article__right">
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://colab.research.google.com/github/khairulislam/GNN/blob/master/docs/pages/others/GNN_Explanation.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Colab"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="dropdown dropdown-repository-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="https://github.com/khairulislam/GNN" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">repository</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/khairulislam/GNN/issues/new?title=Issue%20on%20page%20%2Fpages/others/GNN_Explanation.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">open issue</span>
+</a>
+</a>
+      
+      <li><a href="https://github.com/khairulislam/GNN/edit/master/docs/pages/others/GNN_Explanation.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">suggest edit</span>
+</a>
+</a>
+      
+  </ul>
+</div>
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      <li><a href="../../_sources/pages/others/GNN_Explanation.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</a>
+      
+      <li>
+<button onclick="printPdf(this)"
+  class="btn btn-sm dropdown-item"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</a>
+      
+  </ul>
+</div>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary" data-toggle="tooltip" data-placement="left" title="Toggle secondary sidebar">
+            <span class="fa-solid fa-list"></span>
+        </label>
+    </div>
+</div>
+            </div>
+            
+            
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Explain using Captum</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#loading-the-dataset">
+   7.4.1. Loading the dataset
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#visualizing-the-data">
+   7.4.2. Visualizing the data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#sample-visualization">
+   7.4.3. Sample visualization
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#training-the-model">
+   7.4.4. Training the model
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#define-the-model">
+     7.4.4.1. Define the model
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#define-train-and-test-functions">
+     7.4.4.2. Define train and test functions
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#train-the-model-for-100-epochs">
+     7.4.4.3. Train the model for 100 epochs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#explaining-the-predictions">
+   7.4.5. Explaining the predictions
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+            <article class="bd-article" role="main">
+              
+  <section class="tex2jax_ignore mathjax_ignore" id="explain-using-captum">
+<h1><span class="section-number">7.4. </span>Explain using Captum<a class="headerlink" href="#explain-using-captum" title="Permalink to this heading">#</a></h1>
+<p>In this tutorial we demonstrate how to apply feature attribution methods to graphs. Specifically, we try to find the most important edges for each instance prediction.</p>
+<p>We use the Mutagenicity dataset from <a class="reference external" href="https://chrsmrrs.github.io/datasets/">TUDatasets</a>. This dataset consists of 4337 molecule graphs where the task is to predict the molecule mutagenicity.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Install required packages.
+import os
+import torch
+os.environ[&#39;TORCH&#39;] = torch.__version__
+print(torch.__version__)
+
+!pip install -q torch-scatter -f https://data.pyg.org/whl/torch-${TORCH}.html
+!pip install -q torch-sparse -f https://data.pyg.org/whl/torch-${TORCH}.html
+!pip install -q git+https://github.com/pyg-team/pytorch_geometric.git
+!pip install -q captum
+
+# Helper function for visualization.
+%matplotlib inline
+import matplotlib.pyplot as plt
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.11.0+cu113
+     |████████████████████████████████| 7.9 MB 7.8 MB/s 
+     |████████████████████████████████| 3.5 MB 9.8 MB/s 
+?25h  Building wheel for torch-geometric (setup.py) ... ?25l?25hdone
+     |████████████████████████████████| 1.4 MB 10.2 MB/s 
+?25h
+</pre></div>
+</div>
+</div>
+</div>
+<section id="loading-the-dataset">
+<h2><span class="section-number">7.4.1. </span>Loading the dataset<a class="headerlink" href="#loading-the-dataset" title="Permalink to this heading">#</a></h2>
+<p>We load the dataset and use 10% of the data as the test split.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from torch_geometric.loader import DataLoader
+from torch_geometric.datasets import TUDataset
+
+path = &#39;.&#39;
+dataset = TUDataset(path, name=&#39;Mutagenicity&#39;).shuffle()
+test_dataset = dataset[:len(dataset) // 10]
+train_dataset = dataset[len(dataset) // 10:]
+test_loader = DataLoader(test_dataset, batch_size=128)
+train_loader = DataLoader(train_dataset, batch_size=128)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading https://www.chrsmrrs.com/graphkerneldatasets/Mutagenicity.zip
+Extracting ./Mutagenicity/Mutagenicity.zip
+Processing...
+Done!
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualizing-the-data">
+<h2><span class="section-number">7.4.2. </span>Visualizing the data<a class="headerlink" href="#visualizing-the-data" title="Permalink to this heading">#</a></h2>
+<p>We define some utility functions for visualizing the molecules and draw a random molecule.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import networkx as nx
+import numpy as np
+
+from torch_geometric.utils import to_networkx
+
+
+def draw_molecule(g, edge_mask=None, draw_edge_labels=False):
+    g = g.copy().to_undirected()
+    node_labels = {}
+    for u, data in g.nodes(data=True):
+        node_labels[u] = data[&#39;name&#39;]
+    pos = nx.planar_layout(g)
+    pos = nx.spring_layout(g, pos=pos)
+    if edge_mask is None:
+        edge_color = &#39;black&#39;
+        widths = None
+    else:
+        edge_color = [edge_mask[(u, v)] for u, v in g.edges()]
+        widths = [x * 10 for x in edge_color]
+    nx.draw(g, pos=pos, labels=node_labels, width=widths,
+            edge_color=edge_color, edge_cmap=plt.cm.Blues,
+            node_color=&#39;azure&#39;)
+
+    if draw_edge_labels and edge_mask is not None:
+        edge_labels = {k: (&#39;%.2f&#39; % v) for k, v in edge_mask.items()}
+        nx.draw_networkx_edge_labels(g, pos, edge_labels=edge_labels,
+                                    font_color=&#39;red&#39;)
+    plt.show()
+
+
+def to_molecule(data):
+    ATOM_MAP = [&#39;C&#39;, &#39;O&#39;, &#39;Cl&#39;, &#39;H&#39;, &#39;N&#39;, &#39;F&#39;,
+                &#39;Br&#39;, &#39;S&#39;, &#39;P&#39;, &#39;I&#39;, &#39;Na&#39;, &#39;K&#39;, &#39;Li&#39;, &#39;Ca&#39;]
+    g = to_networkx(data, node_attrs=[&#39;x&#39;])
+    for u, data in g.nodes(data=True):
+        data[&#39;name&#39;] = ATOM_MAP[data[&#39;x&#39;].index(1.0)]
+        del data[&#39;x&#39;]
+    return g
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sample-visualization">
+<h2><span class="section-number">7.4.3. </span>Sample visualization<a class="headerlink" href="#sample-visualization" title="Permalink to this heading">#</a></h2>
+<p>We sample a single molecule from train_dataset and visualize it</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import random
+
+data = random.choice([t for t in train_dataset])
+mol = to_molecule(data)
+plt.figure(figsize=(10, 5))
+draw_molecule(mol)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/f9520df5afcf176154574b08403070bc5aff580eb81ffd9cab3c3a8877e77ef9.png" src="../../_images/f9520df5afcf176154574b08403070bc5aff580eb81ffd9cab3c3a8877e77ef9.png" />
+</div>
+</div>
+</section>
+<section id="training-the-model">
+<h2><span class="section-number">7.4.4. </span>Training the model<a class="headerlink" href="#training-the-model" title="Permalink to this heading">#</a></h2>
+<p>In the next section, we train a GNN model with 5 convolution layers. We use GraphConv which supports <code class="docutils literal notranslate"><span class="pre">edge_weight</span></code> as a parameter. Many convolution layers in Pytorch Geometric supoort this argument.</p>
+<section id="define-the-model">
+<h3><span class="section-number">7.4.4.1. </span>Define the model<a class="headerlink" href="#define-the-model" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import torch
+from torch.nn import Linear
+import torch.nn.functional as F
+
+from torch_geometric.nn import GraphConv, global_add_pool
+
+class Net(torch.nn.Module):
+    def __init__(self, dim):
+        super(Net, self).__init__()
+
+        num_features = dataset.num_features
+        self.dim = dim
+
+        self.conv1 = GraphConv(num_features, dim)
+        self.conv2 = GraphConv(dim, dim)
+        self.conv3 = GraphConv(dim, dim)
+        self.conv4 = GraphConv(dim, dim)
+        self.conv5 = GraphConv(dim, dim)
+
+        self.lin1 = Linear(dim, dim)
+        self.lin2 = Linear(dim, dataset.num_classes)
+
+    def forward(self, x, edge_index, batch, edge_weight=None):
+        x = self.conv1(x, edge_index, edge_weight).relu()
+        x = self.conv2(x, edge_index, edge_weight).relu()
+        x = self.conv3(x, edge_index, edge_weight).relu()
+        x = self.conv4(x, edge_index, edge_weight).relu()
+        x = self.conv5(x, edge_index, edge_weight).relu()
+        x = global_add_pool(x, batch)
+        x = self.lin1(x).relu()
+        x = F.dropout(x, p=0.5, training=self.training)
+        x = self.lin2(x)
+        return F.log_softmax(x, dim=-1)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-train-and-test-functions">
+<h3><span class="section-number">7.4.4.2. </span>Define train and test functions<a class="headerlink" href="#define-train-and-test-functions" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>def train(epoch):
+    model.train()
+
+    if epoch == 51:
+        for param_group in optimizer.param_groups:
+            param_group[&#39;lr&#39;] = 0.5 * param_group[&#39;lr&#39;]
+
+    loss_all = 0
+    for data in train_loader:
+        data = data.to(device)
+        optimizer.zero_grad()
+        output = model(data.x, data.edge_index, data.batch)
+        loss = F.nll_loss(output, data.y)
+        loss.backward()
+        loss_all += loss.item() * data.num_graphs
+        optimizer.step()
+    return loss_all / len(train_dataset)
+
+
+def test(loader):
+    model.eval()
+
+    correct = 0
+    for data in loader:
+        data = data.to(device)
+        output = model(data.x, data.edge_index, data.batch)
+        pred = output.max(dim=1)[1]
+        correct += pred.eq(data.y).sum().item()
+    return correct / len(loader.dataset)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="train-the-model-for-100-epochs">
+<h3><span class="section-number">7.4.4.3. </span>Train the model for 100 epochs<a class="headerlink" href="#train-the-model-for-100-epochs" title="Permalink to this heading">#</a></h3>
+<p>The accuracy should be around 80% in the end</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>device = torch.device(&#39;cuda&#39; if torch.cuda.is_available() else &#39;cpu&#39;)
+model = Net(dim=32).to(device)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+for epoch in range(1, 101):
+    loss = train(epoch)
+    train_acc = test(train_loader)
+    test_acc = test(test_loader)
+    print(f&#39;Epoch: {epoch:03d}, Loss: {loss:.4f}, &#39;
+          f&#39;Train Acc: {train_acc:.4f}, Test Acc: {test_acc:.4f}&#39;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch: 001, Loss: 0.7441, Train Acc: 0.5904, Test Acc: 0.5473
+Epoch: 002, Loss: 0.6459, Train Acc: 0.6550, Test Acc: 0.6328
+Epoch: 003, Loss: 0.6112, Train Acc: 0.7018, Test Acc: 0.6975
+Epoch: 004, Loss: 0.5862, Train Acc: 0.7152, Test Acc: 0.7136
+Epoch: 005, Loss: 0.5750, Train Acc: 0.7318, Test Acc: 0.7206
+Epoch: 006, Loss: 0.5557, Train Acc: 0.7392, Test Acc: 0.7390
+Epoch: 007, Loss: 0.5473, Train Acc: 0.7464, Test Acc: 0.7367
+Epoch: 008, Loss: 0.5433, Train Acc: 0.7403, Test Acc: 0.7321
+Epoch: 009, Loss: 0.5469, Train Acc: 0.7551, Test Acc: 0.7483
+Epoch: 010, Loss: 0.5243, Train Acc: 0.7779, Test Acc: 0.7483
+Epoch: 011, Loss: 0.5178, Train Acc: 0.7772, Test Acc: 0.7529
+Epoch: 012, Loss: 0.4972, Train Acc: 0.7787, Test Acc: 0.7575
+Epoch: 013, Loss: 0.4926, Train Acc: 0.7797, Test Acc: 0.7529
+Epoch: 014, Loss: 0.4908, Train Acc: 0.7900, Test Acc: 0.7852
+Epoch: 015, Loss: 0.4843, Train Acc: 0.7971, Test Acc: 0.7552
+Epoch: 016, Loss: 0.4906, Train Acc: 0.7825, Test Acc: 0.7483
+Epoch: 017, Loss: 0.4744, Train Acc: 0.8048, Test Acc: 0.7737
+Epoch: 018, Loss: 0.4581, Train Acc: 0.8069, Test Acc: 0.7691
+Epoch: 019, Loss: 0.4522, Train Acc: 0.8110, Test Acc: 0.7737
+Epoch: 020, Loss: 0.4546, Train Acc: 0.8071, Test Acc: 0.7968
+Epoch: 021, Loss: 0.4520, Train Acc: 0.8110, Test Acc: 0.7598
+Epoch: 022, Loss: 0.4441, Train Acc: 0.8148, Test Acc: 0.7829
+Epoch: 023, Loss: 0.4572, Train Acc: 0.8015, Test Acc: 0.7783
+Epoch: 024, Loss: 0.4407, Train Acc: 0.8215, Test Acc: 0.7783
+Epoch: 025, Loss: 0.4382, Train Acc: 0.8153, Test Acc: 0.7806
+Epoch: 026, Loss: 0.4296, Train Acc: 0.8240, Test Acc: 0.7829
+Epoch: 027, Loss: 0.4234, Train Acc: 0.8158, Test Acc: 0.7829
+Epoch: 028, Loss: 0.4233, Train Acc: 0.8163, Test Acc: 0.7829
+Epoch: 029, Loss: 0.4221, Train Acc: 0.8112, Test Acc: 0.7829
+Epoch: 030, Loss: 0.4138, Train Acc: 0.8227, Test Acc: 0.7829
+Epoch: 031, Loss: 0.4158, Train Acc: 0.8199, Test Acc: 0.7737
+Epoch: 032, Loss: 0.4070, Train Acc: 0.8289, Test Acc: 0.7852
+Epoch: 033, Loss: 0.4043, Train Acc: 0.8202, Test Acc: 0.7852
+Epoch: 034, Loss: 0.4047, Train Acc: 0.8263, Test Acc: 0.7945
+Epoch: 035, Loss: 0.4024, Train Acc: 0.8181, Test Acc: 0.7875
+Epoch: 036, Loss: 0.4050, Train Acc: 0.8376, Test Acc: 0.7945
+Epoch: 037, Loss: 0.3865, Train Acc: 0.8363, Test Acc: 0.7945
+Epoch: 038, Loss: 0.3889, Train Acc: 0.8274, Test Acc: 0.7945
+Epoch: 039, Loss: 0.3964, Train Acc: 0.8176, Test Acc: 0.7991
+Epoch: 040, Loss: 0.3856, Train Acc: 0.8407, Test Acc: 0.8199
+Epoch: 041, Loss: 0.3877, Train Acc: 0.8391, Test Acc: 0.8037
+Epoch: 042, Loss: 0.3901, Train Acc: 0.8448, Test Acc: 0.7991
+Epoch: 043, Loss: 0.3802, Train Acc: 0.8448, Test Acc: 0.7991
+Epoch: 044, Loss: 0.3781, Train Acc: 0.8363, Test Acc: 0.8037
+Epoch: 045, Loss: 0.3817, Train Acc: 0.8543, Test Acc: 0.8176
+Epoch: 046, Loss: 0.3673, Train Acc: 0.8491, Test Acc: 0.8152
+Epoch: 047, Loss: 0.3666, Train Acc: 0.8409, Test Acc: 0.8152
+Epoch: 048, Loss: 0.3729, Train Acc: 0.8430, Test Acc: 0.8060
+Epoch: 049, Loss: 0.3651, Train Acc: 0.8484, Test Acc: 0.8176
+Epoch: 050, Loss: 0.3740, Train Acc: 0.8522, Test Acc: 0.8129
+Epoch: 051, Loss: 0.3615, Train Acc: 0.8578, Test Acc: 0.8014
+Epoch: 052, Loss: 0.3554, Train Acc: 0.8632, Test Acc: 0.8060
+Epoch: 053, Loss: 0.3490, Train Acc: 0.8607, Test Acc: 0.7921
+Epoch: 054, Loss: 0.3427, Train Acc: 0.8642, Test Acc: 0.8083
+Epoch: 055, Loss: 0.3324, Train Acc: 0.8635, Test Acc: 0.7898
+Epoch: 056, Loss: 0.3350, Train Acc: 0.8681, Test Acc: 0.8106
+Epoch: 057, Loss: 0.3296, Train Acc: 0.8704, Test Acc: 0.8152
+Epoch: 058, Loss: 0.3381, Train Acc: 0.8642, Test Acc: 0.8245
+Epoch: 059, Loss: 0.3298, Train Acc: 0.8683, Test Acc: 0.8152
+Epoch: 060, Loss: 0.3284, Train Acc: 0.8712, Test Acc: 0.8152
+Epoch: 061, Loss: 0.3288, Train Acc: 0.8660, Test Acc: 0.8014
+Epoch: 062, Loss: 0.3295, Train Acc: 0.8701, Test Acc: 0.8014
+Epoch: 063, Loss: 0.3274, Train Acc: 0.8637, Test Acc: 0.7921
+Epoch: 064, Loss: 0.3284, Train Acc: 0.8681, Test Acc: 0.8014
+Epoch: 065, Loss: 0.3278, Train Acc: 0.8632, Test Acc: 0.7945
+Epoch: 066, Loss: 0.3222, Train Acc: 0.8645, Test Acc: 0.7968
+Epoch: 067, Loss: 0.3249, Train Acc: 0.8730, Test Acc: 0.7991
+Epoch: 068, Loss: 0.3107, Train Acc: 0.8717, Test Acc: 0.8014
+Epoch: 069, Loss: 0.3219, Train Acc: 0.8760, Test Acc: 0.7968
+Epoch: 070, Loss: 0.3127, Train Acc: 0.8763, Test Acc: 0.8060
+Epoch: 071, Loss: 0.3111, Train Acc: 0.8799, Test Acc: 0.8060
+Epoch: 072, Loss: 0.3119, Train Acc: 0.8599, Test Acc: 0.8060
+Epoch: 073, Loss: 0.3134, Train Acc: 0.8696, Test Acc: 0.7921
+Epoch: 074, Loss: 0.3067, Train Acc: 0.8770, Test Acc: 0.7991
+Epoch: 075, Loss: 0.3108, Train Acc: 0.8768, Test Acc: 0.7968
+Epoch: 076, Loss: 0.3090, Train Acc: 0.8809, Test Acc: 0.7991
+Epoch: 077, Loss: 0.3002, Train Acc: 0.8791, Test Acc: 0.8014
+Epoch: 078, Loss: 0.3116, Train Acc: 0.8699, Test Acc: 0.7875
+Epoch: 079, Loss: 0.3068, Train Acc: 0.8753, Test Acc: 0.7921
+Epoch: 080, Loss: 0.3019, Train Acc: 0.8760, Test Acc: 0.7991
+Epoch: 081, Loss: 0.3026, Train Acc: 0.8691, Test Acc: 0.7829
+Epoch: 082, Loss: 0.2940, Train Acc: 0.8768, Test Acc: 0.7968
+Epoch: 083, Loss: 0.2946, Train Acc: 0.8783, Test Acc: 0.8152
+Epoch: 084, Loss: 0.2936, Train Acc: 0.8827, Test Acc: 0.8060
+Epoch: 085, Loss: 0.2945, Train Acc: 0.8747, Test Acc: 0.8014
+Epoch: 086, Loss: 0.2948, Train Acc: 0.8735, Test Acc: 0.7875
+Epoch: 087, Loss: 0.2940, Train Acc: 0.8801, Test Acc: 0.8060
+Epoch: 088, Loss: 0.2905, Train Acc: 0.8842, Test Acc: 0.8060
+Epoch: 089, Loss: 0.3051, Train Acc: 0.8614, Test Acc: 0.8222
+Epoch: 090, Loss: 0.3221, Train Acc: 0.8699, Test Acc: 0.7968
+Epoch: 091, Loss: 0.2995, Train Acc: 0.8809, Test Acc: 0.8037
+Epoch: 092, Loss: 0.2845, Train Acc: 0.8886, Test Acc: 0.8176
+Epoch: 093, Loss: 0.2907, Train Acc: 0.8899, Test Acc: 0.8152
+Epoch: 094, Loss: 0.2846, Train Acc: 0.8837, Test Acc: 0.7991
+Epoch: 095, Loss: 0.2774, Train Acc: 0.8878, Test Acc: 0.8060
+Epoch: 096, Loss: 0.2893, Train Acc: 0.8824, Test Acc: 0.7921
+Epoch: 097, Loss: 0.2769, Train Acc: 0.8870, Test Acc: 0.7991
+Epoch: 098, Loss: 0.2789, Train Acc: 0.8919, Test Acc: 0.8060
+Epoch: 099, Loss: 0.2794, Train Acc: 0.8901, Test Acc: 0.8037
+Epoch: 100, Loss: 0.2770, Train Acc: 0.8852, Test Acc: 0.7945
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="explaining-the-predictions">
+<h2><span class="section-number">7.4.5. </span>Explaining the predictions<a class="headerlink" href="#explaining-the-predictions" title="Permalink to this heading">#</a></h2>
+<p>Now we look at two popular attribution methods. First, we calculate the gradient of the output with respect to the edge weights <span class="math notranslate nohighlight">\(w_{e_i}\)</span>. Edge weights are initially one for all edges.
+For the saliency method, we use the absolute value of the gradient as the attribution value for each edge:</p>
+<div class="math notranslate nohighlight">
+\[
+Attribution_{e_i} = |\frac{\partial F(x)}{\partial w_{e_i}}|
+\]</div>
+<p>Where <span class="math notranslate nohighlight">\(x\)</span> is the input and <span class="math notranslate nohighlight">\(F(x)\)</span> is the output of the GNN model on input <span class="math notranslate nohighlight">\(x\)</span>.</p>
+<p>For Integrated Gradients method, we interpolate between the current input and a baseline input where the weight of all edges is zero and accumulate the gradient values for each edge:</p>
+<div class="math notranslate nohighlight">
+\[
+Attribution_{e_i} = \int_{\alpha =0}^1 \frac{\partial F(x_{\alpha)}}{\partial w_{e_i}} d\alpha
+\]</div>
+<p>Where <span class="math notranslate nohighlight">\(x_{\alpha}\)</span> is the same as the original input graph but the weight of all edges is set to <span class="math notranslate nohighlight">\(\alpha\)</span>. Integrated Gradients complete formulation is more complicated but since our initial edge weights are equal to one and the baseline is zero, it can be simplified to the formulation above. You can read more about this method <a class="reference external" href="https://arxiv.org/abs/1703.01365">here</a>. Of course, this can not be calculated directly and is approximated by a discrete sum.</p>
+<p>We use the <a class="reference external" href="https://captum.ai/">captum</a> library for calculating the attribution values. We define the <code class="docutils literal notranslate"><span class="pre">model_forward</span></code> function which calculates the <code class="docutils literal notranslate"><span class="pre">batch</span></code> argument assuming that we are only explaining a single graph at a time.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from captum.attr import Saliency, IntegratedGradients
+
+def model_forward(edge_mask, data):
+    batch = torch.zeros(data.x.shape[0], dtype=int).to(device)
+    out = model(data.x, data.edge_index, batch, edge_mask)
+    return out
+
+
+def explain(method, data, target=0):
+    input_mask = torch.ones(data.edge_index.shape[1]).requires_grad_(True).to(device)
+    if method == &#39;ig&#39;:
+        ig = IntegratedGradients(model_forward)
+        mask = ig.attribute(input_mask, target=target,
+                            additional_forward_args=(data,),
+                            internal_batch_size=data.edge_index.shape[1])
+    elif method == &#39;saliency&#39;:
+        saliency = Saliency(model_forward)
+        mask = saliency.attribute(input_mask, target=target,
+                                  additional_forward_args=(data,))
+    else:
+        raise Exception(&#39;Unknown explanation method&#39;)
+
+    edge_mask = np.abs(mask.cpu().detach().numpy())
+    if edge_mask.max() &gt; 0:  # avoid division by zero
+        edge_mask = edge_mask / edge_mask.max()
+    return edge_mask
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally we take a random sample from the test dataset and run the explanation methods. For a simpler visualization, we make the graph undirected and merge the explanations of each edge in both directions.</p>
+<p>It is known that NO2 substructure makes the molecules mutagenic in many cases and you can verify this by the model explanations.</p>
+<p>Mutagenic molecules have label 0 in this dataset and we only sample from those molecules but you can change the code and see the explanations for the other class as well.</p>
+<p>In this visualization, edge colors and thickness represent the importance. You can also see the numeric value by passing <code class="docutils literal notranslate"><span class="pre">draw_edge_labels</span></code> to <code class="docutils literal notranslate"><span class="pre">draw_molecule</span></code> function.</p>
+<p>As you can see Integrated Gradients tend to create more accurate explanations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import random
+from collections import defaultdict
+
+def aggregate_edge_directions(edge_mask, data):
+    edge_mask_dict = defaultdict(float)
+    for val, u, v in list(zip(edge_mask, *data.edge_index)):
+        u, v = u.item(), v.item()
+        if u &gt; v:
+            u, v = v, u
+        edge_mask_dict[(u, v)] += val
+    return edge_mask_dict
+
+
+data = random.choice([t for t in test_dataset if not t.y.item()])
+mol = to_molecule(data)
+
+for title, method in [(&#39;Integrated Gradients&#39;, &#39;ig&#39;), (&#39;Saliency&#39;, &#39;saliency&#39;)]:
+    edge_mask = explain(method, data, target=0)
+    edge_mask_dict = aggregate_edge_directions(edge_mask, data)
+    plt.figure(figsize=(10, 5))
+    plt.title(title)
+    draw_molecule(mol, edge_mask_dict)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/d53306cc0473c11bedeb4b8a34a7b6e633051a98c0bd1443a49cd965838aebad.png" src="../../_images/d53306cc0473c11bedeb4b8a34a7b6e633051a98c0bd1443a49cd965838aebad.png" />
+<img alt="../../_images/e6cac9d416fa8c1c48b787f600aca7fb3d980279ca231c84be13b2d421d66cb2.png" src="../../_images/e6cac9d416fa8c1c48b787f600aca7fb3d980279ca231c84be13b2d421d66cb2.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./pages\others"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+            </article>
+            
+
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="Scaling_GNNs.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title"><span class="section-number">7.3. </span>Scaling</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="../references.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title"><span class="section-number">8. </span>References</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#loading-the-dataset">
+   7.4.1. Loading the dataset
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#visualizing-the-data">
+   7.4.2. Visualizing the data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#sample-visualization">
+   7.4.3. Sample visualization
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#training-the-model">
+   7.4.4. Training the model
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#define-the-model">
+     7.4.4.1. Define the model
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#define-train-and-test-functions">
+     7.4.4.2. Define train and test functions
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#train-the-model-for-100-epochs">
+     7.4.4.3. Train the model for 100 epochs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#explaining-the-predictions">
+   7.4.5. Explaining the predictions
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Md Khairul Islam
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2024.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+Last updated on None.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </div>
+        </footer>
+        
+
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  </body>
+</html>
